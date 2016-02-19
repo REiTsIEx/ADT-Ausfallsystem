@@ -3,16 +3,15 @@ package Interfaces;
 import java.util.List;
 
 import Utils.Identifier;
-import Utils.MessageObject;
+import Utils.PatientRequest;
 import ca.uhn.fhir.model.dstu2.resource.Patient;
-import ca.uhn.fhir.model.primitive.IdDt;
 
 public interface Connector {
-	public Patient addPatient(MessageObject patient);
+	public Patient addPatient(PatientRequest patient);
 	
-	public Patient updatePatient(Identifier id, MessageObject patient);
+	public Patient updatePatient(Identifier id, PatientRequest patient);
 
-	public Patient searchPatient(MessageObject patient);
+	public Patient searchPatient(PatientRequest patient);
 	
 	public List<Patient> getAllPatients();
 	

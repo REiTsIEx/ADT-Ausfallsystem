@@ -5,15 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.hl7.fhir.instance.model.api.IBaseResource;
-
-import DB.DB;
-import Interfaces.Connector;
 import Interfaces.RestServer;
 import RestServlet.RestFactory;
-import RestServlet.TestFHIRRestServlet;
 import Utils.Identifier;
-import Utils.MessageObject;
+import Utils.PatientRequest;
 import ca.uhn.fhir.model.dstu2.resource.Patient;
 import ca.uhn.fhir.model.dstu2.valueset.AdministrativeGenderEnum;
 import ca.uhn.fhir.model.primitive.IdDt;
@@ -27,15 +22,13 @@ import ca.uhn.fhir.rest.annotation.Update;
 import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
-import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 
 public class RestfulPatientResourceProvider implements IResourceProvider {
 
 	private Map<Long, Patient> myPatients = new HashMap<Long, Patient>();
 	private long myNextID = 1L;
 	
-	RestFactory restFactory = new RestFactory();
-	RestServer myServlet = restFactory.getServer("TestServer");
+	private RestServer restServer = RestFactory.getInstance().getServer("TestServer");
 
 	//TestFHIRRestServlet myServlet = new TestFHIRRestServlet();
 	//DB db = new DB();
@@ -71,14 +64,14 @@ public class RestfulPatientResourceProvider implements IResourceProvider {
 		return retValue;*/
 		Patient pat = new Patient();
 		pat.setId(new IdDt(patID));
-		MessageObject mo = new MessageObject("Der zu suchende Patient", pat);
-		return myServlet.searchPatientOK(mo);
+		PatientRequest mo = new PatientRequest("Der zu suchende Patient", pat);
+		return restServer.searchPatientOK(mo);
 	}
 	
 	@Create
 	public MethodOutcome create(@ResourceParam Patient patient){
-		MessageObject mo = new MessageObject("Der anzulegende Patient", patient);
-		myServlet.addPatient(mo);
+		PatientRequest mo = new PatientRequest("Der anzulegende Patient", patient);
+		restServer.addPatient(mo);
 		return new MethodOutcome(patient.getId());
 	}
 	
@@ -100,14 +93,14 @@ public class RestfulPatientResourceProvider implements IResourceProvider {
 		/*List<Patient> retValue = new ArrayList<Patient>();
 		retValue.addAll(myPatients.values());
 		return retValue;*/
-		return myServlet.getAllPatient();
+		return restServer.getAllPatient();
 	}
 	
 	@Update
 	public MethodOutcome updatePatient(@IdParam IdDt id, @ResourceParam Patient patient){
 		Identifier identifier = new Identifier(id);
-		MessageObject mo = new MessageObject("Die neuen Patientendaten", patient);
-		myServlet.updatePatient(identifier, mo);
+		PatientRequest mo = new PatientRequest("Die neuen Patientendaten", patient);
+		restServer.updatePatient(identifier, mo);
 		return new MethodOutcome(id);
 	}
 	

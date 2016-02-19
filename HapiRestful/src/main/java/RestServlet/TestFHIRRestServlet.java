@@ -7,7 +7,7 @@ import Connector.DBFactory;
 import Interfaces.Connector;
 import Interfaces.RestServer;
 import Utils.Identifier;
-import Utils.MessageObject;
+import Utils.PatientRequest;
 import ca.uhn.fhir.model.dstu2.resource.Patient;
 import ca.uhn.fhir.model.primitive.IdDt;
 
@@ -22,31 +22,31 @@ public class TestFHIRRestServlet implements RestServer {
 		return db.getAllPatients();
 	}
 
-	public void addPatient(MessageObject patient) {
+	public void addPatient(PatientRequest patient) {
 		db.addPatient(patient);
 	}
 	
-	public Patient searchPatientOK(MessageObject patient) {
+	public Patient searchPatientOK(PatientRequest patient) {
 		return db.searchPatient(patient);
 	}
 	
-	public List<Patient> searchPatient(MessageObject patient) {
+	public List<Patient> searchPatient(PatientRequest patient) {
 		List<Patient> patients = null;
 		patients.add(db.searchPatient(patient));
 		return patients;
 	}
 
-	public void updatePatient(Identifier id, MessageObject patient) {
+	public void updatePatient(Identifier id, PatientRequest patient) {
 		db.updatePatient(id, patient);
 
 	}
 
-	public void movePatient(Identifier id, MessageObject patient) {
+	public void movePatient(Identifier id, PatientRequest patient) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void releasePatient(Identifier id, MessageObject patient) {
+	public void releasePatient(Identifier id, PatientRequest patient) {
 		// TODO Auto-generated method stub
 
 	}

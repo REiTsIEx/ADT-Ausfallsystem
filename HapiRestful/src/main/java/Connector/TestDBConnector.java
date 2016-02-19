@@ -8,7 +8,7 @@ import java.util.Map;
 import DB.DB;
 import Interfaces.Connector;
 import Utils.Identifier;
-import Utils.MessageObject;
+import Utils.PatientRequest;
 import ca.uhn.fhir.model.dstu2.resource.Patient;
 import ca.uhn.fhir.model.dstu2.valueset.AdministrativeGenderEnum;
 import ca.uhn.fhir.model.primitive.IdDt;
@@ -18,20 +18,20 @@ public class TestDBConnector implements Connector{
 	DB db = new DB();
 	Long nextID = 3L;
 
-	public Patient addPatient(MessageObject patient) {
-		patient.messageObject.setId(new IdDt(nextID));
-		db.myPatients.put(nextID, patient.messageObject);
+	public Patient addPatient(PatientRequest patient) {
+		patient.patient.setId(new IdDt(nextID));
+		db.myPatients.put(nextID, patient.patient);
 		nextID++;
 		return null;
 	}
 
-	public Patient updatePatient(Identifier id, MessageObject patient) {
-		db.myPatients.put(id.identifier.getIdPartAsLong(), patient.messageObject);
+	public Patient updatePatient(Identifier id, PatientRequest patient) {
+		db.myPatients.put(id.identifier.getIdPartAsLong(), patient.patient);
 		return null;
 	}
 
-	public Patient searchPatient(MessageObject patient) {
-		IdDt patID = patient.messageObject.getId();
+	public Patient searchPatient(PatientRequest patient) {
+		IdDt patID = patient.patient.getId();
 		Patient retValue = db.myPatients.get(patID.getIdPartAsLong());
 		if(patID == null){
 			throw new ResourceNotFoundException(patID);

@@ -4,6 +4,19 @@ import Interfaces.RestServer;
 
 public class RestFactory {
 
+	private static RestFactory factory;
+	
+	private RestFactory() {
+		super();
+	}
+	
+	public static synchronized RestFactory getInstance() {
+		if(factory == null)
+			factory  = new RestFactory();
+		
+		return factory;
+	}
+	
 	public RestServer getServer(String typeOfServer){
 		if(typeOfServer == null){
 			return null;
