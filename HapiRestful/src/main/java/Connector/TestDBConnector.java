@@ -1,11 +1,14 @@
-package Utils;
+package Connector;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import DB.DB;
 import Interfaces.Connector;
+import Utils.Identifier;
+import Utils.MessageObject;
 import ca.uhn.fhir.model.dstu2.resource.Patient;
 import ca.uhn.fhir.model.dstu2.valueset.AdministrativeGenderEnum;
 import ca.uhn.fhir.model.primitive.IdDt;
@@ -15,20 +18,20 @@ public class TestDBConnector implements Connector{
 	DB db = new DB();
 	Long nextID = 3L;
 
-	public Patient addPatient(Patient patient) {
-		patient.setId(new IdDt(nextID));
-		db.myPatients.put(nextID, patient);
+	public Patient addPatient(MessageObject patient) {
+		patient.messageObject.setId(new IdDt(nextID));
+		db.myPatients.put(nextID, patient.messageObject);
 		nextID++;
 		return null;
 	}
 
-	public Patient updatePatient(IdDt id, Patient patient) {
-		db.myPatients.put(id.getIdPartAsLong(), patient);
+	public Patient updatePatient(Identifier id, MessageObject patient) {
+		db.myPatients.put(id.identifier.getIdPartAsLong(), patient.messageObject);
 		return null;
 	}
 
-	public Patient searchPatient(Patient patient) {
-		IdDt patID = patient.getId();
+	public Patient searchPatient(MessageObject patient) {
+		IdDt patID = patient.messageObject.getId();
 		Patient retValue = db.myPatients.get(patID.getIdPartAsLong());
 		if(patID == null){
 			throw new ResourceNotFoundException(patID);
@@ -51,7 +54,5 @@ public class TestDBConnector implements Connector{
 		// TODO Auto-generated method stub
 		
 	}
-
-
 
 }

@@ -1,20 +1,22 @@
-package Utils;
+package Connector;
 
 import java.util.List;
 
 import Interfaces.Connector;
+import Utils.Identifier;
+import Utils.MessageObject;
 import ca.uhn.fhir.model.dstu2.resource.Patient;
 import ca.uhn.fhir.model.primitive.IdDt;
 
 public class DBConnector implements Connector {
 
-	public Patient addPatient(Patient patient) {
+	public Patient addPatient(MessageObject patient) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 
-	public Patient searchPatient(Patient patient) {
+	public Patient searchPatient(MessageObject patient) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -34,7 +36,7 @@ public class DBConnector implements Connector {
 		
 	}
 
-	public Patient updatePatient(IdDt id, Patient patient) {
+	public Patient updatePatient(Identifier id, MessageObject patient) {
 		// TODO Auto-generated method stub
 		return null;
 	}

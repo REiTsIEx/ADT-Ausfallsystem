@@ -1,10 +1,13 @@
-package Utils;
+package RestServlet;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import Connector.DBFactory;
 import Interfaces.Connector;
 import Interfaces.RestServer;
+import Utils.Identifier;
+import Utils.MessageObject;
 import ca.uhn.fhir.model.dstu2.resource.Patient;
 import ca.uhn.fhir.model.primitive.IdDt;
 
@@ -19,31 +22,31 @@ public class TestFHIRRestServlet implements RestServer {
 		return db.getAllPatients();
 	}
 
-	public void addPatient(Patient patient) {
+	public void addPatient(MessageObject patient) {
 		db.addPatient(patient);
 	}
 	
-	public Patient searchPatientOK(Patient patient) {
+	public Patient searchPatientOK(MessageObject patient) {
 		return db.searchPatient(patient);
 	}
 	
-	public List<Patient> searchPatient(Patient patient) {
+	public List<Patient> searchPatient(MessageObject patient) {
 		List<Patient> patients = null;
 		patients.add(db.searchPatient(patient));
 		return patients;
 	}
 
-	public void updatePatient(IdDt id, Patient patient) {
+	public void updatePatient(Identifier id, MessageObject patient) {
 		db.updatePatient(id, patient);
 
 	}
 
-	public void movePatient(IdDt id, Patient patient) {
+	public void movePatient(Identifier id, MessageObject patient) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void releasePatient(IdDt id, Patient patient) {
+	public void releasePatient(Identifier id, MessageObject patient) {
 		// TODO Auto-generated method stub
 
 	}

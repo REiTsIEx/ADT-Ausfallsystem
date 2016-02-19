@@ -1,4 +1,4 @@
-package Utils;
+package RestServlet;
 
 import Interfaces.RestServer;
 

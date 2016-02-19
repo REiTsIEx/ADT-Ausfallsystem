@@ -7,10 +7,13 @@ import java.util.Map;
 
 import org.hl7.fhir.instance.model.api.IBaseResource;
 
+import DB.DB;
+import Interfaces.Connector;
 import Interfaces.RestServer;
-import Utils.DB;
-import Utils.RestFactory;
-import Utils.TestFHIRRestServlet;
+import RestServlet.RestFactory;
+import RestServlet.TestFHIRRestServlet;
+import Utils.Identifier;
+import Utils.MessageObject;
 import ca.uhn.fhir.model.dstu2.resource.Patient;
 import ca.uhn.fhir.model.dstu2.valueset.AdministrativeGenderEnum;
 import ca.uhn.fhir.model.primitive.IdDt;
@@ -68,12 +71,14 @@ public class RestfulPatientResourceProvider implements IResourceProvider {
 		return retValue;*/
 		Patient pat = new Patient();
 		pat.setId(new IdDt(patID));
-		return myServlet.searchPatientOK(pat);
+		MessageObject mo = new MessageObject("Der zu suchende Patient", pat);
+		return myServlet.searchPatientOK(mo);
 	}
 	
 	@Create
 	public MethodOutcome create(@ResourceParam Patient patient){
-		myServlet.addPatient(patient);
+		MessageObject mo = new MessageObject("Der anzulegende Patient", patient);
+		myServlet.addPatient(mo);
 		return new MethodOutcome(patient.getId());
 	}
 	
@@ -100,7 +105,9 @@ public class RestfulPatientResourceProvider implements IResourceProvider {
 	
 	@Update
 	public MethodOutcome updatePatient(@IdParam IdDt id, @ResourceParam Patient patient){
-		myServlet.updatePatient(id, patient);
+		Identifier identifier = new Identifier(id);
+		MessageObject mo = new MessageObject("Die neuen Patientendaten", patient);
+		myServlet.updatePatient(identifier, mo);
 		return new MethodOutcome(id);
 	}
 	
