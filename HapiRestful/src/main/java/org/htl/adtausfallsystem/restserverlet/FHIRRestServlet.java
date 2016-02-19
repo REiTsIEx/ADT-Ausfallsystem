@@ -1,8 +1,9 @@
-package RestServlet;
+package org.htl.adtausfallsystem.restserverlet;
 
 import java.util.List;
 
-import Interfaces.RestServer;
+import org.htl.adtausfallsystem.interfaces.RestServer;
+
 import Utils.Identifier;
 import Utils.MessageObject;
 import ca.uhn.fhir.model.dstu2.resource.Patient;

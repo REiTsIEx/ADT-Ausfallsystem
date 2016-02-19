@@ -1,8 +1,9 @@
-package Connector;
+package org.htl.adtausfallsystem.connector;
 
 import java.util.List;
 
-import Interfaces.Connector;
+import org.htl.adtausfallsystem.interfaces.Connector;
+
 import Utils.Identifier;
 import Utils.MessageObject;
 import ca.uhn.fhir.model.dstu2.resource.Patient;
@@ -14,7 +15,6 @@ public class DBConnector implements Connector {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 
 	public Patient searchPatient(MessageObject patient) {
 		// TODO Auto-generated method stub
@@ -28,12 +28,12 @@ public class DBConnector implements Connector {
 
 	public void getConnection() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void setConnection(String url) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public Patient updatePatient(Identifier id, MessageObject patient) {

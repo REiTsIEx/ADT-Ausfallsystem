@@ -1,4 +1,4 @@
-package DB;
+package org.htl.adtausfallsystem.database;
 
 import java.util.HashMap;
 import java.util.Map;

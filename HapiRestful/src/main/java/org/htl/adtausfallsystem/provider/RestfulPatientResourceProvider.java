@@ -1,4 +1,4 @@
-package Provider;
+package org.htl.adtausfallsystem.provider;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,12 +6,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.hl7.fhir.instance.model.api.IBaseResource;
+import org.htl.adtausfallsystem.database.DB;
+import org.htl.adtausfallsystem.interfaces.Connector;
+import org.htl.adtausfallsystem.interfaces.RestServer;
+import org.htl.adtausfallsystem.restserverlet.RestFactory;
+import org.htl.adtausfallsystem.restserverlet.TestFHIRRestServlet;
 
-import DB.DB;
-import Interfaces.Connector;
-import Interfaces.RestServer;
-import RestServlet.RestFactory;
-import RestServlet.TestFHIRRestServlet;
 import Utils.Identifier;
 import Utils.MessageObject;
 import ca.uhn.fhir.model.dstu2.resource.Patient;

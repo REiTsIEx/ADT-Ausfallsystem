@@ -1,10 +1,11 @@
-package Servlet;
+package org.htl.adtausfallsystem.serverlet;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 
-import Provider.RestfulOrganizationResourceProvider;
-import Provider.RestfulPatientResourceProvider;
+import org.htl.adtausfallsystem.provider.RestfulOrganizationResourceProvider;
+import org.htl.adtausfallsystem.provider.RestfulPatientResourceProvider;
+
 import ca.uhn.fhir.rest.server.RestfulServer;
 
 @WebServlet("/hapiservlet/*")

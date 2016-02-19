@@ -1,4 +1,4 @@
-package Provider;
+package org.htl.adtausfallsystem.provider;
 
 import org.hl7.fhir.instance.model.api.IBaseResource;
 

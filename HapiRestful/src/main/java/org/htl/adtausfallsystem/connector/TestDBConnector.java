@@ -1,12 +1,13 @@
-package Connector;
+package org.htl.adtausfallsystem.connector;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import DB.DB;
-import Interfaces.Connector;
+import org.htl.adtausfallsystem.database.DB;
+import org.htl.adtausfallsystem.interfaces.Connector;
+
 import Utils.Identifier;
 import Utils.MessageObject;
 import ca.uhn.fhir.model.dstu2.resource.Patient;

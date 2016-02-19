@@ -1,4 +1,4 @@
-package Interfaces;
+package org.htl.adtausfallsystem.interfaces;
 
 import java.util.List;
 
