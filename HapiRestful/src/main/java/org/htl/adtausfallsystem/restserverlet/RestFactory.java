@@ -1,6 +1,6 @@
 package org.htl.adtausfallsystem.restserverlet;
 
-import org.htl.adtausfallsystem.interfaces.RestServer;
+import org.htl.adtausfallsystem.Interfaces.RestServer;
 
 public class RestFactory {
 

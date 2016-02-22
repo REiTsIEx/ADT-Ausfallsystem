@@ -2,7 +2,7 @@ package org.htl.adtausfallsystem.restserverlet;
 
 import java.util.List;
 
-import org.htl.adtausfallsystem.interfaces.RestServer;
+import org.htl.adtausfallsystem.Interfaces.RestServer;
 
 import Utils.Identifier;
 import Utils.MessageObject;

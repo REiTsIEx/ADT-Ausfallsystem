@@ -2,7 +2,7 @@ package org.htl.adtausfallsystem.connector;
 
 import java.util.List;
 
-import org.htl.adtausfallsystem.interfaces.Connector;
+import org.htl.adtausfallsystem.Interfaces.Connector;
 
 import Utils.Identifier;
 import Utils.MessageObject;

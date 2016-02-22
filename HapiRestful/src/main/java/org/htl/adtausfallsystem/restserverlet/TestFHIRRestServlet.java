@@ -3,9 +3,9 @@ package org.htl.adtausfallsystem.restserverlet;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.htl.adtausfallsystem.Interfaces.Connector;
+import org.htl.adtausfallsystem.Interfaces.RestServer;
 import org.htl.adtausfallsystem.connector.DBFactory;
-import org.htl.adtausfallsystem.interfaces.Connector;
-import org.htl.adtausfallsystem.interfaces.RestServer;
 
 import Utils.Identifier;
 import Utils.MessageObject;

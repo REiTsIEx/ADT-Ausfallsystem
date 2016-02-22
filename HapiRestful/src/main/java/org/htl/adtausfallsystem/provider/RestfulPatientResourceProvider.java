@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.hl7.fhir.instance.model.api.IBaseResource;
+import org.htl.adtausfallsystem.Interfaces.Connector;
+import org.htl.adtausfallsystem.Interfaces.RestServer;
 import org.htl.adtausfallsystem.database.DB;
-import org.htl.adtausfallsystem.interfaces.Connector;
-import org.htl.adtausfallsystem.interfaces.RestServer;
 import org.htl.adtausfallsystem.restserverlet.RestFactory;
 import org.htl.adtausfallsystem.restserverlet.TestFHIRRestServlet;
 
