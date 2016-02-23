@@ -1,4 +1,4 @@
-package Utils;
+package org.htl.ADT.DomainObjects;
 
 public abstract class Request {
 

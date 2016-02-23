@@ -1,14 +1,15 @@
-package Connector;
+package org.htl.ADT.Connector;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import DB.DB;
-import Interfaces.Connector;
-import Utils.Identifier;
-import Utils.PatientRequest;
+import org.htl.ADT.DB.DB;
+import org.htl.ADT.DomainObjects.Identifier;
+import org.htl.ADT.DomainObjects.PatientRequest;
+import org.htl.ADT.Interfaces.Connector;
+
 import ca.uhn.fhir.model.dstu2.resource.Patient;
 import ca.uhn.fhir.model.dstu2.valueset.AdministrativeGenderEnum;
 import ca.uhn.fhir.model.primitive.IdDt;

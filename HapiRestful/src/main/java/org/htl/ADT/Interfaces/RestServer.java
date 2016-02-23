@@ -1,9 +1,10 @@
-package Interfaces;
+package org.htl.ADT.Interfaces;
 
 import java.util.List;
 
-import Utils.Identifier;
-import Utils.PatientRequest;
+import org.htl.ADT.DomainObjects.Identifier;
+import org.htl.ADT.DomainObjects.PatientRequest;
+
 import ca.uhn.fhir.model.dstu2.resource.Patient;
 
 public interface RestServer {

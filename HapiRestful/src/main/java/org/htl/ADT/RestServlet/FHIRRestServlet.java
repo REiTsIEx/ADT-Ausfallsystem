@@ -1,10 +1,11 @@
-package RestServlet;
+package org.htl.ADT.RestServlet;
 
 import java.util.List;
 
-import Interfaces.RestServer;
-import Utils.Identifier;
-import Utils.PatientRequest;
+import org.htl.ADT.DomainObjects.Identifier;
+import org.htl.ADT.DomainObjects.PatientRequest;
+import org.htl.ADT.Interfaces.RestServer;
+
 import ca.uhn.fhir.model.dstu2.resource.Patient;
 import ca.uhn.fhir.model.primitive.IdDt;
 

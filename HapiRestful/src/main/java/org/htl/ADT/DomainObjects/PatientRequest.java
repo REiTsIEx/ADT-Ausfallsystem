@@ -1,4 +1,4 @@
-package Utils;
+package org.htl.ADT.DomainObjects;
 
 import ca.uhn.fhir.model.dstu2.resource.Patient;
 

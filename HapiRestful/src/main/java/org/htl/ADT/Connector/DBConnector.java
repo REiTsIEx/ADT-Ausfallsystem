@@ -1,10 +1,11 @@
-package Connector;
+package org.htl.ADT.Connector;
 
 import java.util.List;
 
-import Interfaces.Connector;
-import Utils.Identifier;
-import Utils.PatientRequest;
+import org.htl.ADT.DomainObjects.Identifier;
+import org.htl.ADT.DomainObjects.PatientRequest;
+import org.htl.ADT.Interfaces.Connector;
+
 import ca.uhn.fhir.model.dstu2.resource.Patient;
 import ca.uhn.fhir.model.primitive.IdDt;
 

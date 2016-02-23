@@ -1,13 +1,14 @@
-package RestServlet;
+package org.htl.ADT.RestServlet;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import Connector.DBFactory;
-import Interfaces.Connector;
-import Interfaces.RestServer;
-import Utils.Identifier;
-import Utils.PatientRequest;
+import org.htl.ADT.Connector.DBFactory;
+import org.htl.ADT.DomainObjects.Identifier;
+import org.htl.ADT.DomainObjects.PatientRequest;
+import org.htl.ADT.Interfaces.Connector;
+import org.htl.ADT.Interfaces.RestServer;
+
 import ca.uhn.fhir.model.dstu2.resource.Patient;
 import ca.uhn.fhir.model.primitive.IdDt;
 

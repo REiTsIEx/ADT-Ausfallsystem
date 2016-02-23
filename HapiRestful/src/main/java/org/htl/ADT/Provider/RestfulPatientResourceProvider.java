@@ -1,14 +1,15 @@
-package Provider;
+package org.htl.ADT.Provider;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import Interfaces.RestServer;
-import RestServlet.RestFactory;
-import Utils.Identifier;
-import Utils.PatientRequest;
+import org.htl.ADT.DomainObjects.Identifier;
+import org.htl.ADT.DomainObjects.PatientRequest;
+import org.htl.ADT.Interfaces.RestServer;
+import org.htl.ADT.RestServlet.RestFactory;
+
 import ca.uhn.fhir.model.dstu2.resource.Patient;
 import ca.uhn.fhir.model.dstu2.valueset.AdministrativeGenderEnum;
 import ca.uhn.fhir.model.primitive.IdDt;

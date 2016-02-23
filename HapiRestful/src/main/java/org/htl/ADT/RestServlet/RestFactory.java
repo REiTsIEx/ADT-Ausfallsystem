@@ -1,6 +1,6 @@
-package RestServlet;
+package org.htl.ADT.RestServlet;
 
-import Interfaces.RestServer;
+import org.htl.ADT.Interfaces.RestServer;
 
 public class RestFactory {
 
