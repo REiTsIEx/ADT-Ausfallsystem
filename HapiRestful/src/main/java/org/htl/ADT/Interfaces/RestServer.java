@@ -20,6 +20,8 @@ public interface RestServer {
 	
 	public void releasePatient(Identifier id, PatientRequest patient);
 
-	public Patient searchPatientOK(PatientRequest pat);
+	public Patient searchPatientWithID(PatientRequest pat);
+	
+	public List<Patient> searchPatientWithFamily(PatientRequest patient);
 	
 }

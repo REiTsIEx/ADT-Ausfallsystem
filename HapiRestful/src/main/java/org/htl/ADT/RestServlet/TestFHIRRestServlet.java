@@ -27,7 +27,7 @@ public class TestFHIRRestServlet implements RestServer {
 		db.addPatient(patient);
 	}
 	
-	public Patient searchPatientOK(PatientRequest patient) {
+	public Patient searchPatientWithID(PatientRequest patient) {
 		return db.searchPatient(patient);
 	}
 	
@@ -50,6 +50,10 @@ public class TestFHIRRestServlet implements RestServer {
 	public void releasePatient(Identifier id, PatientRequest patient) {
 		// TODO Auto-generated method stub
 
+	}
+	
+	public List<Patient> searchPatientWithFamily(PatientRequest patient){
+		return db.searchPatientWithFamily(patient);
 	}
 
 }

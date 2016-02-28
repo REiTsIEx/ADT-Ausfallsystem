@@ -42,4 +42,10 @@ public class DBConnector implements Connector {
 		return null;
 	}
 
+	public List<Patient> searchPatientWithFamily(PatientRequest patient) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	
 }

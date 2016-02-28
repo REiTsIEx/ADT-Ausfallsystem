@@ -10,8 +10,11 @@ import org.htl.ADT.DomainObjects.PatientRequest;
 import org.htl.ADT.Interfaces.RestServer;
 import org.htl.ADT.RestServlet.RestFactory;
 
+import ca.uhn.fhir.model.dstu2.resource.OperationOutcome;
 import ca.uhn.fhir.model.dstu2.resource.Patient;
 import ca.uhn.fhir.model.dstu2.valueset.AdministrativeGenderEnum;
+import ca.uhn.fhir.model.dstu2.valueset.ExceptionCodesEnum;
+import ca.uhn.fhir.model.dstu2.valueset.IssueSeverityEnum;
 import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.rest.annotation.Create;
 import ca.uhn.fhir.rest.annotation.IdParam;
@@ -23,6 +26,7 @@ import ca.uhn.fhir.rest.annotation.Update;
 import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
+import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 
 public class RestfulPatientResourceProvider implements IResourceProvider {
 
@@ -63,10 +67,17 @@ public class RestfulPatientResourceProvider implements IResourceProvider {
 			throw new ResourceNotFoundException(patID);
 		}
 		return retValue;*/
+		if(patID == null){
+			OperationOutcome oo = new OperationOutcome();
+			oo.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("Ungueltige ID wurde eingegeben");
+			throw new InternalErrorException("Ungueltige ID", oo);
+		}
 		Patient pat = new Patient();
 		pat.setId(new IdDt(patID));
 		PatientRequest mo = new PatientRequest("Der zu suchende Patient", pat);
-		return restServer.searchPatientOK(mo);
+		Patient retValue = restServer.searchPatientWithID(mo);
+		return retValue;
+		
 	}
 	
 	@Create
@@ -78,7 +89,7 @@ public class RestfulPatientResourceProvider implements IResourceProvider {
 	
 	@Search
 	public List<Patient> search(@RequiredParam(name="family") StringParam theParam){
-		List<Patient> retValue = new ArrayList<Patient>();
+		/*List<Patient> retValue = new ArrayList<Patient>();
 		for (Patient next : myPatients.values()){
 			String familyName = next.getNameFirstRep().getFamilyAsSingleString().toLowerCase();
 			if(!familyName.contains(theParam.getValue().toLowerCase())){
@@ -86,7 +97,11 @@ public class RestfulPatientResourceProvider implements IResourceProvider {
 			}
 			retValue.add(next);
 		}
-		return retValue;
+		if(retValue.isEmpty())
+			throw new InternalErrorException("Patient mit diesem Nachnamn nicht vorhanden");
+		return retValue;*/
+		PatientRequest request = new PatientRequest(theParam.getValue(), null);
+		return restServer.searchPatientWithFamily(request);
 	}
 	
 	@Search

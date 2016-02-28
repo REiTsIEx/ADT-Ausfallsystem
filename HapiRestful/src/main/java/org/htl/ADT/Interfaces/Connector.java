@@ -19,4 +19,6 @@ public interface Connector {
 	public void getConnection();
 	
 	public void setConnection(String url);
+	
+	public List<Patient> searchPatientWithFamily(PatientRequest patient);
 }

@@ -41,7 +41,12 @@ public class FHIRRestServlet implements RestServer{
 		
 	}
 
-	public Patient searchPatientOK(PatientRequest pat) {
+	public Patient searchPatientWithID(PatientRequest pat) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<Patient> searchPatientWithFamily(PatientRequest patient) {
 		// TODO Auto-generated method stub
 		return null;
 	}
