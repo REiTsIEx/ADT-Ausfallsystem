@@ -18,6 +18,7 @@ import ca.uhn.fhir.model.dstu2.valueset.IssueSeverityEnum;
 import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.rest.annotation.Create;
 import ca.uhn.fhir.rest.annotation.IdParam;
+import ca.uhn.fhir.rest.annotation.OptionalParam;
 import ca.uhn.fhir.rest.annotation.Read;
 import ca.uhn.fhir.rest.annotation.RequiredParam;
 import ca.uhn.fhir.rest.annotation.ResourceParam;
@@ -60,17 +61,17 @@ public class RestfulPatientResourceProvider implements IResourceProvider {
 		myPatients.put(id, pat1);*/
 	}
 
-	@Read
+	@Read(version=true)
 	public Patient getResourceById(@IdParam IdDt patID){
 		/*Patient retValue = myPatients.get(patID.getIdPartAsLong());
 		if(patID == null){
 			throw new ResourceNotFoundException(patID);
 		}
 		return retValue;*/
-		if(patID == null){
+		if(patID.isEmpty()){
 			OperationOutcome oo = new OperationOutcome();
-			oo.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("Ungueltige ID wurde eingegeben");
-			throw new InternalErrorException("Ungueltige ID", oo);
+			oo.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("Ungültige ID wurde eingegeben");
+			throw new InternalErrorException("Ungültige ID", oo);
 		}
 		Patient pat = new Patient();
 		pat.setId(new IdDt(patID));
@@ -82,13 +83,21 @@ public class RestfulPatientResourceProvider implements IResourceProvider {
 	
 	@Create
 	public MethodOutcome create(@ResourceParam Patient patient){
-		PatientRequest mo = new PatientRequest("Der anzulegende Patient", patient);
-		restServer.addPatient(mo);
-		return new MethodOutcome(patient.getId());
+		if(patient != null){
+			PatientRequest mo = new PatientRequest("Der anzulegende Patient", patient);
+			restServer.addPatient(mo);
+			return new MethodOutcome(new IdDt("Patient", patient.getId().toString(), patient.getId().getVersionIdPart()));
+			//OperationOutcome oo = new OperationOutcome();
+			//oo.addIssue().setSeverity(IssueSeverityEnum.INFORMATION).setDetails(patient.toString());
+			//throw new InternalErrorException("Patient wurde angelegt", oo);
+		}else {
+			throw new InternalErrorException("Kein gültiger Patient eingegeben");
+		}
+		//return new MethodOutcome(patient.getId());
 	}
 	
 	@Search
-	public List<Patient> search(@RequiredParam(name="family") StringParam theParam){
+	public List<Patient> search(@RequiredParam(name="family") StringParam familyName, @OptionalParam(name="first") StringParam firstName){
 		/*List<Patient> retValue = new ArrayList<Patient>();
 		for (Patient next : myPatients.values()){
 			String familyName = next.getNameFirstRep().getFamilyAsSingleString().toLowerCase();
@@ -100,7 +109,7 @@ public class RestfulPatientResourceProvider implements IResourceProvider {
 		if(retValue.isEmpty())
 			throw new InternalErrorException("Patient mit diesem Nachnamn nicht vorhanden");
 		return retValue;*/
-		PatientRequest request = new PatientRequest(theParam.getValue(), null);
+		PatientRequest request = new PatientRequest(familyName.getValue(), null);
 		return restServer.searchPatientWithFamily(request);
 	}
 	

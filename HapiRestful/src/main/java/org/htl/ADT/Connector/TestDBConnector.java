@@ -23,13 +23,19 @@ public class TestDBConnector implements Connector{
 	Long nextID = 3L;
 
 	public Patient addPatient(PatientRequest patient) {
+		//IdDt newPatientID = new IdDt();
+		//newPatientID.withVersion(nextID.toString());
 		patient.patient.setId(new IdDt(nextID));
+		//patient.patient.setId(newPatientID);
 		db.myPatients.put(nextID, patient.patient);
 		nextID++;
 		return null;
 	}
 
 	public Patient updatePatient(Identifier id, PatientRequest patient) {
+		/*Patient oldPatient = db.myPatients.get(id.identifier.getIdPartAsLong());
+		oldPatient.addName(patient.patient.getNameFirstRep());
+		db.myPatients.put(id.identifier.getIdPartAsLong(), oldPatient);*/
 		db.myPatients.put(id.identifier.getIdPartAsLong(), patient.patient);
 		return null;
 	}
@@ -38,9 +44,10 @@ public class TestDBConnector implements Connector{
 		IdDt patID = patient.patient.getId();
 		Patient retValue = db.myPatients.get(patID.getIdPartAsLong());
 		if(retValue == null){
-			OperationOutcome oo = new OperationOutcome();
-			oo.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("Patient mit dieser ID nicht vorhanden");
-			throw new InternalErrorException("Ungueltige Patienten-ID", oo);
+			throw new ResourceNotFoundException("Der Patient mit der ID " + patID.getIdPart() + " ist nicht vorhanden");
+			//OperationOutcome oo = new OperationOutcome();
+			//oo.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("Patient mit dieser ID nicht vorhanden");
+			//throw new InternalErrorException("Ungueltige Patienten-ID", oo);
 		}
 		return retValue;
 	}
@@ -58,7 +65,7 @@ public class TestDBConnector implements Connector{
 
 	public void setConnection(String url) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	
 	public List<Patient> searchPatientWithFamily(PatientRequest patient){
@@ -71,7 +78,7 @@ public class TestDBConnector implements Connector{
 			retValue.add(next);
 		}
 		if(retValue.isEmpty())
-			throw new InternalErrorException("Patient mit diesem Nachnamen nicht vorhanden");
+			throw new ResourceNotFoundException("Patient mit dem Nachnamen nicht vorhanden");
 		return retValue;
 	}
 
