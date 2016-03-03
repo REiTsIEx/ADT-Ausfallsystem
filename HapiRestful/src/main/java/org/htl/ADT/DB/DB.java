@@ -1,4 +1,4 @@
-package DB;
+package org.htl.ADT.DB;
 
 import java.util.HashMap;
 import java.util.Map;

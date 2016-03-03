@@ -1,9 +1,22 @@
-package RestServlet;
+package org.htl.ADT.RestServlet;
 
-import Interfaces.RestServer;
+import org.htl.ADT.Interfaces.RestServer;
 
 public class RestFactory {
 
+	private static RestFactory factory;
+	
+	private RestFactory() {
+		super();
+	}
+	
+	public static synchronized RestFactory getInstance() {
+		if(factory == null)
+			factory  = new RestFactory();
+		
+		return factory;
+	}
+	
 	public RestServer getServer(String typeOfServer){
 		if(typeOfServer == null){
 			return null;

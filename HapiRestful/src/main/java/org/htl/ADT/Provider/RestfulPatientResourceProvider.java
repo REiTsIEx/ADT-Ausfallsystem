@@ -1,24 +1,24 @@
-package Provider;
+package org.htl.ADT.Provider;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.hl7.fhir.instance.model.api.IBaseResource;
+import org.htl.ADT.DomainObjects.Identifier;
+import org.htl.ADT.DomainObjects.PatientRequest;
+import org.htl.ADT.Interfaces.RestServer;
+import org.htl.ADT.RestServlet.RestFactory;
 
-import DB.DB;
-import Interfaces.Connector;
-import Interfaces.RestServer;
-import RestServlet.RestFactory;
-import RestServlet.TestFHIRRestServlet;
-import Utils.Identifier;
-import Utils.MessageObject;
+import ca.uhn.fhir.model.dstu2.resource.OperationOutcome;
 import ca.uhn.fhir.model.dstu2.resource.Patient;
 import ca.uhn.fhir.model.dstu2.valueset.AdministrativeGenderEnum;
+import ca.uhn.fhir.model.dstu2.valueset.ExceptionCodesEnum;
+import ca.uhn.fhir.model.dstu2.valueset.IssueSeverityEnum;
 import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.rest.annotation.Create;
 import ca.uhn.fhir.rest.annotation.IdParam;
+import ca.uhn.fhir.rest.annotation.OptionalParam;
 import ca.uhn.fhir.rest.annotation.Read;
 import ca.uhn.fhir.rest.annotation.RequiredParam;
 import ca.uhn.fhir.rest.annotation.ResourceParam;
@@ -27,15 +27,14 @@ import ca.uhn.fhir.rest.annotation.Update;
 import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
-import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
+import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 
 public class RestfulPatientResourceProvider implements IResourceProvider {
 
 	private Map<Long, Patient> myPatients = new HashMap<Long, Patient>();
 	private long myNextID = 1L;
 	
-	RestFactory restFactory = new RestFactory();
-	RestServer myServlet = restFactory.getServer("TestServer");
+	private RestServer restServer = RestFactory.getInstance().getServer("TestServer");
 
 	//TestFHIRRestServlet myServlet = new TestFHIRRestServlet();
 	//DB db = new DB();
@@ -62,29 +61,44 @@ public class RestfulPatientResourceProvider implements IResourceProvider {
 		myPatients.put(id, pat1);*/
 	}
 
-	@Read
+	@Read(version=true)
 	public Patient getResourceById(@IdParam IdDt patID){
 		/*Patient retValue = myPatients.get(patID.getIdPartAsLong());
 		if(patID == null){
 			throw new ResourceNotFoundException(patID);
 		}
 		return retValue;*/
+		if(patID.isEmpty()){
+			OperationOutcome oo = new OperationOutcome();
+			oo.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("Ungültige ID wurde eingegeben");
+			throw new InternalErrorException("Ungültige ID", oo);
+		}
 		Patient pat = new Patient();
 		pat.setId(new IdDt(patID));
-		MessageObject mo = new MessageObject("Der zu suchende Patient", pat);
-		return myServlet.searchPatientOK(mo);
+		PatientRequest mo = new PatientRequest("Der zu suchende Patient", pat);
+		Patient retValue = restServer.searchPatientWithID(mo);
+		return retValue;
+		
 	}
 	
 	@Create
 	public MethodOutcome create(@ResourceParam Patient patient){
-		MessageObject mo = new MessageObject("Der anzulegende Patient", patient);
-		myServlet.addPatient(mo);
-		return new MethodOutcome(patient.getId());
+		if(patient != null){
+			PatientRequest mo = new PatientRequest("Der anzulegende Patient", patient);
+			restServer.addPatient(mo);
+			return new MethodOutcome(new IdDt("Patient", patient.getId().toString(), patient.getId().getVersionIdPart()));
+			//OperationOutcome oo = new OperationOutcome();
+			//oo.addIssue().setSeverity(IssueSeverityEnum.INFORMATION).setDetails(patient.toString());
+			//throw new InternalErrorException("Patient wurde angelegt", oo);
+		}else {
+			throw new InternalErrorException("Kein gültiger Patient eingegeben");
+		}
+		//return new MethodOutcome(patient.getId());
 	}
 	
 	@Search
-	public List<Patient> search(@RequiredParam(name="family") StringParam theParam){
-		List<Patient> retValue = new ArrayList<Patient>();
+	public List<Patient> search(@RequiredParam(name="family") StringParam familyName, @OptionalParam(name="first") StringParam firstName){
+		/*List<Patient> retValue = new ArrayList<Patient>();
 		for (Patient next : myPatients.values()){
 			String familyName = next.getNameFirstRep().getFamilyAsSingleString().toLowerCase();
 			if(!familyName.contains(theParam.getValue().toLowerCase())){
@@ -92,7 +106,11 @@ public class RestfulPatientResourceProvider implements IResourceProvider {
 			}
 			retValue.add(next);
 		}
-		return retValue;
+		if(retValue.isEmpty())
+			throw new InternalErrorException("Patient mit diesem Nachnamn nicht vorhanden");
+		return retValue;*/
+		PatientRequest request = new PatientRequest(familyName.getValue(), null);
+		return restServer.searchPatientWithFamily(request);
 	}
 	
 	@Search
@@ -100,14 +118,14 @@ public class RestfulPatientResourceProvider implements IResourceProvider {
 		/*List<Patient> retValue = new ArrayList<Patient>();
 		retValue.addAll(myPatients.values());
 		return retValue;*/
-		return myServlet.getAllPatient();
+		return restServer.getAllPatient();
 	}
 	
 	@Update
 	public MethodOutcome updatePatient(@IdParam IdDt id, @ResourceParam Patient patient){
 		Identifier identifier = new Identifier(id);
-		MessageObject mo = new MessageObject("Die neuen Patientendaten", patient);
-		myServlet.updatePatient(identifier, mo);
+		PatientRequest mo = new PatientRequest("Die neuen Patientendaten", patient);
+		restServer.updatePatient(identifier, mo);
 		return new MethodOutcome(id);
 	}
 	
