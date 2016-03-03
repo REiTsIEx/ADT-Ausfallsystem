@@ -65,10 +65,7 @@
     color: #ffffff;
     padding: 20px;
 	}
-	.inPutAlign{
-	text-align: right;
-	}
-	
+
 	ulMenuBar {
     list-style-type: none;
     margin: 0;
@@ -85,9 +82,13 @@
 	display: block;
     color: white;
     text-align: center;
-    padding: 14px 16px;
+    padding: 20px 22px;
     text-decoration: none;
+    
 	}
 	liMenuBar a:HOVER {
 	backgroundcolor: #04A278;
-}
+	}
+	input {
+	width : 75%;
+	}
