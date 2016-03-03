@@ -6,9 +6,11 @@ public class PatientRequest extends Request {
 		
 	public Patient patient;
 	
+	
 	public PatientRequest(String messageText, Patient messageObject) {
 		this.messageText = messageText;
 		this.patient = messageObject;
+		
 	}
 
 	public PatientRequest() {
