@@ -8,9 +8,9 @@ import org.htl.ADT.DomainObjects.PatientRequest;
 import ca.uhn.fhir.model.dstu2.resource.Patient;
 
 public interface Connector {
-	public Patient addPatient(PatientRequest patient);
+	public void addPatient(PatientRequest patient);
 	
-	public Patient updatePatient(Identifier id, PatientRequest patient);
+	public void updatePatient(Identifier id, PatientRequest patient);
 
 	public Patient searchPatient(PatientRequest patient);
 	
