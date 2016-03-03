@@ -28,7 +28,7 @@ public class DBConnector implements Connector {
 
 	}
 
-	public Patient addPatient(PatientRequest patient){
+	public void addPatient(PatientRequest patient){
 		// TODO Auto-generated method stub
 
 		Session session = null;
@@ -60,7 +60,6 @@ public class DBConnector implements Connector {
 
 		}
 
-		return null;
 	}
 
 	public Patient searchPatient(PatientRequest patient) {
@@ -75,10 +74,6 @@ public class DBConnector implements Connector {
 			session = factory.openSession();
 
 			transaction = session.beginTransaction();
-
-			
-			
-			
 
 			transaction.commit();// transaction is committed
 
@@ -110,9 +105,9 @@ public class DBConnector implements Connector {
 
 	}
 
-	public Patient updatePatient(Identifier id, PatientRequest patient) {
+	public void updatePatient(Identifier id, PatientRequest patient) {
 		// TODO Auto-generated method stub
-		return null;
+		
 	}
 
 	public List<Patient> searchPatientWithFamily(PatientRequest patient) {

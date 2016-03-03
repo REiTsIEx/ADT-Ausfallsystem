@@ -22,22 +22,22 @@ public class TestDBConnector implements Connector{
 	DB db = new DB();
 	Long nextID = 3L;
 
-	public Patient addPatient(PatientRequest patient) {
+	public void addPatient(PatientRequest patient) {
 		//IdDt newPatientID = new IdDt();
 		//newPatientID.withVersion(nextID.toString());
 		patient.patient.setId(new IdDt(nextID));
 		//patient.patient.setId(newPatientID);
 		db.myPatients.put(nextID, patient.patient);
 		nextID++;
-		return null;
+		
 	}
 
-	public Patient updatePatient(Identifier id, PatientRequest patient) {
+	public void updatePatient(Identifier id, PatientRequest patient) {
 		/*Patient oldPatient = db.myPatients.get(id.identifier.getIdPartAsLong());
 		oldPatient.addName(patient.patient.getNameFirstRep());
 		db.myPatients.put(id.identifier.getIdPartAsLong(), oldPatient);*/
 		db.myPatients.put(id.identifier.getIdPartAsLong(), patient.patient);
-		return null;
+		
 	}
 
 	public Patient searchPatient(PatientRequest patient) {
