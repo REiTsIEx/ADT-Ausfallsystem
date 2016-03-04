@@ -1,5 +1,8 @@
 package org.htl.ADT.Tests;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.log4j.BasicConfigurator;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -78,6 +81,27 @@ public class DatabaseUnitTests {
 		Connector connector = DBFactory.getInstance().getConnector("DBConnector");
 		
 		connector.addPatient(new PatientRequest("Patient hinzufügen", testPatient));
+		
+	}
+	
+	/**
+	* 
+	* Ruft alle Patienten aus der Datenbank an.
+	* Die Patienten werden mithilfe des DBConnectors aus der Datenbank abgerufen
+	*/
+	@Test
+	public void getAllPatient() {
+		BasicConfigurator.configure();
+		
+		Connector connector = DBFactory.getInstance().getConnector("DBConnector");
+		
+		List<Patient> patientlist = new ArrayList<Patient>();
+
+		patientlist = connector.getAllPatients();
+		
+		for (Patient patient : patientlist) {
+			System.out.println(patient.getNameFirstRep().getNameAsSingleString());
+		}
 		
 	}
 
