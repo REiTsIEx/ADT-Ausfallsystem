@@ -75,7 +75,7 @@ public class DatabaseUnitTests {
 
 		Patient testPatient = new Patient();
 		testPatient.addIdentifier().setSystem("http://loinc.org").setValue("1234");
-		testPatient.addName().addFamily("Marcel").addGiven("Nachname").addGiven("M");
+		testPatient.addName().addFamily("Nachname").addGiven("Marcel").addGiven("M");
 		testPatient.setGender(AdministrativeGenderEnum.MALE);
 		
 		Connector connector = DBFactory.getInstance().getConnector("DBConnector");
