@@ -49,8 +49,8 @@ public class DBConnector implements Connector {
 			FhirContext ctx = FhirContext.forDstu2();
 			String fhirMessage = ctx.newXmlParser().encodeResourceToString(patient.patient);
 
-			DatabasePatient data = new DatabasePatient("12345",
-					patient.patient.getNameFirstRep().getNameAsSingleString(),
+			DatabasePatient data = new DatabasePatient(patient.patient.getId().toString(),
+					patient.patient.getNameFirstRep().getGivenAsSingleString(),
 					patient.patient.getNameFirstRep().getFamilyAsSingleString(), fhirMessage);
 
 			session.save(data);
