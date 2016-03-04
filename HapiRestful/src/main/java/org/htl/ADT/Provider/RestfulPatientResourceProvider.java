@@ -97,7 +97,7 @@ public class RestfulPatientResourceProvider implements IResourceProvider {
 	}
 	
 	@Search
-	public List<Patient> search(@RequiredParam(name="family") StringParam familyName, @OptionalParam(name="first") StringParam firstName){
+	public List<Patient> search(@RequiredParam(name="family") StringParam familyName, @OptionalParam(name="firstname") StringParam firstName){
 		/*List<Patient> retValue = new ArrayList<Patient>();
 		for (Patient next : myPatients.values()){
 			String familyName = next.getNameFirstRep().getFamilyAsSingleString().toLowerCase();

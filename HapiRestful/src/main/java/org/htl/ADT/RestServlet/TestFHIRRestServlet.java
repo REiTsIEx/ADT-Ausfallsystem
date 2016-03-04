@@ -3,6 +3,7 @@ package org.htl.ADT.RestServlet;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.htl.ADT.Connector.DBConnector;
 import org.htl.ADT.Connector.DBFactory;
 import org.htl.ADT.DomainObjects.Identifier;
 import org.htl.ADT.DomainObjects.PatientRequest;
@@ -15,7 +16,7 @@ import ca.uhn.fhir.model.primitive.IdDt;
 public class TestFHIRRestServlet implements RestServer {
 
 	Connector db = DBFactory.getInstance().getConnector("TestDBConnector");
-
+	//DBConnector db = new DBConnector();
 	//TestDBConnector db = new TestDBConnector();
 
 	public List<Patient> getAllPatient() {

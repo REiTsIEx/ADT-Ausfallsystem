@@ -25,6 +25,7 @@ public class DBConnector implements Connector {
 		config.configure("hibernate.cfg.xml");
 
 		factory = config.buildSessionFactory();
+		
 
 	}
 
@@ -33,8 +34,10 @@ public class DBConnector implements Connector {
 
 		Session session = null;
 		Transaction transaction = null;
+		
+		
 
-		try {
+		//try {
 
 			session = factory.openSession();
 
@@ -49,7 +52,7 @@ public class DBConnector implements Connector {
 			session.save(data);
 
 			transaction.commit();// transaction is committed
-
+/*
 		} catch (Exception e) {
 			if (transaction != null) {
 				transaction.rollback();
@@ -58,7 +61,7 @@ public class DBConnector implements Connector {
 				session.close();
 			};
 
-		}
+		}*/
 
 	}
 
