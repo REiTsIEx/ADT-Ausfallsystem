@@ -1,4 +1,4 @@
-package org.htl.ADT.Tests;
+package org.htl.adt.tests;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,10 +8,10 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
-import org.htl.ADT.Connector.DBFactory;
-import org.htl.ADT.DomainObjects.DatabasePatient;
-import org.htl.ADT.DomainObjects.PatientRequest;
-import org.htl.ADT.Interfaces.Connector;
+import org.htl.adt.connector.DBFactory;
+import org.htl.adt.domainobjects.DatabasePatient;
+import org.htl.adt.domainobjects.PatientRequest;
+import org.htl.adt.interfaces.Connector;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

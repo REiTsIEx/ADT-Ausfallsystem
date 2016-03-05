@@ -1,4 +1,4 @@
-package org.htl.ADT.Connector;
+package org.htl.adt.connector;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -8,10 +8,10 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
-import org.htl.ADT.DomainObjects.DatabasePatient;
-import org.htl.ADT.DomainObjects.Identifier;
-import org.htl.ADT.DomainObjects.PatientRequest;
-import org.htl.ADT.Interfaces.Connector;
+import org.htl.adt.domainobjects.DatabasePatient;
+import org.htl.adt.domainobjects.Identifier;
+import org.htl.adt.domainobjects.PatientRequest;
+import org.htl.adt.interfaces.Connector;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.model.dstu2.resource.Patient;

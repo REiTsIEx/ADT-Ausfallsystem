@@ -1,10 +1,10 @@
-package org.htl.ADT.Servlet;
+package org.htl.adt.servlet;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 
-import org.htl.ADT.Provider.RestfulOrganizationResourceProvider;
-import org.htl.ADT.Provider.RestfulPatientResourceProvider;
+import org.htl.adt.provider.RestfulOrganizationResourceProvider;
+import org.htl.adt.provider.RestfulPatientResourceProvider;
 
 import ca.uhn.fhir.rest.server.RestfulServer;
 

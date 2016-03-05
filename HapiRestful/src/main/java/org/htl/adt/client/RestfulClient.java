@@ -1,4 +1,4 @@
-package org.hatl.adt.client;
+package org.htl.adt.client;
 
 import com.mysql.fabric.xmlrpc.Client;
 

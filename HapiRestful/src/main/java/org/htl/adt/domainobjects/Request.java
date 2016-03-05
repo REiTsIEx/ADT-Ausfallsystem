@@ -1,4 +1,4 @@
-package org.htl.ADT.DomainObjects;
+package org.htl.adt.domainobjects;
 
 public abstract class Request {
 

@@ -1,14 +1,14 @@
-package org.htl.ADT.Provider;
+package org.htl.adt.provider;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.htl.ADT.DomainObjects.Identifier;
-import org.htl.ADT.DomainObjects.PatientRequest;
-import org.htl.ADT.Interfaces.RestServer;
-import org.htl.ADT.RestServlet.RestFactory;
+import org.htl.adt.domainobjects.Identifier;
+import org.htl.adt.domainobjects.PatientRequest;
+import org.htl.adt.interfaces.RestServer;
+import org.htl.adt.restservlet.RestFactory;
 
 import ca.uhn.fhir.model.dstu2.resource.OperationOutcome;
 import ca.uhn.fhir.model.dstu2.resource.Patient;
