@@ -32,7 +32,7 @@ import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 public class RestfulPatientResourceProvider implements IResourceProvider {
 
 	private Map<Long, Patient> myPatients = new HashMap<Long, Patient>();
-	private long myNextID = 1L;
+	private long nextID = 1L;
 	
 	private RestServer restServer = RestFactory.getInstance().getServer("TestServer");
 
@@ -44,7 +44,7 @@ public class RestfulPatientResourceProvider implements IResourceProvider {
 	}
 	
 	public RestfulPatientResourceProvider() {
-		long id = myNextID++;
+		long id = nextID++;
 		Patient patient = new Patient();
 		patient.setId(new IdDt(id));
 		patient.addIdentifier().setSystem("http://test.com/Patient").setValue("1234");
@@ -75,8 +75,8 @@ public class RestfulPatientResourceProvider implements IResourceProvider {
 		}
 		Patient pat = new Patient();
 		pat.setId(new IdDt(patID));
-		PatientRequest mo = new PatientRequest("Der zu suchende Patient", pat);
-		Patient retValue = restServer.searchPatientWithID(mo);
+		PatientRequest request = new PatientRequest("Der zu suchende Patient", pat);
+		Patient retValue = restServer.searchPatientWithID(request);
 		return retValue;
 		
 	}
@@ -84,8 +84,8 @@ public class RestfulPatientResourceProvider implements IResourceProvider {
 	@Create
 	public MethodOutcome create(@ResourceParam Patient patient){
 		if(patient != null){
-			PatientRequest mo = new PatientRequest("Der anzulegende Patient", patient);
-			restServer.addPatient(mo);
+			PatientRequest request = new PatientRequest("Der anzulegende Patient", patient);
+			restServer.addPatient(request);
 			return new MethodOutcome(new IdDt("Patient", patient.getId().toString(), patient.getId().getVersionIdPart()));
 			//OperationOutcome oo = new OperationOutcome();
 			//oo.addIssue().setSeverity(IssueSeverityEnum.INFORMATION).setDetails(patient.toString());
@@ -124,8 +124,8 @@ public class RestfulPatientResourceProvider implements IResourceProvider {
 	@Update
 	public MethodOutcome updatePatient(@IdParam IdDt id, @ResourceParam Patient patient){
 		Identifier identifier = new Identifier(id);
-		PatientRequest mo = new PatientRequest("Die neuen Patientendaten", patient);
-		restServer.updatePatient(identifier, mo);
+		PatientRequest request = new PatientRequest("Die neuen Patientendaten", patient);
+		restServer.updatePatient(identifier, request);
 		return new MethodOutcome(id);
 	}
 	

@@ -78,7 +78,7 @@ public class TestDBConnector implements Connector{
 			retValue.add(next);
 		}
 		if(retValue.isEmpty())
-			throw new ResourceNotFoundException("Patient mit dem Nachnamen nicht vorhanden");
+			throw new ResourceNotFoundException("Patient mit dem Nachnamen " + patient.messageText + " nicht vorhanden");
 		return retValue;
 	}
 

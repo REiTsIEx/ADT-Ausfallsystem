@@ -12,8 +12,9 @@ import org.htl.ADT.Connector.DBFactory;
 import org.htl.ADT.DomainObjects.DatabasePatient;
 import org.htl.ADT.DomainObjects.PatientRequest;
 import org.htl.ADT.Interfaces.Connector;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
-
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.model.dstu2.resource.Patient;
@@ -21,10 +22,21 @@ import ca.uhn.fhir.model.dstu2.valueset.AdministrativeGenderEnum;
 
 public class DatabaseUnitTests {
 
+	@Before
+	public void init() {
+		
+	}
+	
+	@After
+	public void cleanup() {
+		
+		
+	}
+	
 	/**
 	* 
-	* Fügt einen DatabasePatient zur Datenbank hinzu.
-	* Es wird nicht der DBConnector aufgerufen um den Patienten hinzuzufügen, sondern wird direkt an die Datenbank übergeben.
+	* Fï¿½gt einen DatabasePatient zur Datenbank hinzu.
+	* Es wird nicht der DBConnector aufgerufen um den Patienten hinzuzufï¿½gen, sondern wird direkt an die Datenbank ï¿½bergeben.
 	*/
 	@Test
 	public void addPatientDirect() {
@@ -66,8 +78,8 @@ public class DatabaseUnitTests {
 	
 	/**
 	* 
-	* Fügt einen DatabasePatient zur Datenbank hinzu.
-	* Der Patient wird mithilfe des DBConnectors in die Datenbank hinzugefügt
+	* Fï¿½gt einen DatabasePatient zur Datenbank hinzu.
+	* Der Patient wird mithilfe des DBConnectors in die Datenbank hinzugefï¿½gt
 	*/
 	@Test
 	public void addPatient() {
@@ -80,7 +92,7 @@ public class DatabaseUnitTests {
 		
 		Connector connector = DBFactory.getInstance().getConnector("DBConnector");
 		
-		connector.addPatient(new PatientRequest("Patient hinzufügen", testPatient));
+		connector.addPatient(new PatientRequest("Patient hinzufï¿½gen", testPatient));
 		
 	}
 	

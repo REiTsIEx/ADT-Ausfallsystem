@@ -4,7 +4,7 @@
 function getPatientbyName() {
 	
 	var url = "http://127.0.0.1:8080";
-	var method = "/Patient/";
+	var method = "/HapiRestful/hapiservlet/Patient";
 
 	var lastname = document.getElementById('lastname');
 	if(lastname.value == "") {
