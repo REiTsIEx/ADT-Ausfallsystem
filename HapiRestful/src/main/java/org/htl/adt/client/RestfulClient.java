@@ -1,7 +1,5 @@
 package org.htl.adt.client;
 
-import com.mysql.fabric.xmlrpc.Client;
-
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.model.dstu2.resource.Bundle;
 import ca.uhn.fhir.model.dstu2.resource.Patient;
@@ -9,7 +7,6 @@ import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.client.IGenericClient;
 
 public class RestfulClient {
-
 	FhirContext context = FhirContext.forDstu2();
 	String serverURL = "http://localhost:8080/HapiRestful/hapiservlet/";
 	IGenericClient client = context.newRestfulGenericClient(serverURL);
@@ -50,5 +47,4 @@ public class RestfulClient {
 				.withId(toReadPatient.getId())
 				.execute();
 	}
-
 }
