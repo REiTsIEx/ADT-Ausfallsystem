@@ -31,7 +31,7 @@
 	.col-11 {width: 91.66%;}
 	.col-12 {width: 100%;}
 
-	h1{
+	h2{
 	color:white;
 	font-size: 30;	
 	}
@@ -41,7 +41,6 @@
     color: #ffffff;
     padding: 20px;
 	}
-
 	ulMenuBar {
     list-style-type: none;
     margin: 0;
@@ -53,13 +52,18 @@
 	liMenuBar {
 	display : block;
     float: left;
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 20px 22px;
+    text-decoration: none;
 	}
 	liMenuBar a {
 	display: block;
     color: white;
     text-align: center;
     padding: 20px 22px;
-    text-decoration: none;
+    text-decoration: none; 
     
 	}
 	liMenuBar a:HOVER {

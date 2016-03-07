@@ -3,12 +3,12 @@
  */
 function getPatientbyName() {
 	
-	var url = "http://127.0.0.1:8080";
-	var method = "/Patient/";
+	var url = "http://10.0.2.18:8080";
+	var method = "/HapiRestful/Patient";
 
 	var lastname = document.getElementById('lastname');
 	if(lastname.value == "") {
-		alert("yolo");
+		alert("Bitte Nachname eingeben!");
 		
 	}else{
 	
@@ -20,7 +20,7 @@ function getPatientbyName() {
 	url = url+method+param;
 	
     var xmlRequest = new XMLHttpRequest();
-    xmlRequest.open( "GET", url, false ); // false for synchronous request
+    xmlRequest.open( "GET", url, true );
     xmlRequest.send( null );
     return xmlRequest.responseText;
 	
