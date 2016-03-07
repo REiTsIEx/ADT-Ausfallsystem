@@ -1,4 +1,4 @@
-package org.htl.ADT.Provider;
+package org.htl.adt.provider;
 
 import org.hl7.fhir.instance.model.api.IBaseResource;
 

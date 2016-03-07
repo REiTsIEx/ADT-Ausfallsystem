@@ -1,14 +1,14 @@
-package org.htl.ADT.Connector;
+package org.htl.adt.connector;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.htl.ADT.DB.DB;
-import org.htl.ADT.DomainObjects.Identifier;
-import org.htl.ADT.DomainObjects.PatientRequest;
-import org.htl.ADT.Interfaces.Connector;
+import org.htl.adt.db.DB;
+import org.htl.adt.domainobjects.Identifier;
+import org.htl.adt.domainobjects.PatientRequest;
+import org.htl.adt.interfaces.Connector;
 
 import ca.uhn.fhir.model.dstu2.resource.OperationOutcome;
 import ca.uhn.fhir.model.dstu2.resource.Patient;
@@ -78,7 +78,7 @@ public class TestDBConnector implements Connector{
 			retValue.add(next);
 		}
 		if(retValue.isEmpty())
-			throw new ResourceNotFoundException("Patient mit dem Nachnamen nicht vorhanden");
+			throw new ResourceNotFoundException("Patient mit dem Nachnamen " + patient.messageText + " nicht vorhanden");
 		return retValue;
 	}
 

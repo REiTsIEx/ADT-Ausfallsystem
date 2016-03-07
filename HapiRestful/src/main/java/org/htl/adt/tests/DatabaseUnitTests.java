@@ -1,16 +1,20 @@
-package org.htl.ADT.Tests;
+package org.htl.adt.tests;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.log4j.BasicConfigurator;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
-import org.htl.ADT.Connector.DBFactory;
-import org.htl.ADT.DomainObjects.DatabasePatient;
-import org.htl.ADT.DomainObjects.PatientRequest;
-import org.htl.ADT.Interfaces.Connector;
+import org.htl.adt.connector.DBFactory;
+import org.htl.adt.domainobjects.DatabasePatient;
+import org.htl.adt.domainobjects.PatientRequest;
+import org.htl.adt.interfaces.Connector;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
-
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.model.dstu2.resource.Patient;
@@ -18,10 +22,21 @@ import ca.uhn.fhir.model.dstu2.valueset.AdministrativeGenderEnum;
 
 public class DatabaseUnitTests {
 
+	@Before
+	public void init() {
+		
+	}
+	
+	@After
+	public void cleanup() {
+		
+		
+	}
+	
 	/**
 	* 
-	* Fügt einen DatabasePatient zur Datenbank hinzu.
-	* Es wird nicht der DBConnector aufgerufen um den Patienten hinzuzufügen, sondern wird direkt an die Datenbank übergeben.
+	* Fï¿½gt einen DatabasePatient zur Datenbank hinzu.
+	* Es wird nicht der DBConnector aufgerufen um den Patienten hinzuzufï¿½gen, sondern wird direkt an die Datenbank ï¿½bergeben.
 	*/
 	@Test
 	public void addPatientDirect() {
@@ -63,8 +78,8 @@ public class DatabaseUnitTests {
 	
 	/**
 	* 
-	* Fügt einen DatabasePatient zur Datenbank hinzu.
-	* Der Patient wird mithilfe des DBConnectors in die Datenbank hinzugefügt
+	* Fï¿½gt einen DatabasePatient zur Datenbank hinzu.
+	* Der Patient wird mithilfe des DBConnectors in die Datenbank hinzugefï¿½gt
 	*/
 	@Test
 	public void addPatient() {
@@ -72,12 +87,33 @@ public class DatabaseUnitTests {
 
 		Patient testPatient = new Patient();
 		testPatient.addIdentifier().setSystem("http://loinc.org").setValue("1234");
-		testPatient.addName().addFamily("Marcel").addGiven("Nachname").addGiven("M");
+		testPatient.addName().addFamily("Nachname").addGiven("Marcel").addGiven("M");
 		testPatient.setGender(AdministrativeGenderEnum.MALE);
 		
 		Connector connector = DBFactory.getInstance().getConnector("DBConnector");
 		
-		connector.addPatient(new PatientRequest("Patient hinzufügen", testPatient));
+		connector.addPatient(new PatientRequest("Patient hinzufï¿½gen", testPatient));
+		
+	}
+	
+	/**
+	* 
+	* Ruft alle Patienten aus der Datenbank an.
+	* Die Patienten werden mithilfe des DBConnectors aus der Datenbank abgerufen
+	*/
+	@Test
+	public void getAllPatient() {
+		BasicConfigurator.configure();
+		
+		Connector connector = DBFactory.getInstance().getConnector("DBConnector");
+		
+		List<Patient> patientlist = new ArrayList<Patient>();
+
+		patientlist = connector.getAllPatients();
+		
+		for (Patient patient : patientlist) {
+			System.out.println(patient.getNameFirstRep().getNameAsSingleString());
+		}
 		
 	}
 

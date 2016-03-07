@@ -1,13 +1,14 @@
-package org.htl.ADT.RestServlet;
+package org.htl.adt.restservlet;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.htl.ADT.Connector.DBFactory;
-import org.htl.ADT.DomainObjects.Identifier;
-import org.htl.ADT.DomainObjects.PatientRequest;
-import org.htl.ADT.Interfaces.Connector;
-import org.htl.ADT.Interfaces.RestServer;
+import org.htl.adt.connector.DBConnector;
+import org.htl.adt.connector.DBFactory;
+import org.htl.adt.domainobjects.Identifier;
+import org.htl.adt.domainobjects.PatientRequest;
+import org.htl.adt.interfaces.Connector;
+import org.htl.adt.interfaces.RestServer;
 
 import ca.uhn.fhir.model.dstu2.resource.Patient;
 import ca.uhn.fhir.model.primitive.IdDt;
@@ -15,7 +16,7 @@ import ca.uhn.fhir.model.primitive.IdDt;
 public class TestFHIRRestServlet implements RestServer {
 
 	Connector db = DBFactory.getInstance().getConnector("TestDBConnector");
-
+	//DBConnector db = new DBConnector();
 	//TestDBConnector db = new TestDBConnector();
 
 	public List<Patient> getAllPatient() {

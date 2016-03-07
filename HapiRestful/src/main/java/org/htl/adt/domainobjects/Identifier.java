@@ -1,4 +1,4 @@
-package org.htl.ADT.DomainObjects;
+package org.htl.adt.domainobjects;
 
 import ca.uhn.fhir.model.dstu2.resource.Patient;
 import ca.uhn.fhir.model.primitive.IdDt;

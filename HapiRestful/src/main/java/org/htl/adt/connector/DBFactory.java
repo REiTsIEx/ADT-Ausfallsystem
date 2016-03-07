@@ -1,6 +1,6 @@
-package org.htl.ADT.Connector;
+package org.htl.adt.connector;
 
-import org.htl.ADT.Interfaces.Connector;
+import org.htl.adt.interfaces.Connector;
 
 public class DBFactory {
 

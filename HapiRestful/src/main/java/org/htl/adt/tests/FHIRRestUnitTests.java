@@ -1,4 +1,4 @@
-package org.htl.ADT.Tests;
+package org.htl.adt.tests;
 
 public class FHIRRestUnitTests {
 

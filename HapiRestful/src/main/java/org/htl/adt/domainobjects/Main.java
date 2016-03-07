@@ -1,4 +1,4 @@
-package org.htl.ADT.DomainObjects;
+package org.htl.adt.domainobjects;
 
 import org.apache.log4j.BasicConfigurator;
 import org.hibernate.Session;

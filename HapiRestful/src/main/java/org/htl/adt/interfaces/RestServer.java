@@ -1,9 +1,9 @@
-package org.htl.ADT.Interfaces;
+package org.htl.adt.interfaces;
 
 import java.util.List;
 
-import org.htl.ADT.DomainObjects.Identifier;
-import org.htl.ADT.DomainObjects.PatientRequest;
+import org.htl.adt.domainobjects.Identifier;
+import org.htl.adt.domainobjects.PatientRequest;
 
 import ca.uhn.fhir.model.dstu2.resource.Patient;
 
