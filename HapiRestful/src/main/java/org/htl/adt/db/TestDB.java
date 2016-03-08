@@ -7,11 +7,11 @@ import ca.uhn.fhir.model.dstu2.resource.Patient;
 import ca.uhn.fhir.model.dstu2.valueset.AdministrativeGenderEnum;
 import ca.uhn.fhir.model.primitive.IdDt;
 
-public class DB {
+public class TestDB {
 	public Map<Long, Patient> myPatients = new HashMap<Long, Patient>();
 	Long id = 1L;
 	
-	public DB() {
+	public TestDB() {
 		Patient patientMax = new Patient();
 		patientMax.setId(new IdDt(id));
 		patientMax.addIdentifier().setSystem("http://loinc.org").setValue("1234");

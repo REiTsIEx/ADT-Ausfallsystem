@@ -5,7 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.htl.adt.db.DB;
+import org.htl.adt.client.RestfulClient;
+import org.htl.adt.db.TestDB;
 import org.htl.adt.domainobjects.Identifier;
 import org.htl.adt.domainobjects.PatientRequest;
 import org.htl.adt.interfaces.Connector;
@@ -19,8 +20,9 @@ import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 
 public class TestDBConnector implements Connector{
-	DB db = new DB();
+	TestDB db = new TestDB();
 	Long nextID = 3L;
+	RestfulClient client = new RestfulClient();
 
 	public void addPatient(PatientRequest patient) {
 		//IdDt newPatientID = new IdDt();
@@ -37,7 +39,6 @@ public class TestDBConnector implements Connector{
 		oldPatient.addName(patient.patient.getNameFirstRep());
 		db.myPatients.put(id.identifier.getIdPartAsLong(), oldPatient);*/
 		db.myPatients.put(id.identifier.getIdPartAsLong(), patient.patient);
-		
 	}
 
 	public Patient searchPatient(PatientRequest patient) {
