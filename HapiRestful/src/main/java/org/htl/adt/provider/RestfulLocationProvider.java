@@ -7,6 +7,8 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.hl7.fhir.instance.model.api.IBaseResource;
+import org.htl.adt.connector.DBFactory;
+import org.htl.adt.interfaces.Connector;
 
 import ca.uhn.fhir.model.dstu2.resource.Location;
 import ca.uhn.fhir.model.dstu2.resource.MessageHeader.Response;
@@ -25,6 +27,7 @@ public class RestfulLocationProvider implements IResourceProvider {
 
 	HashMap<Long, Location> myLocations = new HashMap<Long, Location>();
 	Long nextID = 1L;
+	Connector db = DBFactory.getInstance().getConnector("TestDBConnector");
 	
 	public RestfulLocationProvider() {
 		Location location = new Location();
