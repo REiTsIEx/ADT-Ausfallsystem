@@ -1,5 +1,6 @@
 package org.htl.adt.tests;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,8 +36,8 @@ public class DatabaseUnitTests {
 	
 	/**
 	* 
-	* Fï¿½gt einen DatabasePatient zur Datenbank hinzu.
-	* Es wird nicht der DBConnector aufgerufen um den Patienten hinzuzufï¿½gen, sondern wird direkt an die Datenbank ï¿½bergeben.
+	* Fügt einen DatabasePatient zur Datenbank hinzu.
+	* Es wird nicht der DBConnector aufgerufen um den Patienten hinzuzufï¿½gen, sondern wird direkt an die Datenbank übergeben.
 	*/
 	@Test
 	public void addPatientDirect() {
@@ -92,7 +93,12 @@ public class DatabaseUnitTests {
 		
 		Connector connector = DBFactory.getInstance().getConnector("DBConnector");
 		
-		connector.addPatient(new PatientRequest("Patient hinzufï¿½gen", testPatient));
+		try {
+			connector.addPatient(new PatientRequest("Patient hinzufügen", testPatient));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 	
@@ -109,7 +115,12 @@ public class DatabaseUnitTests {
 		
 		List<Patient> patientlist = new ArrayList<Patient>();
 
-		patientlist = connector.getAllPatients();
+		try {
+			patientlist = connector.getAllPatients();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		for (Patient patient : patientlist) {
 			System.out.println(patient.getNameFirstRep().getNameAsSingleString());

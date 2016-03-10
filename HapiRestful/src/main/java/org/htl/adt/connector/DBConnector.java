@@ -1,5 +1,6 @@
 package org.htl.adt.connector;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -32,7 +33,7 @@ public class DBConnector implements Connector {
 
 	}
 
-	public void addPatient(PatientRequest patient) {
+	public void addPatient(PatientRequest patient) throws IOException{
 		// TODO Auto-generated method stub
 
 		Session session = null;
@@ -40,7 +41,7 @@ public class DBConnector implements Connector {
 		
 		
 
-		//try {
+		try {
 
 			session = factory.openSession();
 
@@ -56,17 +57,17 @@ public class DBConnector implements Connector {
 			session.save(data);
 
 			transaction.commit();// transaction is committed
-/*
-		} catch (Exception e) {
+
+		} catch (Exception exception) {
 			if (transaction != null) {
 				transaction.rollback();
 			}
 			if (session != null) {
 				session.close();
 			}
-			;
+			throw exception;
 
-		}*/
+		}
 
 	}
 
