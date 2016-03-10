@@ -4,7 +4,8 @@
 
 <web-app>
   <display-name>Archetype Created Web Application</display-name>
-      		<filter>
+  
+      <filter>
 		<filter-name>CORS Filter</filter-name>
 		<filter-class>org.ebaysf.web.cors.CORSFilter</filter-class>
 		<init-param>

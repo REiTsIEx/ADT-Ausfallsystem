@@ -50,6 +50,7 @@ public class TestDBConnector implements Connector{
 			//oo.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("Patient mit dieser ID nicht vorhanden");
 			//throw new InternalErrorException("Ungueltige Patienten-ID", oo);
 		}
+		
 		return retValue;
 	}
 	
@@ -80,6 +81,12 @@ public class TestDBConnector implements Connector{
 		}
 		if(retValue.isEmpty())
 			throw new ResourceNotFoundException("Patient mit dem Nachnamen " + patient.messageText + " nicht vorhanden");
+		Patient newPatient = new Patient();
+		newPatient.setId(new IdDt(3));
+		newPatient.addIdentifier().setSystem("http://test.com/Patient").setValue("1234");
+		newPatient.addName().addFamily("Simpson").addGiven("Homer").addGiven("J");
+		newPatient.setGender(AdministrativeGenderEnum.MALE);
+		client.createPatient(newPatient);
 		return retValue;
 	}
 

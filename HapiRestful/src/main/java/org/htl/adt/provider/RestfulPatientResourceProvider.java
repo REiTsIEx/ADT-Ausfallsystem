@@ -43,6 +43,8 @@ public class RestfulPatientResourceProvider implements IResourceProvider {
 		return Patient.class;
 	}
 	
+	
+	
 	public RestfulPatientResourceProvider() {
 		long id = nextID++;
 		Patient patient = new Patient();
@@ -77,6 +79,7 @@ public class RestfulPatientResourceProvider implements IResourceProvider {
 		pat.setId(new IdDt(patID));
 		PatientRequest request = new PatientRequest("Der zu suchende Patient", pat);
 		Patient retValue = restServer.searchPatientWithID(request);
+		
 		return retValue;
 		
 	}
