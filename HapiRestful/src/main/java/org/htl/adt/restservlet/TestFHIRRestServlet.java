@@ -1,5 +1,6 @@
 package org.htl.adt.restservlet;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,30 +16,57 @@ import ca.uhn.fhir.model.primitive.IdDt;
 
 public class TestFHIRRestServlet implements RestServer {
 
-	Connector db = DBFactory.getInstance().getConnector("TestDBConnector");
+	Connector db = DBFactory.getInstance().getConnector("DBConnector");
 	//DBConnector db = new DBConnector();
 	//TestDBConnector db = new TestDBConnector();
 
 	public List<Patient> getAllPatient() {
-		return db.getAllPatients();
+		try {
+			return db.getAllPatients();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	public void addPatient(PatientRequest patient) {
-		db.addPatient(patient);
+		try {
+			db.addPatient(patient);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public Patient searchPatientWithID(PatientRequest patient) {
-		return db.searchPatient(patient);
+		try {
+			return db.searchPatient(patient);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	public List<Patient> searchPatient(PatientRequest patient) {
 		List<Patient> patients = null;
-		patients.add(db.searchPatient(patient));
+		try {
+			patients.add(db.searchPatient(patient));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return patients;
 	}
 
 	public void updatePatient(Identifier id, PatientRequest patient) {
-		db.updatePatient(id, patient);
+		try {
+			db.updatePatient(id, patient);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 
@@ -53,7 +81,13 @@ public class TestFHIRRestServlet implements RestServer {
 	}
 	
 	public List<Patient> searchPatientWithFamily(PatientRequest patient){
-		return db.searchPatientWithFamily(patient);
+		try {
+			return db.searchPatientWithFamily(patient);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 }
