@@ -26,6 +26,7 @@ public class DBFactory {
 		}
 		
 		else if(typeOfConnector.equalsIgnoreCase("DBConnector")){
+			System.out.println("Vor DB erzeugung");
 			return new DBConnector();
 		}
 		

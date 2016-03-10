@@ -1,5 +1,6 @@
 package org.htl.adt.domainobjects;
 
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,7 +11,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table(name = "Patient")
-public class DatabasePatient {
+public class DatabasePatient{
 	
 	@Id
 	@GeneratedValue(generator="increment")

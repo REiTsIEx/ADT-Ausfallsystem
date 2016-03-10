@@ -8,7 +8,6 @@ import org.apache.log4j.BasicConfigurator;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.cfg.AnnotationConfiguration;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -27,14 +26,14 @@ public class DBConnector implements Connector {
 	private SessionFactory sessionFactory;
 
 	public DBConnector() {
-
+	BasicConfigurator.configure();
+	
+		System.out.println("Nach DB erzeugung");
 		config = new Configuration();
 		config.configure("hibernate.cfg.xml");
 
-		// factory = config.buildSessionFactory();
-		sessionFactory = new AnnotationConfiguration().addAnnotatedClass(DatabasePatient.class).configure()
-				.buildSessionFactory();
-
+		sessionFactory = config.buildSessionFactory();
+		System.out.println("Nach config erzeugung");
 	}
 
 	public void addPatient(PatientRequest patient) throws IOException {

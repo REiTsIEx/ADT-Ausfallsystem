@@ -5,8 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.htl.adt.connector.DBFactory;
 import org.htl.adt.domainobjects.Identifier;
 import org.htl.adt.domainobjects.PatientRequest;
+import org.htl.adt.interfaces.Connector;
 import org.htl.adt.interfaces.RestServer;
 import org.htl.adt.restservlet.RestFactory;
 
@@ -122,6 +124,7 @@ public class RestfulPatientResourceProvider implements IResourceProvider {
 		retValue.addAll(myPatients.values());
 		return retValue;*/
 		return restServer.getAllPatient();
+		
 	}
 	
 	@Update

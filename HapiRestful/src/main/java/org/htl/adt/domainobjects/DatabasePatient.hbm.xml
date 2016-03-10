@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="org.htl.adt.domainobjects">
+    <class name="DatabasePatient" table="Patient">
+        <id name="patient_id" column="Patient_id">
+            <generator class="increment"/>
+        </id>
+        <property name="socialSecurityNumber" column="SocialSecurityNumber"/>
+        <property name="firstName" column="FirstName"/>
+      	<property name="lastName" column="LastName"/>
+      	<property name="fhirMessage" column="FhirMessage"/>
+      	
+    </class>
+    
+</hibernate-mapping>
