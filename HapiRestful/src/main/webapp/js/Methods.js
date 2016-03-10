@@ -18,12 +18,18 @@ function searchPatientByName() {
 		alert("Bitte SVN oder Nachname eingeben!");
 		
 	}else{
+		if(svn.value == ""){
 
 	var firstname = document.getElementById('firstnameSearch');
 
 	
 	param = "?family="+lastname.value+"&firstname="+firstname.value;
-
+		}else{
+			param="/"+svn.value;
+		
+		
+		}
+		
 		
 	url = url+method+param;
 	
@@ -31,7 +37,7 @@ function searchPatientByName() {
     xmlRequest.open( "GET", url, true );
     xmlRequest.withCredentials = false;
     xmlRequest.send(null);
-   console.log(xmlRequest.responseXML);
+    loadPatients(xmlRequest.responseXML);
    
 
 			
@@ -40,7 +46,7 @@ function searchPatientByName() {
 
 
 
-function loadPatients() {
+function loadPatients(XML) {
 	
 	var list = document.getElementById('demo');
 	
@@ -54,7 +60,7 @@ function loadPatients() {
 
 function addNewPatient() {
 	
-	var method = "/HapiRestful/hapiservlet/"
+	var method = "/HapiRestful/hapiservlet/Patient"
 		
 	var svnValue = document.getElementById('svn_value');
 	
@@ -74,8 +80,8 @@ function addNewPatient() {
 		var xmlRequest = new XMLHttpRequest();
 		
 		xmlRequest.open("POST",url);
-		xmlRequest.withCredentials = true;
-		xmlRequest.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+		xmlRequest.withCredentials = false;
+		xmlRequest.setRequestHeader("Content-Type", "application/json+fhir;charset=UTF-8");
 		xmlRequest.send(JSON.stringify({value: svnValue, family: lastnameValue, given:firstnameValue, gender: genderValue, location : locationValue}));
 		
 
