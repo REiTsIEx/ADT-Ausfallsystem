@@ -37,25 +37,44 @@ function searchPatientByName() {
     xmlRequest.open( "GET", url, true );
     xmlRequest.withCredentials = false;
     xmlRequest.send(null);
-    loadPatients(xmlRequest.responseXML);
-   
-
-			
+    var xmlMessage = xmlRequest.responseXML;
+    if(xmlMessage != null) {
+    loadPatients(xmlMessage);
+    }else{
+    	
+    	alert("Keine Patienten für diese Auswahlkriterien!")
+    }
+   			
 }
 }
 
-
-
-function loadPatients(XML) {
-	
-	var list = document.getElementById('demo');
-	
-	var entry = document.createElement('li');
-	
-	entry.appendChild(document.createTextNode("Test" + Math.random()));
-	list.appendChild(entry);
-
-}
+////function loadPatients(xmlMessage) {
+//	
+//	var list = document.getElementById('demo');
+//	
+//	var entry = document.createElement('li');
+//	
+//	
+//	var multipleMatches = xmlMessage.getElementsByTagName('Bundle')
+//	if(multipleMatches =! null) {
+//		length = xmlMessage.getElementsByTagName('total').getAttribute('value');
+//		for(i = 0; i < length; i++) {
+//			var nameValues = xmlD
+//			var svn = xmlMessage.getElementsByTagName('value')[i].getAttribute('value');
+//			var lastname = xmlMessage.getElementsByTagName('family')[i].getAttribute('value');
+//			var firstname = xmlMessage.getElementsByTagName('given')[i].getAttribute('value');
+//		}
+//		
+//	}
+//	
+//	
+//	
+//	entry.appendChild(document.createTextNode("Test" + Math.random()));
+//	list.appendChild(entry);
+//	
+//	
+//
+//}
 
 
 function addNewPatient() {
@@ -82,7 +101,7 @@ function addNewPatient() {
 		xmlRequest.open("POST",url);
 		xmlRequest.withCredentials = false;
 		xmlRequest.setRequestHeader("Content-Type", "application/json+fhir;charset=UTF-8");
-		xmlRequest.send(JSON.stringify({value: svnValue, family: lastnameValue, given:firstnameValue, gender: genderValue, location : locationValue}));
+		xmlRequest.send(JSON.stringify({resourceType:"Patient", value: svnValue, family: lastnameValue, given:firstnameValue, gender: genderValue, location : locationValue}));
 		
 
 	}
