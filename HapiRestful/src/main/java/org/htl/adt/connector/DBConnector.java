@@ -10,6 +10,8 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.AnnotationConfiguration;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 import org.htl.adt.domainobjects.DatabasePatient;
 import org.htl.adt.domainobjects.Identifier;
 import org.htl.adt.domainobjects.PatientRequest;
@@ -29,20 +31,18 @@ public class DBConnector implements Connector {
 		config = new Configuration();
 		config.configure("hibernate.cfg.xml");
 
-		//factory = config.buildSessionFactory();
-		sessionFactory = new AnnotationConfiguration()
-				.addAnnotatedClass(DatabasePatient.class)
-				.configure().buildSessionFactory();
-		
+		// factory = config.buildSessionFactory();
+		sessionFactory = new AnnotationConfiguration().addAnnotatedClass(DatabasePatient.class).configure()
+				.buildSessionFactory();
 
 	}
 
-	public void addPatient(PatientRequest patient) throws IOException{
+	public void addPatient(PatientRequest patient) throws IOException {
 		// TODO Auto-generated method stub
 
 		Session session = null;
 		Transaction transaction = null;
-		
+
 		try {
 
 			session = sessionFactory.openSession();
@@ -67,7 +67,7 @@ public class DBConnector implements Connector {
 			if (session != null) {
 				session.close();
 			}
-			throw exception;
+			throw new IOException("Fehler beim hinzufügen des Patienten: " +  exception.getMessage());
 		}
 
 	}
@@ -78,7 +78,7 @@ public class DBConnector implements Connector {
 		return null;
 	}
 
-	public List<Patient> getAllPatients() {
+	public List<Patient> getAllPatients() throws IOException {
 		// TODO Auto-generated method stub
 		FhirContext ctx = FhirContext.forDstu2();
 		IParser parser = ctx.newXmlParser();
@@ -96,38 +96,77 @@ public class DBConnector implements Connector {
 			transaction = session.beginTransaction();
 
 			datalist = session.createCriteria(DatabasePatient.class).list();
-			
+
 			for (DatabasePatient data : datalist) {
-				Patient patient = parser.parseResource(Patient.class, data.getFhirMessage());
-				patientlist.add(patient);
+				Patient fhirPatient = parser.parseResource(Patient.class, data.getFhirMessage());
+				patientlist.add(fhirPatient);
 			}
 
 			transaction.commit();// transaction is committed
 
-		} catch (Exception e) {
+		} catch (Exception exception) {
 			if (transaction != null) {
 				transaction.rollback();
 			}
 			if (session != null) {
 				session.close();
 			}
+			
+			throw new IOException("Fehler beim abrufen der Patienten:" +  exception.getMessage());
+
+		}
+		return patientlist;
+	}
+
+	public void updatePatient(Identifier id, PatientRequest patient) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public List<Patient> searchPatientWithFamily(PatientRequest patient) throws IOException {
+		// TODO Auto-generated method stub
+		FhirContext ctx = FhirContext.forDstu2();
+		IParser parser = ctx.newXmlParser();
+	
+		List<DatabasePatient> datalist = new ArrayList<DatabasePatient>();
+		List<Patient> patientlist = new ArrayList<Patient>();
+
+		Session session = null;
+		Transaction transaction = null;
+
+		try {
+
+			session = sessionFactory.openSession();
+
+			transaction = session.beginTransaction();
+
+			String criteriaLastName = patient.patient.getNameFirstRep().getFamilyAsSingleString().toLowerCase();
+			
+			datalist = session.createCriteria(DatabasePatient.class)
+				    .add( Restrictions.like("lastName", criteriaLastName))
+				    .addOrder( Order.asc("patient_id")).list();	
+			
+			for (DatabasePatient data : datalist) {
+				Patient fhirPatient = parser.parseResource(Patient.class, data.getFhirMessage());
+				patientlist.add(fhirPatient);
+			}
+
+			transaction.commit();// transaction is committed
+
+		} catch (Exception exception) {
+			if (transaction != null) {
+				transaction.rollback();
+			}
+			if (session != null) {
+				session.close();
+			}
+			
+			throw new IOException("Fehler beim abrufen der Patienten:" +  exception.getMessage());
 
 		}
 		return patientlist;
 	}
 	
-	
-	public void updatePatient(Identifier id, PatientRequest patient) {
-		// TODO Auto-generated method stub
-				
-
-	}
-
-	public List<Patient> searchPatientWithFamily(PatientRequest patient) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	public void getConnection() {
 		// TODO Auto-generated method stub
 
@@ -137,7 +176,5 @@ public class DBConnector implements Connector {
 		// TODO Auto-generated method stub
 
 	}
-
-	
 
 }

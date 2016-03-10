@@ -9,6 +9,7 @@ import org.htl.adt.domainobjects.PatientRequest;
 import ca.uhn.fhir.model.dstu2.resource.Patient;
 
 public interface Connector {
+	
 	public void addPatient(PatientRequest patient) throws IOException;
 	
 	public void updatePatient(Identifier id, PatientRequest patient) throws IOException;

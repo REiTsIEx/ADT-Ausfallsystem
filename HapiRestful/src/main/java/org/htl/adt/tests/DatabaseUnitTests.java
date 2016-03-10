@@ -36,8 +36,8 @@ public class DatabaseUnitTests {
 	
 	/**
 	* 
-	* Fügt einen DatabasePatient zur Datenbank hinzu.
-	* Es wird nicht der DBConnector aufgerufen um den Patienten hinzuzufï¿½gen, sondern wird direkt an die Datenbank übergeben.
+	* FÃ¼gt einen DatabasePatient zur Datenbank hinzu.
+	* Es wird nicht der DBConnector aufgerufen um den Patienten hinzuzufÃ¼gen, sondern wird direkt an die Datenbank Ã¼bergeben.
 	*/
 	@Test
 	public void addPatientDirect() {
@@ -51,8 +51,7 @@ public class DatabaseUnitTests {
 
 		String fhirMessage = ctx.newXmlParser().encodeResourceToString(testPatient);
 		
-		BasicConfigurator.configure();
-
+		
 		Configuration config = new Configuration();
 		config.configure("hibernate.cfg.xml");
 		
@@ -79,8 +78,8 @@ public class DatabaseUnitTests {
 	
 	/**
 	* 
-	* Fügt einen DatabasePatient zur Datenbank hinzu.
-	* Der Patient wird mithilfe des DBConnectors in die Datenbank hinzugefï¿½gt
+	* FÃ¼gt einen DatabasePatient zur Datenbank hinzu.
+	* Der Patient wird mithilfe des DBConnectors in die Datenbank hinzugefÃ¼gt
 	*/
 	@Test
 	public void addPatient() {
@@ -92,7 +91,7 @@ public class DatabaseUnitTests {
 		Connector connector = DBFactory.getInstance().getConnector("DBConnector");
 		
 		try {
-			connector.addPatient(new PatientRequest("Patient hinzufügen", testPatient));
+			connector.addPatient(new PatientRequest("Patient hinzufÃ¼gen", testPatient));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -107,7 +106,6 @@ public class DatabaseUnitTests {
 	*/
 	@Test
 	public void getAllPatient() {
-		BasicConfigurator.configure();
 		
 		Connector connector = DBFactory.getInstance().getConnector("DBConnector");
 		
@@ -122,6 +120,36 @@ public class DatabaseUnitTests {
 		
 		for (Patient patient : patientlist) {
 			System.out.println(patient.getNameFirstRep().getNameAsSingleString());
+		}
+		
+	}
+
+	/**
+	* 
+	* Ruft alle Patienten aus der Datenbank an.
+	* Die Patienten werden mithilfe des DBConnectors aus der Datenbank abgerufen
+	*/
+	@Test
+	public void getPatientbyLastName() {
+		
+		
+		Connector connector = DBFactory.getInstance().getConnector("DBConnector");
+		
+		List<Patient> patientlist = new ArrayList<Patient>();
+		
+		Patient testPatient = new Patient();
+		testPatient.addName().addFamily("Nachname");
+		
+		try {
+			patientlist = connector.searchPatientWithFamily(new PatientRequest("Patient nach Nachname suchen", testPatient));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			System.out.println("Error");
+			e.printStackTrace();
+		}
+		
+		for (Patient patient : patientlist) {
+			System.out.println(patient.getNameFirstRep().getFamilyAsSingleString().toLowerCase());
 		}
 		
 	}
