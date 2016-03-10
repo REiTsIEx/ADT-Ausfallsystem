@@ -1,50 +1,57 @@
 /**
  * 
  */
+
+
+
 var url = "http://localhost:8081";
 
 
-function getPatientbyName() {
+function searchPatientByName() {
 
-	
+	var param= "";
 	var method = "/HapiRestful/hapiservlet/Patient";
 
-
+	var svn = document.getElementById("svnSearch");
 	var lastname = document.getElementById('lastnameSearch');
-	if(lastname.value == "") {
-		alert("Bitte Nachname eingeben!");
+	if(lastname.value == "" && svn.value == "") {
+		alert("Bitte SVN oder Nachname eingeben!");
 		
 	}else{
-	
+
 	var firstname = document.getElementById('firstnameSearch');
 
 	
-	var param = "?family="+lastname.value+"&firstname="+firstname.value;
+	param = "?family="+lastname.value+"&firstname="+firstname.value;
 
+		
 	url = url+method+param;
 	
     var xmlRequest = new XMLHttpRequest();
-    xmlRequest.open( "GET", url, false );
-    xmlRequest.withCredentials = true;
-    xmlRequest.send();
+    xmlRequest.open( "GET", url, true );
+    xmlRequest.withCredentials = false;
+    xmlRequest.send(null);
    console.log(xmlRequest.responseXML);
    
 
-	
-    
-	}
-	
+			
 }
-//gefundene Patienten in List anzeigen
+}
+
+
+
 function loadPatients() {
 	
 	var list = document.getElementById('demo');
 	
-	var entry = document.createElement('li')
+	var entry = document.createElement('li');
+	
 	entry.appendChild(document.createTextNode("Test" + Math.random()));
 	list.appendChild(entry);
+
 }
-//
+
+
 function addNewPatient() {
 	
 	var method = "/HapiRestful/hapiservlet/"
@@ -74,3 +81,6 @@ function addNewPatient() {
 
 	}
 }
+
+
+
