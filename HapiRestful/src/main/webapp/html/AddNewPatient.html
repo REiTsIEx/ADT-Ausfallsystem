@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" type="text/css" href="../css/AddPatientStyles.css">
+<script type="text/javascript" src="../js/Methods.js"></script>
+<title>Neuer Patient</title>
+</head>
+
+<div>
+<ulBar>
+  <liBar><a class="active" href="HomeScreen.html"><b>Hauptseite</b></a></liBar>
+</ulBar>
+</div>
+
+<div class="header"><br> Patienten anlegen </div>
+<body>
+<div class="row">
+<div class="col-3 menu">
+<ul>
+<li>SVN-Nummer: <br> <input  type="text" placeholder="Pflichtfeld.." id="svn_value" name = "lastnameField"></li>
+<li>Vorname:	<br><input  type="text" placeholder="Pflichtfeld.." id="firstnameAdd" name = "lastnameField"></li>
+<li>Nachname:	<br><input  type="text" placeholder="Pflichtfeld.." id="lastnameAdd" name = "lastnameField"></li>
+<li>Geschlecht: <br>
+	<select id="genderAdd">
+  		<option value="MALE">Männlich</option>
+  		<option value="FEMALE">Weiblich</option>
+  		<option value="UNDEFINED">undefiniert</option>
+	</select>
+</li>
+<li class="button" onclick="addNewPatient()">Patient speichern</li>
+</ul>
+
+</div>
+</div>
+
+</body>
+</html>

@@ -2,20 +2,26 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Hauptseite</title>
-<script src = "../js/FHIRLib.js"></script>
 <link href="../css/HomeScreenStyles.css" type="text/css" rel="stylesheet" />
 </head>
-<body>
-<h1 class="header">Was möchten Sie tun?</h1>
-<br>
-<ulMenuBar>
-  <liMenuBar class="header"><a class = "active" href="AddNewPatienten.html"><h2>Neuen Patienten<br> anlegen </h2></a></liMenuBar>
-  <liMenuBar class="header"><a href="SearchforPatient.html"><h2>Patientendaten bearbeiten <br> (mit Nachname)</h2></a></liMenuBar>
-  <liMenuBar class="header"><a href="movePatient.html"><h2>Patienten <br> verlegen </h2></a></liMenuBar>
-</ulMenuBar>
 
+<body>
+
+<div class="header">Was möchten Sie tun?</div>
+
+
+<br>
+<div class="row">
+<div class="col-2 menu">
+<ul class="normal">
+  <li><a  href="AddNewPatient.html">Neuen Patienten anlegen </a></liMenuBar>
+  <li><a  href="SearchforPatient.html">Patientendaten bearbeiten <br>(mit Nachname)</a></liMenuBar>
+  <li><a  href="movePatient.html">Patienten verlegen </a></liMenuBar>
+</ul>
+</div>
+</div>
 	
 </body>
 </html>

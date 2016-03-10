@@ -5,35 +5,31 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ADT-Ausfallsystem</title>
 <link rel="stylesheet" type="text/css" href="../css/SearchforPatientStyles.css">
-<script type="text/javascript" src="../js/PatientSearchMethods.js"></script>
+<script type="text/javascript" src="../js/Methods.js"></script>
 
 </head>
 
 
 <body>
-
-<ulMenuBar>
-  <liMenuBar><a class="active" href="HomeScreen.html"><b>Hauptseite</b></a></liMenuBar>
-  <liMenuBar><a href="#news.asp"><b></b></a></liMenuBar>
-  <liMenuBar><a href="#contact.asp"><b></b></a></liMenuBar>
-  <liMenuBar><a href="#about.asp"><b></b></a></liMenuBar>
-</ulMenuBar>
-<br>
-<div class="header">
-<h1>Patientensuche</h1>
-
+<div>
+<ulBar>
+  <liBar><a  href="HomeScreen.html"><b>Hauptseite</b></a></liBar>
+</ulBar>
 </div>
+
+<div class="header"><br>Patientensuche</div>
+
+<div class="row">
 <div class="col-3 menu">
 <ul>
 
-<li>Nachname: <br><input  type="text" placeholder="Pflichtfeld.." id="lastname" name = "lastnameField"></li>
-<li>Vorname: <br> <input  type="text" placeholder="Optional" id="firstname" name="firstnameField"></li>
+<li>Nachname: <br><input  type="text" placeholder="Pflichtfeld.." id="lastnameSearch" name = "lastnameField"></li>
+<li>Vorname:  <br><input  type="text" placeholder="Optional" id="firstnameSearch" name="firstnameField"></li>
 
-
-
-<liButton class="col-3 menu" onclick="getPatientbyName()">Suche Patient</liButton>
+<li class="button" onclick="getPatientbyName()">Suche Patient</li>
 
 </ul>
+</div>
 </div>
 </body>
 

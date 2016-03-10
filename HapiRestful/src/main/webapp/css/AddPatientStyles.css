@@ -1,23 +1,19 @@
-@CHARSET "ISO-8859-1";
-/* Allgemein Anfang */
-	body{
+body{
 	background-color:lightgrey;
-	font-size: 20px;
+	font-size: 20px
 	}
 	
 	* {
-    box-sizing: border-box;
+    box-sizing: content-box;
 	}
 	
-	.row:after 
-	{
+	.row:after {
     content: "";
     clear: both;
     display: block;
 	}
 	
-	[class*="col-"] 
-	{
+	[class*="col-"] {
     float: left;
     padding: 15px;
 	}
@@ -34,8 +30,69 @@
 	.col-10 {width: 83.33%;}
 	.col-11 {width: 91.66%;}
 	.col-12 {width: 100%;}
-/* Allgemein Ende */
 	
+	.normal{
+	font-size: 20px;
+	}
+	
+	.header {
+    background-color: #04B486;
+    color: #ffffff;
+    padding: 15px;
+    font-size: 35px;
+	}
+	
+	.menu ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+	}
+	
+	.menu li {
+    padding: 8px;
+    margin-bottom: 7px;
+    background-color :#04B486;
+    color: #ffffff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    border-radius: 10px;
+	}
+	
+	.menu li a {
+	display: block;
+    color: white;
+    text-align: center;
+    padding: 20px 22px;
+    text-decoration: none;
+	}
+	ulBar {
+	position : fixed;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+	}
+
+	liBar {
+    float: left;
+	}
+
+liBar a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+	}
+
+/* Change the link color to #111 (black) on hover */
+	liBar a:hover {
+    background-color: #04A278;
+}
+	.active {
+    background-color: #04B486;
+}
+
 /* SearchButton Anfang */
 	.button 
 	{
@@ -56,75 +113,3 @@
 	}
 /* SearchButton Ende */
 	
-	.header 
-	{
-    background-color: #04B486;
-    color: #ffffff;
-    padding: 15px;
-    font-size: 35px;
-	}
-	
-/* Parameterfelder Anfang */
-	.menu ul{
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    border-radius: 10px;
-    
-	}
-	
-	.menu li 
-	{
-    padding: 8px;
-    margin-bottom: 7px;
-    background-color :#04B486;
-    color: #ffffff;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-    border-radius: 10px;
-	}
-	
-	.menu li a {
-	display: block;
-    color: white;
-    text-align: center;
-    padding: 20px 22px;
-    text-decoration: none;
-	}
-/* Parameterfelder Ende */
-	
-/* Inputfelder Anfang */
-	input 
-	{
-	width : 75%;
-	}
-/* Inputfelder Ende */
-	
-	
-/* MenuBar Anfang */
-	ulBar {
-	position : fixed;
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    background-color: #04B486;
-}
-
-	liBar {
-    float: left;
-}
-
-	liBar a {
-    display: block;
-    color: white;
-    text-align: center;
-    padding: 14px 16px;
-    text-decoration: none;
-}
-
-
-	liBar a:hover {
-    background-color: #04A278;
-}
-/* MenuBar Ende */
-
