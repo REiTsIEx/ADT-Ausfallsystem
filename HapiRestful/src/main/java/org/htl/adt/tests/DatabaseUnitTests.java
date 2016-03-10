@@ -25,7 +25,7 @@ public class DatabaseUnitTests {
 
 	@Before
 	public void init() {
-		
+		BasicConfigurator.configure();
 	}
 	
 	@After
@@ -79,13 +79,11 @@ public class DatabaseUnitTests {
 	
 	/**
 	* 
-	* Fï¿½gt einen DatabasePatient zur Datenbank hinzu.
+	* Fügt einen DatabasePatient zur Datenbank hinzu.
 	* Der Patient wird mithilfe des DBConnectors in die Datenbank hinzugefï¿½gt
 	*/
 	@Test
 	public void addPatient() {
-		BasicConfigurator.configure();
-
 		Patient testPatient = new Patient();
 		testPatient.addIdentifier().setSystem("http://loinc.org").setValue("1234");
 		testPatient.addName().addFamily("Nachname").addGiven("Marcel").addGiven("M");

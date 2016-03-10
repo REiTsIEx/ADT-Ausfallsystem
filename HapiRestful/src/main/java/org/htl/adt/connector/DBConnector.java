@@ -8,6 +8,7 @@ import org.apache.log4j.BasicConfigurator;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.cfg.AnnotationConfiguration;
 import org.hibernate.cfg.Configuration;
 import org.htl.adt.domainobjects.DatabasePatient;
 import org.htl.adt.domainobjects.Identifier;
@@ -21,14 +22,17 @@ import ca.uhn.fhir.parser.IParser;
 public class DBConnector implements Connector {
 
 	private Configuration config;
-	private SessionFactory factory;
+	private SessionFactory sessionFactory;
 
 	public DBConnector() {
 
 		config = new Configuration();
 		config.configure("hibernate.cfg.xml");
 
-		factory = config.buildSessionFactory();
+		//factory = config.buildSessionFactory();
+		sessionFactory = new AnnotationConfiguration()
+				.addAnnotatedClass(DatabasePatient.class)
+				.configure().buildSessionFactory();
 		
 
 	}
@@ -39,11 +43,9 @@ public class DBConnector implements Connector {
 		Session session = null;
 		Transaction transaction = null;
 		
-		
-
 		try {
 
-			session = factory.openSession();
+			session = sessionFactory.openSession();
 
 			transaction = session.beginTransaction();
 
@@ -66,7 +68,6 @@ public class DBConnector implements Connector {
 				session.close();
 			}
 			throw exception;
-
 		}
 
 	}
@@ -79,8 +80,6 @@ public class DBConnector implements Connector {
 
 	public List<Patient> getAllPatients() {
 		// TODO Auto-generated method stub
-		BasicConfigurator.configure();
-
 		FhirContext ctx = FhirContext.forDstu2();
 		IParser parser = ctx.newXmlParser();
 
@@ -92,7 +91,7 @@ public class DBConnector implements Connector {
 
 		try {
 
-			session = factory.openSession();
+			session = sessionFactory.openSession();
 
 			transaction = session.beginTransaction();
 
@@ -116,6 +115,18 @@ public class DBConnector implements Connector {
 		}
 		return patientlist;
 	}
+	
+	
+	public void updatePatient(Identifier id, PatientRequest patient) {
+		// TODO Auto-generated method stub
+				
+
+	}
+
+	public List<Patient> searchPatientWithFamily(PatientRequest patient) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 	public void getConnection() {
 		// TODO Auto-generated method stub
@@ -127,14 +138,6 @@ public class DBConnector implements Connector {
 
 	}
 
-	public void updatePatient(Identifier id, PatientRequest patient) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public List<Patient> searchPatientWithFamily(PatientRequest patient) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 
 }

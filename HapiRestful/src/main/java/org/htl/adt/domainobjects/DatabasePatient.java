@@ -1,17 +1,32 @@
 package org.htl.adt.domainobjects;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
+import org.hibernate.annotations.GenericGenerator;
 
+@Entity
+@Table(name = "Patient")
 public class DatabasePatient {
 	
+	@Id
+	@GeneratedValue(generator="increment")
+	@GenericGenerator(name="increment", strategy = "increment")
 	int patient_id;
 	
+	@Column(name = "SocialSecurityNumber")
 	String socialSecurityNumber;
 	
+	@Column(name = "FirstName")
 	String firstName;
 	
+	@Column(name = "LastName")
 	String lastName;
 	
+	@Column(name = "FhirMessage")
 	String fhirMessage;
 	
 	
