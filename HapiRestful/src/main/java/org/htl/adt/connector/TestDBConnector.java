@@ -41,15 +41,17 @@ public class TestDBConnector implements Connector{
 		db.myPatients.put(id.identifier.getIdPartAsLong(), patient.patient);
 	}
 
-	public Patient searchPatient(PatientRequest patient) {
+	public List<Patient> searchPatient(PatientRequest patient) {
 		IdDt patID = patient.patient.getId();
-		Patient retValue = db.myPatients.get(patID.getIdPartAsLong());
-		if(retValue == null){
+		Patient dbPatient = db.myPatients.get(patID.getIdPartAsLong());
+		if(dbPatient == null){
 			throw new ResourceNotFoundException("Der Patient mit der ID " + patID.getIdPart() + " ist nicht vorhanden");
 			//OperationOutcome oo = new OperationOutcome();
 			//oo.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("Patient mit dieser ID nicht vorhanden");
 			//throw new InternalErrorException("Ungueltige Patienten-ID", oo);
 		}
+		List<Patient> retValue = new ArrayList<Patient>();
+		retValue.add(dbPatient);
 		
 		return retValue;
 	}

@@ -34,10 +34,6 @@ public class DatabasePatient{
 	
 	
 
-	public DatabasePatient() {
-		super();
-	}
-
 	public DatabasePatient(String identifier, String firstName, String lastName, String fhirMessage) {
 		super();
 		this.identifier = identifier;
