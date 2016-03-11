@@ -18,8 +18,8 @@ public class DatabasePatient{
 	@GenericGenerator(name="increment", strategy = "increment")
 	int patient_id;
 	
-	@Column(name = "SocialSecurityNumber")
-	String socialSecurityNumber;
+	@Column(name = "Identifier")
+	String identifier;
 	
 	@Column(name = "FirstName")
 	String firstName;
@@ -32,16 +32,22 @@ public class DatabasePatient{
 	
 	
 	
-	public DatabasePatient() {
-		super();
-	}
+	
 
-	public DatabasePatient(String socialSecurityNumber, String firstName, String lastName, String fhirMessage) {
+	public DatabasePatient(String identifier, String firstName, String lastName, String fhirMessage) {
 		super();
-		this.socialSecurityNumber = socialSecurityNumber;
+		this.identifier = identifier;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.fhirMessage = fhirMessage;
+	}
+
+	public String getIdentifier() {
+		return identifier;
+	}
+
+	public void setIdentifier(String identifier) {
+		this.identifier = identifier;
 	}
 
 	public int getPatient_id() {
@@ -52,13 +58,7 @@ public class DatabasePatient{
 		this.patient_id = patient_id;
 	}
 
-	public String getSocialSecurityNumber() {
-		return socialSecurityNumber;
-	}
-
-	public void setSocialSecurityNumber(String socialSecurityNumber) {
-		this.socialSecurityNumber = socialSecurityNumber;
-	}
+	
 
 	public String getFirstName() {
 		return firstName;

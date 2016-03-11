@@ -11,6 +11,7 @@ import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.htl.adt.connector.DBFactory;
 import org.htl.adt.domainobjects.DatabasePatient;
+import org.htl.adt.domainobjects.Identifier;
 import org.htl.adt.domainobjects.PatientRequest;
 import org.htl.adt.interfaces.Connector;
 import org.junit.After;
@@ -150,6 +151,30 @@ public class DatabaseUnitTests {
 		
 		for (Patient patient : patientlist) {
 			System.out.println(patient.getNameFirstRep().getFamilyAsSingleString().toLowerCase());
+		}
+		
+	}
+	
+	/**
+	* 
+	* Updatet einen DatabasePatient in der Datenbank.
+	* Der Patient wird mithilfe des DBConnectors in die Datenbank gesendet
+	*/
+	@Test
+	public void updatePatient() {
+		Patient testPatient = new Patient();
+		testPatient.addIdentifier().setSystem("http://loinc.org").setValue("1234");
+		testPatient.addName().addFamily("Nachname2").addGiven("Marcel2").addGiven("M2");
+		testPatient.setGender(AdministrativeGenderEnum.MALE);
+		
+		Connector connector = DBFactory.getInstance().getConnector("DBConnector");
+		
+		
+		try {
+			connector.updatePatient(new Identifier(), new PatientRequest("", testPatient));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 	}

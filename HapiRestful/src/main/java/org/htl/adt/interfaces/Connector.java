@@ -14,7 +14,7 @@ public interface Connector {
 	
 	public void updatePatient(Identifier id, PatientRequest patient) throws IOException;
 
-	public Patient searchPatient(PatientRequest patient) throws IOException;
+	public List<Patient> searchPatient(PatientRequest patient) throws IOException;
 	
 	public List<Patient> getAllPatients() throws IOException;
 	

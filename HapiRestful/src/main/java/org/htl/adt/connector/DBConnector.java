@@ -26,8 +26,8 @@ public class DBConnector implements Connector {
 	private SessionFactory sessionFactory;
 
 	public DBConnector() {
-	BasicConfigurator.configure();
-	
+		BasicConfigurator.configure();
+
 		System.out.println("Nach DB erzeugung");
 		config = new Configuration();
 		config.configure("hibernate.cfg.xml");
@@ -66,14 +66,12 @@ public class DBConnector implements Connector {
 			if (session != null) {
 				session.close();
 			}
-			throw new IOException("Fehler beim hinzufügen des Patienten: " +  exception.getMessage());
+			throw new IOException("Fehler beim hinzufügen des Patienten: " + exception.getMessage());
 		}
 
 	}
 
-	public Patient searchPatient(PatientRequest patient) {
-		// TODO Auto-generated method stub
-
+	public List<Patient> searchPatient(PatientRequest patient) {
 		return null;
 	}
 
@@ -110,15 +108,53 @@ public class DBConnector implements Connector {
 			if (session != null) {
 				session.close();
 			}
-			
-			throw new IOException("Fehler beim abrufen der Patienten:" +  exception.getMessage());
+
+			throw new IOException("Fehler beim abrufen der Patienten:" + exception.getMessage());
 
 		}
 		return patientlist;
 	}
 
-	public void updatePatient(Identifier id, PatientRequest patient) {
+	public void updatePatient(Identifier id, PatientRequest patient) throws IOException {
 		// TODO Auto-generated method stub
+		Session session = null;
+		Transaction transaction = null;
+
+		try {
+
+			session = sessionFactory.openSession();
+
+			transaction = session.beginTransaction();
+			
+			String ersatzidentifier = "12345";
+
+			DatabasePatient value = (DatabasePatient) session.createCriteria(DatabasePatient.class).setMaxResults(1)
+					.add(Restrictions.like("identifier", ersatzidentifier)).list().get(0);
+
+			FhirContext ctx = FhirContext.forDstu2();
+			String fhirMessage = ctx.newXmlParser().encodeResourceToString(patient.patient);
+
+			DatabasePatient dbPatient = new DatabasePatient(patient.patient.getIdentifier().toString(),
+					patient.patient.getNameFirstRep().getFamilyAsSingleString().toLowerCase(),
+					patient.patient.getNameFirstRep().getNameAsSingleString().toLowerCase(), fhirMessage);
+
+			dbPatient.setPatient_id(value.getPatient_id());
+
+			session.saveOrUpdate(dbPatient);
+
+			transaction.commit();// transaction is committed
+
+		} catch (Exception exception) {
+			if (transaction != null) {
+				transaction.rollback();
+			}
+			if (session != null) {
+				session.close();
+			}
+
+			throw new IOException("Fehler beim updaten des Patientes:" + exception.getMessage());
+
+		}
 
 	}
 
@@ -126,7 +162,7 @@ public class DBConnector implements Connector {
 		// TODO Auto-generated method stub
 		FhirContext ctx = FhirContext.forDstu2();
 		IParser parser = ctx.newXmlParser();
-	
+
 		List<DatabasePatient> datalist = new ArrayList<DatabasePatient>();
 		List<Patient> patientlist = new ArrayList<Patient>();
 
@@ -140,11 +176,10 @@ public class DBConnector implements Connector {
 			transaction = session.beginTransaction();
 
 			String criteriaLastName = patient.patient.getNameFirstRep().getFamilyAsSingleString().toLowerCase();
-			
+
 			datalist = session.createCriteria(DatabasePatient.class)
-				    .add( Restrictions.like("lastName", criteriaLastName))
-				    .addOrder( Order.asc("patient_id")).list();	
-			
+					.add(Restrictions.like("lastName", criteriaLastName)).addOrder(Order.asc("patient_id")).list();
+
 			for (DatabasePatient data : datalist) {
 				Patient fhirPatient = parser.parseResource(Patient.class, data.getFhirMessage());
 				patientlist.add(fhirPatient);
@@ -159,13 +194,13 @@ public class DBConnector implements Connector {
 			if (session != null) {
 				session.close();
 			}
-			
-			throw new IOException("Fehler beim abrufen der Patienten:" +  exception.getMessage());
+
+			throw new IOException("Fehler beim abrufen der Patienten:" + exception.getMessage());
 
 		}
 		return patientlist;
 	}
-	
+
 	public void getConnection() {
 		// TODO Auto-generated method stub
 

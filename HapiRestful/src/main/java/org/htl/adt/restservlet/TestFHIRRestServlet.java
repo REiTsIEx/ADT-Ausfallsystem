@@ -41,7 +41,7 @@ public class TestFHIRRestServlet implements RestServer {
 	
 	public Patient searchPatientWithID(PatientRequest patient) {
 		try {
-			return db.searchPatient(patient);
+			return db.searchPatient(patient).get(0);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -52,7 +52,7 @@ public class TestFHIRRestServlet implements RestServer {
 	public List<Patient> searchPatient(PatientRequest patient) {
 		List<Patient> patients = null;
 		try {
-			patients.add(db.searchPatient(patient));
+			patients.add(db.searchPatient(patient).get(0));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
