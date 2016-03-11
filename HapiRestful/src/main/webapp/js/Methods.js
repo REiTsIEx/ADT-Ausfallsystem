@@ -4,7 +4,7 @@
 
 
 
-var url = "http://localhost:8081";
+var url = "http://localhost:8080";
 
 
 function searchPatientByName() {
@@ -101,7 +101,7 @@ function addNewPatient() {
 		xmlRequest.open("POST",url);
 		xmlRequest.withCredentials = false;
 		xmlRequest.setRequestHeader("Content-Type", "application/json+fhir;charset=UTF-8");
-		xmlRequest.send(JSON.stringify({resourceType:"Patient", value: svnValue, family: lastnameValue, given:firstnameValue, gender: genderValue, location : locationValue}));
+		xmlRequest.send(JSON.stringify({resourceType:"Patient", value: svnValue, name:{ family: lastnameValue.value, given:firstnameValue.value }, gender: genderValue.value, location : locationValue}));
 		
 
 	}

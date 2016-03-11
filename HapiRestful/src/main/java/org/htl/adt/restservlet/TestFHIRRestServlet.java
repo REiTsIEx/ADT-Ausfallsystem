@@ -16,7 +16,7 @@ import ca.uhn.fhir.model.primitive.IdDt;
 
 public class TestFHIRRestServlet implements RestServer {
 
-	Connector db = DBFactory.getInstance().getConnector("DBConnector");
+	Connector db = DBFactory.getInstance().getConnector("TestDBConnector");
 	//DBConnector db = new DBConnector();
 	//TestDBConnector db = new TestDBConnector();
 
