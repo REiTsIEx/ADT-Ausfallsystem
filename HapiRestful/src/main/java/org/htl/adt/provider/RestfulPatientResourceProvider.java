@@ -114,7 +114,10 @@ public class RestfulPatientResourceProvider implements IResourceProvider {
 		if(retValue.isEmpty())
 			throw new InternalErrorException("Patient mit diesem Nachnamn nicht vorhanden");
 		return retValue;*/
-		PatientRequest request = new PatientRequest(familyName.getValue(), null);
+		Patient pat = new Patient();
+		pat.setId(new IdDt(1));
+		pat.addName().addFamily(familyName.getValue());
+		PatientRequest request = new PatientRequest(familyName.getValue(), pat);
 		return restServer.searchPatientWithFamily(request);
 	}
 	

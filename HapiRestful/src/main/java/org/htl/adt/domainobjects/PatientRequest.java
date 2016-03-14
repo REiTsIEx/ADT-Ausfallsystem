@@ -4,7 +4,7 @@ import ca.uhn.fhir.model.dstu2.resource.Patient;
 
 public class PatientRequest extends Request {
 		
-	public Patient patient;
+	private Patient patient;
 	
 	
 	public PatientRequest(String messageText, Patient messageObject) {
@@ -15,6 +15,14 @@ public class PatientRequest extends Request {
 
 	public PatientRequest() {
 		
+	}
+
+	public Patient getPatient() {
+		return patient;
+	}
+
+	public void setPatient(Patient patient) {
+		this.patient = patient;
 	}
 	
 	

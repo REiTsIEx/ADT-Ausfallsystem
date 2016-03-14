@@ -10,7 +10,7 @@ var url = "http://localhost:8080";
 function searchPatientByName() {
 
 	var param= "";
-	var method = "/HapiRestful/hapiservlet/Patient";
+	var method = "/Ausfallsystem/hapiservlet/Patient";
 
 	var svn = document.getElementById("svnSearch");
 	var lastname = document.getElementById('lastnameSearch');
@@ -40,10 +40,11 @@ function searchPatientByName() {
     var xmlMessage = xmlRequest.responseXML;
     if(xmlMessage != null) {
     loadPatients(xmlMessage);
-    }else{
-    	
-    	alert("Keine Patienten für diese Auswahlkriterien!")
     }
+//    else{
+//    	
+//    	alert("Keine Patienten für diese Auswahlkriterien!")
+//    }
    			
 }
 }
@@ -79,7 +80,7 @@ function searchPatientByName() {
 
 function addNewPatient() {
 	
-	var method = "/HapiRestful/hapiservlet/Patient"
+	var method = "/Ausfallsystem/hapiservlet/Patient"
 		
 	var svnValue = document.getElementById('svn_value');
 	
@@ -101,7 +102,7 @@ function addNewPatient() {
 		xmlRequest.open("POST",url);
 		xmlRequest.withCredentials = false;
 		xmlRequest.setRequestHeader("Content-Type", "application/json+fhir;charset=UTF-8");
-		xmlRequest.send(JSON.stringify({resourceType:"Patient", value: svnValue, name:{ family: lastnameValue.value, given:firstnameValue.value }, gender: genderValue.value, location : locationValue}));
+		xmlRequest.send(JSON.stringify({resourceType:"Patient", id : svnValue.value, name:{ family: lastnameValue.value, given:firstnameValue.value }, gender: genderValue.value, location : locationValue}));
 		
 
 	}

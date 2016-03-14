@@ -27,9 +27,9 @@ public class TestDBConnector implements Connector{
 	public void addPatient(PatientRequest patient) {
 		//IdDt newPatientID = new IdDt();
 		//newPatientID.withVersion(nextID.toString());
-		patient.patient.setId(new IdDt(nextID));
+		patient.getPatient().setId(new IdDt(nextID));
 		//patient.patient.setId(newPatientID);
-		db.myPatients.put(nextID, patient.patient);
+		db.myPatients.put(nextID, patient.getPatient());
 		nextID++;
 		
 	}
@@ -38,11 +38,11 @@ public class TestDBConnector implements Connector{
 		/*Patient oldPatient = db.myPatients.get(id.identifier.getIdPartAsLong());
 		oldPatient.addName(patient.patient.getNameFirstRep());
 		db.myPatients.put(id.identifier.getIdPartAsLong(), oldPatient);*/
-		db.myPatients.put(id.identifier.getIdPartAsLong(), patient.patient);
+		db.myPatients.put(id.identifier.getIdPartAsLong(), patient.getPatient());
 	}
 
 	public List<Patient> searchPatient(PatientRequest patient) {
-		IdDt patID = patient.patient.getId();
+		IdDt patID = patient.getPatient().getId();
 		Patient dbPatient = db.myPatients.get(patID.getIdPartAsLong());
 		if(dbPatient == null){
 			throw new ResourceNotFoundException("Der Patient mit der ID " + patID.getIdPart() + " ist nicht vorhanden");

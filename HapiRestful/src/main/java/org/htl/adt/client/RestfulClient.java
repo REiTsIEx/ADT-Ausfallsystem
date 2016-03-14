@@ -8,7 +8,7 @@ import ca.uhn.fhir.rest.client.IGenericClient;
 
 public class RestfulClient {
 	FhirContext context = FhirContext.forDstu2();
-	String serverURL = "http://localhost:8080/HapiRestful/hapiservlet/";
+	String serverURL = "http://localhost:8081/Ausfallsystem/hapiservlet/";
 	IGenericClient client = context.newRestfulGenericClient(serverURL);
 	
 	public RestfulClient() {

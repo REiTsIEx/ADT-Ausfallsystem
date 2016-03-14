@@ -11,6 +11,7 @@ import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.htl.adt.client.RestfulClient;
 import org.htl.adt.domainobjects.DatabasePatient;
 import org.htl.adt.domainobjects.Identifier;
 import org.htl.adt.domainobjects.PatientRequest;
@@ -18,10 +19,12 @@ import org.htl.adt.interfaces.Connector;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.model.dstu2.resource.Patient;
+import ca.uhn.fhir.model.dstu2.valueset.AdministrativeGenderEnum;
+import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.parser.IParser;
 
 public class DBConnector implements Connector {
-
+	// private RestfulClient client = new RestfulClient();
 	private Configuration config;
 	private SessionFactory sessionFactory;
 
@@ -49,11 +52,11 @@ public class DBConnector implements Connector {
 			transaction = session.beginTransaction();
 
 			FhirContext ctx = FhirContext.forDstu2();
-			String fhirMessage = ctx.newXmlParser().encodeResourceToString(patient.patient);
+			String fhirMessage = ctx.newXmlParser().encodeResourceToString(patient.getPatient());
 
-			DatabasePatient data = new DatabasePatient(patient.patient.getId().toString(),
-					patient.patient.getNameFirstRep().getGivenAsSingleString(),
-					patient.patient.getNameFirstRep().getFamilyAsSingleString(), fhirMessage);
+			DatabasePatient data = new DatabasePatient(patient.getPatient().getId().toString(),
+					patient.getPatient().getNameFirstRep().getGivenAsSingleString(),
+					patient.getPatient().getNameFirstRep().getFamilyAsSingleString(), fhirMessage);
 
 			session.save(data);
 
@@ -125,18 +128,18 @@ public class DBConnector implements Connector {
 			session = sessionFactory.openSession();
 
 			transaction = session.beginTransaction();
-			
+
 			String ersatzidentifier = "12345";
 
 			DatabasePatient value = (DatabasePatient) session.createCriteria(DatabasePatient.class).setMaxResults(1)
 					.add(Restrictions.like("identifier", ersatzidentifier)).list().get(0);
 
 			FhirContext ctx = FhirContext.forDstu2();
-			String fhirMessage = ctx.newXmlParser().encodeResourceToString(patient.patient);
+			String fhirMessage = ctx.newXmlParser().encodeResourceToString(patient.getPatient());
 
-			DatabasePatient dbPatient = new DatabasePatient(patient.patient.getIdentifier().toString(),
-					patient.patient.getNameFirstRep().getFamilyAsSingleString().toLowerCase(),
-					patient.patient.getNameFirstRep().getNameAsSingleString().toLowerCase(), fhirMessage);
+			DatabasePatient dbPatient = new DatabasePatient(patient.getPatient().getIdentifier().toString(),
+					patient.getPatient().getNameFirstRep().getFamilyAsSingleString().toLowerCase(),
+					patient.getPatient().getNameFirstRep().getNameAsSingleString().toLowerCase(), fhirMessage);
 
 			dbPatient.setPatient_id(value.getPatient_id());
 
@@ -158,7 +161,7 @@ public class DBConnector implements Connector {
 
 	}
 
-	public List<Patient> searchPatientWithFamily(PatientRequest patient) throws IOException {
+	public List<Patient> searchPatientWithFamily(PatientRequest patientRequest) throws IOException {
 		// TODO Auto-generated method stub
 		FhirContext ctx = FhirContext.forDstu2();
 		IParser parser = ctx.newXmlParser();
@@ -175,7 +178,8 @@ public class DBConnector implements Connector {
 
 			transaction = session.beginTransaction();
 
-			String criteriaLastName = patient.patient.getNameFirstRep().getFamilyAsSingleString().toLowerCase();
+			String criteriaLastName = patientRequest.getPatient().getNameFirstRep().getFamilyAsSingleString()
+					.toLowerCase();
 
 			datalist = session.createCriteria(DatabasePatient.class)
 					.add(Restrictions.like("lastName", criteriaLastName)).addOrder(Order.asc("patient_id")).list();
@@ -198,6 +202,14 @@ public class DBConnector implements Connector {
 			throw new IOException("Fehler beim abrufen der Patienten:" + exception.getMessage());
 
 		}
+		/*
+		 * Patient newPatient = new Patient(); newPatient.setId(new IdDt(3));
+		 * newPatient.addIdentifier().setSystem("http://test.com/Patient").
+		 * setValue("1234");
+		 * newPatient.addName().addFamily("Simpson").addGiven("Homer").addGiven(
+		 * "J"); newPatient.setGender(AdministrativeGenderEnum.MALE);
+		 * client.createPatient(newPatient);
+		 */
 		return patientlist;
 	}
 

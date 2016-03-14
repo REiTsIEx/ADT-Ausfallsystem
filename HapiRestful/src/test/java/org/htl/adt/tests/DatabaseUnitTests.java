@@ -21,6 +21,7 @@ import org.junit.Test;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.model.dstu2.resource.Patient;
 import ca.uhn.fhir.model.dstu2.valueset.AdministrativeGenderEnum;
+import ca.uhn.fhir.model.primitive.IdDt;
 
 public class DatabaseUnitTests {
 
@@ -85,6 +86,7 @@ public class DatabaseUnitTests {
 	@Test
 	public void addPatient() {
 		Patient testPatient = new Patient();
+		testPatient.setId(new IdDt(1));
 		testPatient.addIdentifier().setSystem("http://loinc.org").setValue("1234");
 		testPatient.addName().addFamily("Nachname").addGiven("Marcel").addGiven("M");
 		testPatient.setGender(AdministrativeGenderEnum.MALE);
