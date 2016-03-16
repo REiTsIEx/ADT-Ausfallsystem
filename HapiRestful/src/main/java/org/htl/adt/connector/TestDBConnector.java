@@ -83,12 +83,12 @@ public class TestDBConnector implements Connector{
 		}
 		if(retValue.isEmpty())
 			throw new ResourceNotFoundException("Patient mit dem Nachnamen " + patient.messageText + " nicht vorhanden");
-		Patient newPatient = new Patient();
+		/*Patient newPatient = new Patient();
 		newPatient.setId(new IdDt(3));
 		newPatient.addIdentifier().setSystem("http://test.com/Patient").setValue("1234");
 		newPatient.addName().addFamily("Simpson").addGiven("Homer").addGiven("J");
 		newPatient.setGender(AdministrativeGenderEnum.MALE);
-		client.createPatient(newPatient);
+		client.createPatient(newPatient);*/
 		return retValue;
 	}
 

@@ -1,5 +1,6 @@
 package org.htl.adt.provider;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -36,8 +37,8 @@ public class RestfulPatientResourceProvider implements IResourceProvider {
 	private Map<Long, Patient> myPatients = new HashMap<Long, Patient>();
 	private long nextID = 1L;
 	
-	private RestServer restServer = RestFactory.getInstance().getServer("TestServer");
-
+	//private RestServer restServer = RestFactory.getInstance().getServer("TestServer");
+	Connector db = DBFactory.getInstance().getConnector("TestDBConnector");
 	//TestFHIRRestServlet myServlet = new TestFHIRRestServlet();
 	//DB db = new DB();
 	
@@ -80,9 +81,16 @@ public class RestfulPatientResourceProvider implements IResourceProvider {
 		Patient pat = new Patient();
 		pat.setId(new IdDt(patID));
 		PatientRequest request = new PatientRequest("Der zu suchende Patient", pat);
-		Patient retValue = restServer.searchPatientWithID(request);
+		Patient retValue = new Patient();
+		try {
+			List<Patient> values = db.searchPatient(request);
+			return values.get(0);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 		
-		return retValue;
 		
 	}
 	
@@ -90,7 +98,12 @@ public class RestfulPatientResourceProvider implements IResourceProvider {
 	public MethodOutcome create(@ResourceParam Patient patient){
 		if(patient != null){
 			PatientRequest request = new PatientRequest("Der anzulegende Patient", patient);
-			restServer.addPatient(request);
+			try {
+				db.addPatient(request);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			return new MethodOutcome(new IdDt("Patient", patient.getId().toString(), patient.getId().getVersionIdPart()));
 			//OperationOutcome oo = new OperationOutcome();
 			//oo.addIssue().setSeverity(IssueSeverityEnum.INFORMATION).setDetails(patient.toString());
@@ -118,7 +131,13 @@ public class RestfulPatientResourceProvider implements IResourceProvider {
 		pat.setId(new IdDt(1));
 		pat.addName().addFamily(familyName.getValue());
 		PatientRequest request = new PatientRequest(familyName.getValue(), pat);
-		return restServer.searchPatientWithFamily(request);
+		try {
+			return db.searchPatientWithFamily(request);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		throw new InternalErrorException("Patient mit dem Namen "+ familyName + " nicht vorhanden");
 	}
 	
 	@Search
@@ -126,15 +145,25 @@ public class RestfulPatientResourceProvider implements IResourceProvider {
 		/*List<Patient> retValue = new ArrayList<Patient>();
 		retValue.addAll(myPatients.values());
 		return retValue;*/
-		return restServer.getAllPatient();
-		
+		try {
+			return db.getAllPatients();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		throw new InternalErrorException("Kein Patient vorhanden");
 	}
 	
 	@Update
 	public MethodOutcome updatePatient(@IdParam IdDt id, @ResourceParam Patient patient){
 		Identifier identifier = new Identifier(id);
 		PatientRequest request = new PatientRequest("Die neuen Patientendaten", patient);
-		restServer.updatePatient(identifier, request);
+		try {
+			db.updatePatient(identifier, request);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return new MethodOutcome(id);
 	}
 	
