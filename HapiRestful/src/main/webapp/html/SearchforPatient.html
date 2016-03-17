@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ADT-Ausfallsystem</title>
 <link rel="stylesheet" type="text/css" href="../css/SearchforPatientStyles.css">
-<script type="text/javascript" src="../js/Methods.js"></script>
+<!-- <script type="text/javascript" src="../js/Methods.js"></script> -->
 
 </head>
 
@@ -28,7 +28,7 @@
 
 <li>Vorname:  <br><input  type="text" placeholder="Optional" id="firstnameSearch" name="firstnameField"></li>
 
-<li class="button" onclick="searchPatientByName()">Suche Patient</li>
+<li class="button" onclick="searchPatient()">Suche Patient</li>
 
 </ul>
 </div>
@@ -45,6 +45,40 @@
 </div>
 
 </div>
+
+
+
+<script src='../js/fhir-client.js'></script>
+<script>
+function searchPatient() {
+	  var smart = new FHIR.client({
+		    serviceUrl: 'http://localhost:8080',
+		    auth: {
+		      type: 'none'
+		    }
+		  });
+	
+
+if(svnSearch.value != "") {
+
+	  smart.api.search({type: "Patient", query: {identifier: svnSearch.value }
+		}).then(function(r){
+		       console.log(JSON.stringify(p.name[0],null,2));
+		});
+}else{
+	  var smart = new FHIR.client({
+		    serviceUrl: 'http://localhost:8080',
+		    auth: {
+		      type: 'none'
+		    }
+		  });
+  smart.api.search({type: "Patient", query: {family: lastnameSearch.value, given: firstnameSearch.value}
+	}).then(function(r){
+	       console.log(JSON.stringify(r,null,2));
+	});
+}
+}
+</script>
 
 </body>
 
