@@ -35,7 +35,7 @@
 </div>
 
 <div class="row">
-<div class ="col-7 menu">
+<div class ="col-4 menu">
 
 <ul id="demo">
 
@@ -51,6 +51,10 @@
 <script src='../js/fhir-client.js'></script>
 <script>
 function searchPatient() {
+var list = document.getElementById('demo');
+
+var entry = document.createElement('li')
+	entry.className = "button";
 	
 	
 	  var smart = new FHIR.client({
@@ -64,15 +68,14 @@ function searchPatient() {
 if(svnSearch.value != "") {
 
 	  smart.api.search({type: "Patient", query: {identifier: svnSearch.value }
-		}).then(function(r){
-			r.data.entry.forEach(function(re){
-				var resource = re.resource;
-				var name = resource.active
-				console.log("yolo"+name);
-// 				var formatted = ("<li>"  +name.given.join(" ") + " " + name.family + "</li>");
-// 				$("#demo").append(formatted);
-// 				console.log(JSON.stringify(r,null,2));
-
+		}).then(function(patientList){
+			r.data.entry.forEach(function(patient){
+				var nameg = patient.resource;
+				var namePat = nameg.name[0];
+				var familyName = namePat.family;
+				var givenName = namePat.given;
+				entry.appendChild(document.createTextNode(familyName + " " + givenName));
+				list.appendChild(entry);
 				
 			});
 		       
@@ -83,12 +86,12 @@ if(svnSearch.value != "") {
 	}).then(function(patientList){
 		patientList.data.entry.forEach(function(patient){
 			
-			var name = patient.resource.id;
-			console.log(JSON.stringify(patient,null,2));
-			console.log(name);
-//				var formatted = ("<li>"  +name.given.join(" ") + " " + name.family + "</li>");
-//				$("#demo").append(formatted);
-//				console.log(JSON.stringify(r,null,2));
+			var nameg = patient.resource;
+			var namePat = nameg.name[0];
+			var familyName = namePat.family;
+			var givenName = namePat.given;
+			entry.appendChild(document.createTextNode(familyName + " " + givenName));
+			list.appendChild(entry);
 		});
 	});
 }
