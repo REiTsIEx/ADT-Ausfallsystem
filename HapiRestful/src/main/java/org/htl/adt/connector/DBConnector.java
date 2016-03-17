@@ -120,7 +120,7 @@ public class DBConnector implements Connector {
 		// TODO Auto-generated method stub
 		Session session = null;
 		Transaction transaction = null;
-
+		
 		try {
 
 			session = sessionFactory.openSession();
@@ -130,29 +130,33 @@ public class DBConnector implements Connector {
 			FhirContext ctx = FhirContext.forDstu2();
 			String fhirMessage = ctx.newXmlParser().encodeResourceToString(patient.getPatient());
 
-			DatabasePatient selectValue = (DatabasePatient)session.createCriteria(DatabasePatient.class)
-					.add(Restrictions.like("identifier", "99"))
+			
+			List<DatabasePatient> selectValue = session.createCriteria(DatabasePatient.class)
+					.add(Restrictions.like("identifier", id.getIdentifier().getIdPart()))
 					.addOrder(Order.asc("patient_id"))
-					.list().get(0);
-
-			if (selectValue == null) {
-
+					.list();
+			
+			
+			if (!selectValue.isEmpty()) {
+				
 				DatabasePatient insertValue = new DatabasePatient(patient.getPatient().getId().toString(),
 						patient.getPatient().getNameFirstRep().getGivenAsSingleString(),
 						patient.getPatient().getNameFirstRep().getFamilyAsSingleString(), fhirMessage);
-
-				session.save(insertValue);
+							
+				insertValue.setPatient_id(selectValue.get(0).getPatient_id());
+				
+				session.merge(insertValue);
+				
 			} else {
-
+				
 				DatabasePatient insertValue = new DatabasePatient(patient.getPatient().getId().toString(),
 						patient.getPatient().getNameFirstRep().getGivenAsSingleString(),
 						patient.getPatient().getNameFirstRep().getFamilyAsSingleString(), fhirMessage);
-
-				insertValue.setPatient_id(selectValue.getPatient_id());
-
-				session.update(insertValue);
+								
+				session.save(insertValue);
+				
 			}
-
+						
 			transaction.commit();// transaction is committed
 
 		} catch (Exception exception) {
@@ -193,6 +197,7 @@ public class DBConnector implements Connector {
 					.addOrder(Order.asc("patient_id"))
 					.list();
 
+			
 			for (DatabasePatient data : datalist) {
 				Patient fhirPatient = parser.parseResource(Patient.class, data.getFhirMessage());
 				patientlist.add(fhirPatient);

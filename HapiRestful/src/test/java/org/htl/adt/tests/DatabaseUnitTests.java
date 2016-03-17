@@ -87,8 +87,8 @@ public class DatabaseUnitTests {
 	public void addPatient() {
 		Patient testPatient = new Patient();
 		testPatient.setId(new IdDt(1));
-		testPatient.setId(new IdDt("99"));;
-		testPatient.addName().addFamily("Nachname").addGiven("Marcel");
+		testPatient.setId(new IdDt("57"));;
+		testPatient.addName().addFamily("Nachname789").addGiven("Marcel");
 		testPatient.setGender(AdministrativeGenderEnum.MALE);
 		
 		Connector connector = DBFactory.getInstance().getConnector("DBConnector");
@@ -142,7 +142,7 @@ public class DatabaseUnitTests {
 		List<Patient> patientlist = new ArrayList<Patient>();
 		
 		Patient testPatient = new Patient();
-		testPatient.addName().addFamily("Nachname");
+		testPatient.addName().addFamily("irgendwas");
 		
 		try {
 			patientlist = connector.searchPatientWithFamily(new PatientRequest("Patient nach Nachname suchen", testPatient));
@@ -166,8 +166,8 @@ public class DatabaseUnitTests {
 	@Test
 	public void updatePatient() {
 		Patient testPatient = new Patient();
-		testPatient.setId(new IdDt(44));
-		testPatient.addName().addFamily("Nachname").addGiven("Marcel");
+		testPatient.setId(new IdDt(69));
+		testPatient.addName().addFamily("Nachname").addGiven("siri");
 		testPatient.setGender(AdministrativeGenderEnum.MALE);
 		
 		Connector connector = DBFactory.getInstance().getConnector("DBConnector");
