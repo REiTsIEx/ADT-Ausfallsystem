@@ -47,34 +47,49 @@
 </div>
 
 
-
+<script src='http://code.jquery.com/jquery-2.1.4.min.js'></script>
 <script src='../js/fhir-client.js'></script>
 <script>
 function searchPatient() {
+	
+	
 	  var smart = new FHIR.client({
-		    serviceUrl: 'http://localhost:8080',
+		    serviceUrl: 'https://fhir-open-api-dstu2.smarthealthit.org',
+
 		    auth: {
 		      type: 'none'
 		    }
 		  });
-	
 
 if(svnSearch.value != "") {
 
 	  smart.api.search({type: "Patient", query: {identifier: svnSearch.value }
 		}).then(function(r){
-		       console.log(JSON.stringify(p.name[0],null,2));
+			r.data.entry.forEach(function(re){
+				var resource = re.resource;
+				var name = resource.active
+				console.log("yolo"+name);
+// 				var formatted = ("<li>"  +name.given.join(" ") + " " + name.family + "</li>");
+// 				$("#demo").append(formatted);
+// 				console.log(JSON.stringify(r,null,2));
+
+				
+			});
+		       
 		});
 }else{
-	  var smart = new FHIR.client({
-		    serviceUrl: 'http://localhost:8080',
-		    auth: {
-		      type: 'none'
-		    }
-		  });
+
   smart.api.search({type: "Patient", query: {family: lastnameSearch.value, given: firstnameSearch.value}
-	}).then(function(r){
-	       console.log(JSON.stringify(r,null,2));
+	}).then(function(patientList){
+		patientList.data.entry.forEach(function(patient){
+			
+			var name = patient.resource.id;
+			console.log(JSON.stringify(patient,null,2));
+			console.log(name);
+//				var formatted = ("<li>"  +name.given.join(" ") + " " + name.family + "</li>");
+//				$("#demo").append(formatted);
+//				console.log(JSON.stringify(r,null,2));
+		});
 	});
 }
 }
