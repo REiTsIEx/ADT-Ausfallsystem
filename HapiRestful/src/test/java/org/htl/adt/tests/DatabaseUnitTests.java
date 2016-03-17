@@ -48,7 +48,7 @@ public class DatabaseUnitTests {
 
 		Patient testPatient = new Patient();
 		testPatient.addIdentifier().setSystem("http://loinc.org").setValue("1234");
-		testPatient.addName().addFamily("Mustermann").addGiven("Max").addGiven("M");
+		testPatient.addName().addFamily("Mustermann").addGiven("Max");
 		testPatient.setGender(AdministrativeGenderEnum.MALE);
 
 		String fhirMessage = ctx.newXmlParser().encodeResourceToString(testPatient);
@@ -87,8 +87,8 @@ public class DatabaseUnitTests {
 	public void addPatient() {
 		Patient testPatient = new Patient();
 		testPatient.setId(new IdDt(1));
-		testPatient.addIdentifier().setSystem("http://loinc.org").setValue("1234");
-		testPatient.addName().addFamily("Nachname").addGiven("Marcel").addGiven("M");
+		testPatient.setId(new IdDt("99"));;
+		testPatient.addName().addFamily("Nachname").addGiven("Marcel");
 		testPatient.setGender(AdministrativeGenderEnum.MALE);
 		
 		Connector connector = DBFactory.getInstance().getConnector("DBConnector");
@@ -122,7 +122,8 @@ public class DatabaseUnitTests {
 		}
 		
 		for (Patient patient : patientlist) {
-			System.out.println(patient.getNameFirstRep().getNameAsSingleString());
+			System.out.println("Identifier: " + patient.getId().getIdPart() + " - " + patient.getNameFirstRep().getNameAsSingleString() );
+			
 		}
 		
 	}
@@ -165,19 +166,19 @@ public class DatabaseUnitTests {
 	@Test
 	public void updatePatient() {
 		Patient testPatient = new Patient();
-		testPatient.addIdentifier().setSystem("http://loinc.org").setValue("1234");
-		testPatient.addName().addFamily("Nachname2").addGiven("Marcel2").addGiven("M2");
+		testPatient.setId(new IdDt(44));
+		testPatient.addName().addFamily("Nachname").addGiven("Marcel");
 		testPatient.setGender(AdministrativeGenderEnum.MALE);
 		
 		Connector connector = DBFactory.getInstance().getConnector("DBConnector");
 		
 		
 		try {
-			connector.updatePatient(new Identifier(), new PatientRequest("", testPatient));
-		} catch (IOException e) {
+			connector.updatePatient(new Identifier(testPatient.getId()), new PatientRequest("", testPatient));
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		} 
 		
 	}
 

@@ -38,7 +38,7 @@ public class TestDBConnector implements Connector{
 		/*Patient oldPatient = db.myPatients.get(id.identifier.getIdPartAsLong());
 		oldPatient.addName(patient.patient.getNameFirstRep());
 		db.myPatients.put(id.identifier.getIdPartAsLong(), oldPatient);*/
-		db.myPatients.put(id.identifier.getIdPartAsLong(), patient.getPatient());
+		db.myPatients.put(id.getIdentifier().getIdPartAsLong(), patient.getPatient());
 	}
 
 	public List<Patient> searchPatient(PatientRequest patient) {
