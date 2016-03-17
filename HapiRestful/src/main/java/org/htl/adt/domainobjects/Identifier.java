@@ -5,7 +5,7 @@ import ca.uhn.fhir.model.primitive.IdDt;
 
 public class Identifier {
 	
-	public IdDt identifier;
+	private IdDt identifier;
 
 	public Identifier(IdDt identifier) {
 		this.identifier = identifier;
@@ -16,6 +16,14 @@ public class Identifier {
 	
 	public void getPatientId(Patient patient){
 		this.identifier = patient.getId();
+	}
+
+	public IdDt getIdentifier() {
+		return identifier;
+	}
+
+	public void setIdentifier(IdDt identifier) {
+		this.identifier = identifier;
 	}
 
 }
