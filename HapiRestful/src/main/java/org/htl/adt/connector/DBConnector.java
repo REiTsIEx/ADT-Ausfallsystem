@@ -143,6 +143,7 @@ public class DBConnector implements Connector {
 						patient.getPatient().getNameFirstRep().getGivenAsSingleString(),
 						patient.getPatient().getNameFirstRep().getFamilyAsSingleString(), fhirMessage);
 							
+				System.out.println("Update");
 				insertValue.setPatient_id(selectValue.get(0).getPatient_id());
 				
 				session.merge(insertValue);
@@ -152,7 +153,8 @@ public class DBConnector implements Connector {
 				DatabasePatient insertValue = new DatabasePatient(patient.getPatient().getId().toString(),
 						patient.getPatient().getNameFirstRep().getGivenAsSingleString(),
 						patient.getPatient().getNameFirstRep().getFamilyAsSingleString(), fhirMessage);
-								
+						
+				System.out.println("Insert");
 				session.save(insertValue);
 				
 			}

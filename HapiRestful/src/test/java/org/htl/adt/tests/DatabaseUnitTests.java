@@ -166,8 +166,8 @@ public class DatabaseUnitTests {
 	@Test
 	public void updatePatient() {
 		Patient testPatient = new Patient();
-		testPatient.setId(new IdDt(69));
-		testPatient.addName().addFamily("Nachname").addGiven("siri");
+		testPatient.setId(new IdDt("101"));
+		testPatient.addName().addFamily("Nachname").addGiven("Tobias");
 		testPatient.setGender(AdministrativeGenderEnum.MALE);
 		
 		Connector connector = DBFactory.getInstance().getConnector("DBConnector");
