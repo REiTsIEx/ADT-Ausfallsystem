@@ -37,7 +37,6 @@ body{
 	}
 	
 	.header {
-	min-width: 300px;
     background-color: #04B486;
     color: #ffffff;
     padding: 15px;
@@ -51,7 +50,6 @@ body{
 	}
 	
 	.menu li {
-	min-width:250px;
     padding: 8px;
     margin-bottom: 7px;
     background-color :#04B486;
@@ -115,4 +113,3 @@ liBar a {
 	cursor: pointer;
 	}
 /* SearchButton Ende */
-	

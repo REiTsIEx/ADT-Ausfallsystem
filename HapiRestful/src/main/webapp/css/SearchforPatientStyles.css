@@ -58,6 +58,7 @@
 	
 	.header 
 	{
+	min-width: 300px;
     background-color: #04B486;
     color: #ffffff;
     padding: 15px;
@@ -75,7 +76,7 @@
 	
 	.menu li 
 	{
-	
+	min-width:250px;
     padding: 8px;
     margin-bottom: 7px;
     background-color :#04B486;
@@ -128,4 +129,23 @@
     background-color: #04A278;
 }
 /* MenuBar Ende */
+/* Patient in Patientenliste Anfang */
+	.patientListbutton 
+	{
+    padding: 8px;
+    text-align: center;
+    margin-bottom: 7px;
+    background-color :#04B486;
+    color: #ffffff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    border-radius: 10px;
+    
+	}
+	
+	.patientListbutton:HOVER 
+	{
+	background-color: #04A278;
+	cursor: pointer;
+	}
+/* Patient in Patientenliste  Ende */
 

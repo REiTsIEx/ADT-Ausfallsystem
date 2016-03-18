@@ -82,15 +82,23 @@ function addNewPatient() {
 	
 	var method = "/Ausfallsystem/hapiservlet/Patient"
 		
-	var svnValue = document.getElementById('svn_value');
+	var svn = document.getElementById('svn_value');
 	
-	var lastnameValue = document.getElementById('lastnameAdd');
+	var lastname = document.getElementById('lastnameAdd');
 	
-	var firstnameValue =document.getElementById('firstnameAdd');
+	var firstname =document.getElementById('firstnameAdd');
 	
-	var genderValue = document.getElementById('genderAdd');
+	var gender = document.getElementById('genderAdd');
 	
-	var locationValue = document.getElementById('locationAdd');
+	var location = document.getElementById('locationAdd');
+	
+	var street = document.getElementById('streetAdd');
+	
+	var country = document.getElementById('countryAdd');
+	
+	var city = document.getElementById('cityAdd');
+	var plz = document.getElementById('plzAdd');
+	var birthday = document.getElementById('birthdateAdd');
 	
 	if(lastnameValue.value == "" || firstnameValue.value == "" || svnValue.value == ""){
 		alert("Bitte alle Pflichteingaben abschließen!")
@@ -102,7 +110,7 @@ function addNewPatient() {
 		xmlRequest.open("POST",url);
 		xmlRequest.withCredentials = false;
 		xmlRequest.setRequestHeader("Content-Type", "application/json+fhir;charset=UTF-8");
-		xmlRequest.send(JSON.stringify({resourceType:"Patient", id : svnValue.value, name:{ family: lastnameValue.value, given:firstnameValue.value }, gender: genderValue.value, location : locationValue}));
+		xmlRequest.send(JSON.stringify({resourceType:"Patient", identifier:{value : svn.value}, name:{ family: lastname.value, given:firstname.value }, address:{city : city.value, country : country.value, line : street.value, postalCode : plz.value},gender: gender.value, location : location.value, birthDate: birthday.value}));
 		
 
 	}

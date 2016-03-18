@@ -3,7 +3,7 @@
 <head>
 <meta charset="ISO-8859-1">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ADT-Ausfallsystem</title>
+<title>Patientensuche</title>
 <link rel="stylesheet" type="text/css" href="../css/SearchforPatientStyles.css">
 <!-- <script type="text/javascript" src="../js/Methods.js"></script> -->
 
@@ -54,11 +54,11 @@ function searchPatient() {
 var list = document.getElementById('demo');
 
 var entry = document.createElement('li')
-	entry.className = "button";
+	entry.className = "patientListbutton";
 	
 	
 	  var smart = new FHIR.client({
-		    serviceUrl: 'https://fhir-open-api-dstu2.smarthealthit.org',
+		    serviceUrl: "/Ausfallsystem/hapiservlet/Patient",
 
 		    auth: {
 		      type: 'none'
@@ -70,10 +70,12 @@ if(svnSearch.value != "") {
 	  smart.api.search({type: "Patient", query: {identifier: svnSearch.value }
 		}).then(function(patientList){
 			r.data.entry.forEach(function(patient){
+				console.log(patientList);
 				var nameg = patient.resource;
 				var namePat = nameg.name[0];
 				var familyName = namePat.family;
 				var givenName = namePat.given;
+				
 				entry.appendChild(document.createTextNode(familyName + " " + givenName));
 				list.appendChild(entry);
 				
@@ -84,15 +86,30 @@ if(svnSearch.value != "") {
 
   smart.api.search({type: "Patient", query: {family: lastnameSearch.value, given: firstnameSearch.value}
 	}).then(function(patientList){
+		console.log(patientList);
+		if(patientList.data.total != 0) {
 		patientList.data.entry.forEach(function(patient){
-			
-			var nameg = patient.resource;
-			var namePat = nameg.name[0];
-			var familyName = namePat.family;
-			var givenName = namePat.given;
-			entry.appendChild(document.createTextNode(familyName + " " + givenName));
+			console.log(patientList);
+			var resource = patient.resource;
+			var address = resource.address[0];
+			var name = resource.name[0];
+			var singlePatient = {
+					gender : resource.gender,
+					familyName : name.family,
+					givenName : name.given,
+					city: address.city,
+					country : address.country
+					
+					
+					
+			};
+			entry.appendChild(document.createTextNode(singlePatient.familyName + " " + singlePatient.givenName));
 			list.appendChild(entry);
+			console.log(singlePatient);
 		});
+		}else{
+		alert("Keine Ergebnisse");	
+		}
 	});
 }
 }

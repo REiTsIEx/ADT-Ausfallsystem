@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" type="text/css" href="../css/AddPatientStyles.css">
 <script type="text/javascript" src="../js/Methods.js"></script>
-<title>Neuer Patient</title>
+<title>Patient anlegen</title>
 </head>
 
 <div>
@@ -19,8 +19,8 @@
 <div class="row">
 <div class="col-3 menu">
 <ul>
-<li>SVN-Nummer: <br> <input  type="text" placeholder="Pflichtfeld.." id="svn_value" name = "lastnameField"></li>
-<li>Vorname:	<br><input  type="text" placeholder="Pflichtfeld.." id="firstnameAdd" name = "lastnameField"></li>
+<li>SVN-Nummer: <br> <input  type="text" placeholder="Pflichtfeld.." id="svn_value" name = "SVNField"></li>
+<li>Vorname:	<br><input  type="text" placeholder="Pflichtfeld.." id="firstnameAdd" name = "firstnameField"></li>
 <li>Nachname:	<br><input  type="text" placeholder="Pflichtfeld.." id="lastnameAdd" name = "lastnameField"></li>
 <li>Geschlecht: <br>
 	<select id="genderAdd">
@@ -29,6 +29,12 @@
   		<option value="UNDEFINED">undefiniert</option>
 	</select>
 </li>
+
+<li>Land: <br><input  type="text" placeholder="Optional" id="countryAdd" name = "countryField"></li>
+<li>Straﬂe: <br><input  type="text" placeholder="Optional" id="streetAdd" name = "streetField"></li>
+<li>Stadt: <br><input  type="text" placeholder="Optional" id="cityAdd" name = "cityField"></li>
+<li>Postleitzahl: <br><input  type="text" placeholder="Optional" id="plzAdd" name = "plzField"></li>
+<li>Geburtsdatum<input  type="date" placeholder="Optional" id="birthdateAdd" name = "birthdateField"></li>
 <li>Station: <br>
 	<select id="locationAdd">
   		<option value="RADIOLOGY">Radiologie</option>
