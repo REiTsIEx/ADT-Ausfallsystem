@@ -31,7 +31,7 @@ public class TestDBConnector implements Connector{
 		//patient.patient.setId(newPatientID);
 		db.myPatients.put(nextID, patient.getPatient());
 		nextID++;
-		
+		client.createPatient(patient.getPatient());
 	}
 
 	public void updatePatient(Identifier id, PatientRequest patient) {

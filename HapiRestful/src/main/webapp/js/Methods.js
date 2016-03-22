@@ -100,7 +100,7 @@ function addNewPatient() {
 	var plz = document.getElementById('plzAdd');
 	var birthday = document.getElementById('birthdateAdd');
 	
-	if(lastnameValue.value == "" || firstnameValue.value == "" || svnValue.value == ""){
+	if(lastname.value == "" || firstname.value == "" || svn.value == ""){
 		alert("Bitte alle Pflichteingaben abschließen!")
 	}else{
 		url = url+method;

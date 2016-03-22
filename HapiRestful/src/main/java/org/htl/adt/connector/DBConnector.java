@@ -1,11 +1,11 @@
 package org.htl.adt.connector;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
+
 import org.apache.log4j.BasicConfigurator;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -20,12 +20,11 @@ import org.htl.adt.interfaces.Connector;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.model.dstu2.resource.Patient;
-import ca.uhn.fhir.model.dstu2.valueset.AdministrativeGenderEnum;
-import ca.uhn.fhir.model.primitive.IdDt;
+import ca.uhn.fhir.parser.DataFormatException;
 import ca.uhn.fhir.parser.IParser;
 
 public class DBConnector implements Connector {
-	// private RestfulClient client = new RestfulClient();
+	private RestfulClient client = new RestfulClient();
 	private Configuration config;
 	private SessionFactory sessionFactory;
 
@@ -38,7 +37,12 @@ public class DBConnector implements Connector {
 		sessionFactory = config.buildSessionFactory();
 	}
 
-	public void addPatient(PatientRequest patient) throws IOException {
+	/*
+	 * (non-Javadoc)
+	 * @see org.htl.adt.interfaces.Connector#addPatient(org.htl.adt.domainobjects.PatientRequest)
+	 */
+	
+	public void addPatient(PatientRequest patientRequest) throws IOException {
 		// TODO Auto-generated method stub
 
 		Session session = null;
@@ -51,24 +55,31 @@ public class DBConnector implements Connector {
 			transaction = session.beginTransaction();
 
 			FhirContext ctx = FhirContext.forDstu2();
-			String fhirMessage = ctx.newXmlParser().encodeResourceToString(patient.getPatient());
+			String fhirMessage = ctx.newXmlParser().encodeResourceToString(patientRequest.getPatient());
 
-			DatabasePatient data = new DatabasePatient(patient.getPatient().getId().toString(),
-					patient.getPatient().getNameFirstRep().getGivenAsSingleString(),
-					patient.getPatient().getNameFirstRep().getFamilyAsSingleString(), fhirMessage);
+			DatabasePatient data = new DatabasePatient(patientRequest.getPatient().getId().toString(),
+					patientRequest.getPatient().getNameFirstRep().getGivenAsSingleString(),
+					patientRequest.getPatient().getNameFirstRep().getFamilyAsSingleString(), fhirMessage);
 
 			session.save(data);
 
 			transaction.commit();// transaction is committed
-
-		} catch (Exception exception) {
+			client.createPatient(patientRequest.getPatient());
+		} 
+		catch(DataFormatException e) {
+			throw new RuntimeException("Error during Parse Operation", e);
+		}
+		catch(HibernateException e) {
 			if (transaction != null) {
 				transaction.rollback();
 			}
 			if (session != null) {
 				session.close();
 			}
-			throw new IOException("Fehler beim hinzufügen des Patienten: " + exception.getMessage());
+			throw new RuntimeException("Error during insert Operation - had to rollback transaction!", e);
+		}
+		catch (Exception e) {			
+			throw new IOException("Fehler beim hinzufügen des Patienten: " + e.getMessage(), e);
 		}
 	}
 
@@ -160,7 +171,7 @@ public class DBConnector implements Connector {
 			}
 						
 			transaction.commit();// transaction is committed
-
+			client.updatePatient(patient.getPatient());
 		} catch (Exception exception) {
 			if (transaction != null) {
 				transaction.rollback();

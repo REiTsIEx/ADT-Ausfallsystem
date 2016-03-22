@@ -58,7 +58,7 @@ var entry = document.createElement('li')
 	
 	
 	  var smart = new FHIR.client({
-		    serviceUrl: "/Ausfallsystem/hapiservlet/Patient",
+		    serviceUrl: "http://localhost:8080/Ausfallsystem/hapiservlet",
 
 		    auth: {
 		      type: 'none'
@@ -91,14 +91,14 @@ if(svnSearch.value != "") {
 		patientList.data.entry.forEach(function(patient){
 			console.log(patientList);
 			var resource = patient.resource;
-			var address = resource.address[0];
+			//var address = resource.address[0];
 			var name = resource.name[0];
 			var singlePatient = {
 					gender : resource.gender,
 					familyName : name.family,
 					givenName : name.given,
-					city: address.city,
-					country : address.country
+					//city: address.city,
+					//country : address.country
 					
 					
 					
