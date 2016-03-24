@@ -31,11 +31,10 @@
 <li class="button" onclick="searchPatient()">Suche Patient</li>
 
 </ul>
-</div>
+
 </div>
 
-<div class="row">
-<div class ="col-4 menu">
+<div class ="col-3 menu">
 
 <ul id="demo">
 
@@ -50,15 +49,17 @@
 <script src='http://code.jquery.com/jquery-2.1.4.min.js'></script>
 <script src='../js/fhir-client.js'></script>
 <script>
+var patientArray = [];
+var list = document.getElementById('demo');
 function searchPatient() {
 	
 	$(demo).empty();
-	var singlePatient = {};
-	var list = document.getElementById('demo');
+	
+	
 
 	var entry = document.createElement('li')
 	entry.className = "patientListbutton";
-	entry.
+	entry.addEventListener("click",showPatient)
 	
 	  var smart = new FHIR.client({
 		    serviceUrl: "https://fhir-open-api-dstu2.smarthealthit.org",
@@ -95,20 +96,13 @@ if(svnSearch.value != "") {
 		
 		if(patientList.data.total != 0) {
 			//Legt die Länge des Array fest
-			var index = 0;
-			patientList.data.entry.forEach(function(patient) {
-				index++;
-				
-			});
-			patientArray = new Array(index);
-			
-			
 		patientList.data.entry.forEach(function(patient){
 			console.log(patient);
 			var resource = patient.resource;
 			var address = resource.address[0];
 			var name = resource.name[0];
 			singlePatient = {
+					
 					svn : resource.identifier[0].value,
 					gender : resource.gender,
 					familyName : name.family,
@@ -122,8 +116,9 @@ if(svnSearch.value != "") {
 			};
 			entry.appendChild(document.createTextNode(singlePatient.givenName + " " + singlePatient.familyName + " " + singlePatient.birthdate));
 			list.appendChild(entry);
+			patientArray.push(singlePatient);
+			
 			console.log(singlePatient);
-			index++;
 		});
 		}else{
 		alert("Keine Ergebnisse");	
@@ -132,8 +127,10 @@ if(svnSearch.value != "") {
 }
 }
 function showPatient(){
-	
-	}
+	    console.log($(this).parent('li').index()+1);
+	    var index = $(this).parent('li').index()+1;
+	    console.log(JSON.stringify(patientArray[0].givenName));
+			}
 </script>
 
 </body>
