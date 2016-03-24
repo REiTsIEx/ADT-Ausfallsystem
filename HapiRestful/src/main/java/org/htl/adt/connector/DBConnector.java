@@ -93,6 +93,7 @@ public class DBConnector implements Connector {
 
 	public List<Patient> searchPatient(PatientRequest patient) {
 		return null;
+		//Test
 	}
 
 	public List<Patient> getAllPatients() {
