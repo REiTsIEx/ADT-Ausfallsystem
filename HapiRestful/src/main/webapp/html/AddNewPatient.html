@@ -4,7 +4,7 @@
 <meta charset="ISO-8859-1">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" type="text/css" href="../css/AddPatientStyles.css">
-<script type="text/javascript" src="../js/Methods.js"></script>
+<script type="text/javascript" src="../js/fhir-client.js"></script>
 <title>Patient anlegen</title>
 </head>
 
@@ -20,26 +20,46 @@
 <div class="col-3 menu">
 <ul>
 <li>SVN-Nummer: <br> <input  type="text" placeholder="Pflichtfeld.." id="svn_value" name = "SVNField"></li>
-<li>Vorname:	<br><input  type="text" placeholder="Pflichtfeld.." id="firstnameAdd" name = "firstnameField"></li>
-<li>Nachname:	<br><input  type="text" placeholder="Pflichtfeld.." id="lastnameAdd" name = "lastnameField"></li>
+<li>Vorname:	<br><input  type="text" placeholder="Pflichtfeld.." id="firstname" name = "firstnameField"></li>
+<li>Nachname:	<br><input  type="text" placeholder="Pflichtfeld.." id="lastname" name = "lastnameField"></li>
+<li>Geburtsdatum: <br> <input  type="date" placeholder="Optional" id="birthdate" name = "birthdateField"></li>
 <li>Geschlecht: <br>
-	<select id="genderAdd">
+	<select id="gender">
   		<option value="MALE">Männlich</option>
   		<option value="FEMALE">Weiblich</option>
   		<option value="UNDEFINED">undefiniert</option>
 	</select>
 </li>
+</ul>
+</div>
 
-<li>Land: <br><input  type="text" placeholder="Optional" id="countryAdd" name = "countryField"></li>
-<li>Straße: <br><input  type="text" placeholder="Optional" id="streetAdd" name = "streetField"></li>
-<li>Stadt: <br><input  type="text" placeholder="Optional" id="cityAdd" name = "cityField"></li>
-<li>Postleitzahl: <br><input  type="text" placeholder="Optional" id="plzAdd" name = "plzField"></li>
-<li>Geburtsdatum<input  type="date" placeholder="Optional" id="birthdateAdd" name = "birthdateField"></li>
+
+<div class="col-3 menu">
+
+<ul>
+<li>Straße: <br><input  type="text" placeholder="Optional" id="street" name = "streetField"></li>
+<li>Stadt: <br><input  type="text" placeholder="Optional" id="city" name = "cityField"></li>
+<li>Postleitzahl: <br><input  type="text" placeholder="Optional" id="plz" name = "plzField"></li>
+<li>Land: <br><input  type="text" placeholder="Optional" id="country" name = "countryField"></li>
+</ul>
+
+</div>
+<div class="col-3 menu">
+<ul>
+
+<li>Telefonnummer: 
+				<input type="text" placeholder="Optional" id="phoneNumber">
+					<select id="phoneType" >
+						<option value="mobile">Mobitelefon</option>
+						<option value="home">Haustelefon</option> 
+					</select>
+</li>
+ 
 <li>Station: <br>
 	<select id="locationAdd">
-  		<option value="RADIOLOGY">Radiologie</option>
-  		<option value="INTENSIVE">Intensivstation</option>
-  		<option value="AMBULANT">Ambulanz</option>
+  		<option value="radiology">Radiologie</option>
+  		<option value="intensive">Intensivstation</option>
+  		<option value="ambulant">Ambulanz</option>
 	</select>
 </li>
 <li class="button" onclick="addNewPatient()">Patient speichern</li>
@@ -49,4 +69,117 @@
 </div>
 
 </body>
+<script>
+function addNewPatient() {
+	
+	  var smart = new FHIR.client({
+		    serviceUrl: "localhost:8080",
+
+		    auth: {
+		      type: 'none'
+		    }
+		  });
+
+	
+	var svn = document.getElementById('svn_value');
+	var lastname = document.getElementById('lastname');
+	var firstname =document.getElementById('firstname');
+	var gender = document.getElementById('gender');
+	var birthday = document.getElementById('birthdate');
+	
+	
+	var street = document.getElementById('street');
+	var country = document.getElementById('country');
+	var city = document.getElementById('city');
+	var plz = document.getElementById('plz');
+	
+	var location = document.getElementById('location');
+	var phone = document.getElementById('phoneNumber')
+	var phonetype = document.getElementById('phoneType')
+	
+	if(lastname.value == "" || firstname.value == "" || svn.value == ""){
+		alert("Bitte alle Pflichteingaben abschließen!")
+	}else{
+		
+		var newPatient = {
+				
+				content: {
+					
+					resourceType: 'Patient',
+					identifier: {
+						value: svn.value
+						
+					},
+					name:{
+						family: lastname.value,
+						given: firstname.value
+					},
+					telecom: {
+						system : 'phone',
+						value : phone.value,
+						use : phoneType.value
+					},
+					gender: gender.value,
+					birthdate: birthdate.value,
+					address: {
+						use: 'home',
+						line: street.value,
+						city: city.value,
+						postalCode : plz.value,
+						country: country.value
+					}
+					
+					
+				}
+				
+		}
+
+		myClient = fhir(smart, 		(function() {
+		    var mkFhir = require('../fhir');
+
+		    var defer = function(){
+		        pr = jQuery.Deferred();
+		        pr.promise = pr.promise();
+		        return pr;
+		    };
+		    var adapter = {
+		        defer: defer,
+		        http: function(args) {
+		            var ret = jQuery.Deferred();
+		            var opts = {
+		                type: args.method,
+		                url: args.url,
+		                headers: args.headers,
+		                dataType: "json",
+		                contentType: "application/json",
+		                data: args.data || args.params
+		            };
+		            jQuery.ajax(opts)
+		                .done(function(data, status, xhr) {ret.resolve({data: data, status: status, headers: xhr.getResponseHeader, config: args});})
+		                .fail(function(err) {ret.reject({error: err, data: err, config: args});});
+		            return ret.promise();
+		        }
+		    };
+
+		    var fhir = function(config) {
+		        return mkFhir(config, adapter);
+		    };
+		    fhir.defer = defer;
+		    module.exports = fhir;
+
+		}).call(this));
+
+		console.log(newPatient);
+		myclient.create(newPatient);
+	
+	
+	
+	}
+
+}
+
+
+
+
+</script>
 </html>
