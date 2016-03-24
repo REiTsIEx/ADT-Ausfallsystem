@@ -58,7 +58,7 @@ function searchPatient() {
 
 	var entry = document.createElement('li')
 	entry.className = "patientListbutton";
-	
+	entry.
 	
 	  var smart = new FHIR.client({
 		    serviceUrl: "https://fhir-open-api-dstu2.smarthealthit.org",
@@ -72,8 +72,9 @@ if(svnSearch.value != "") {
 
 	  smart.api.search({type: "Patient", query: {identifier:{value : svnSearch.value} }
 		}).then(function(patientList){
-			var arrayCount = r.data.total;
-			r.data.entry.forEach(function(patient){
+			var arrayCount = patientList.data.total;
+			
+			patientList.data.entry.forEach(function(patient){
 				console.log(patientList);
 				var nameg = patient.resource;
 				var namePat = nameg.name[0];
@@ -91,12 +92,19 @@ if(svnSearch.value != "") {
   smart.api.search({type: "Patient", query: {family: lastnameSearch.value, given: firstnameSearch.value}
 	}).then(function(patientList){
 		console.log(patientList);
-		var arrayCount = r.data.total;
-		if(arrayCount != 0) {
-			patientArray = new Array[arrayCount];
+		
+		if(patientList.data.total != 0) {
+			//Legt die Länge des Array fest
 			var index = 0;
+			patientList.data.entry.forEach(function(patient) {
+				index++;
+				
+			});
+			patientArray = new Array(index);
+			
+			
 		patientList.data.entry.forEach(function(patient){
-			console.log(patientList);
+			console.log(patient);
 			var resource = patient.resource;
 			var address = resource.address[0];
 			var name = resource.name[0];
@@ -105,14 +113,14 @@ if(svnSearch.value != "") {
 					gender : resource.gender,
 					familyName : name.family,
 					givenName : name.given,
-					birthdate : resource.birthdate,
+					birthdate : resource.birthDate,
 					city: address.city,
 					country : address.country
 					
 					
 					
 			};
-			entry.appendChild(document.createTextNode(JSON.stringify(singlePatient)));
+			entry.appendChild(document.createTextNode(singlePatient.givenName + " " + singlePatient.familyName + " " + singlePatient.birthdate));
 			list.appendChild(entry);
 			console.log(singlePatient);
 			index++;
@@ -123,23 +131,9 @@ if(svnSearch.value != "") {
 	});
 }
 }
-// function access(singlePatient){
-// 	}
-// 	patient.firstname = 
-// 	patient.lastname = 
-// 	patient.Last = 
-// 	//var formData = JSON.stringify(options); <!--Puts form data in one variable-->
-
-// 	$.ajax({
-// 	    url: "someURL",
-// 	    type: "POST",
-// 	    data: formData ,
-// 	    success function() { window.location = 'somePage.htm' },
-// 	    failure function () {
-// 	         window.location = 'errorPage.htm?first=' + options.First +'&last=' + options.Last
-// 	    }
-// 	});
-// 	}
+function showPatient(){
+	
+	}
 </script>
 
 </body>
