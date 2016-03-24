@@ -6,6 +6,7 @@ import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 
+import org.htl.adt.provider.RestfulEncounterResourceProvider;
 import org.htl.adt.provider.RestfulLocationProvider;
 import org.htl.adt.provider.RestfulOrganizationResourceProvider;
 import org.htl.adt.provider.RestfulPatientResourceProvider;
@@ -22,6 +23,7 @@ public class SimpleRestfulServer extends RestfulServer{
 		List<IResourceProvider> provider = new ArrayList<IResourceProvider>();
 		provider.add(new RestfulPatientResourceProvider());
 		provider.add(new RestfulLocationProvider());
+		provider.add(new RestfulEncounterResourceProvider());
 		setResourceProviders(provider);
 		//setResourceProviders(new RestfulPatientResourceProvider());
 		//setResourceProviders(new RestfulLocationProvider());

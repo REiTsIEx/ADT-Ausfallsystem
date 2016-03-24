@@ -25,7 +25,7 @@ import ca.uhn.fhir.parser.IParser;
 import ca.uhn.fhir.rest.server.exceptions.BaseServerResponseException;
 
 public class DBConnector implements Connector {
-	private RestfulClient client = new RestfulClient();
+	//private RestfulClient client = new RestfulClient();
 	private Configuration config;
 	private SessionFactory sessionFactory;
 
@@ -72,7 +72,6 @@ public class DBConnector implements Connector {
 
 			transaction.commit();// transaction is committed
 
-			client.createPatient(patientRequest.getPatient());
 
 		} catch (DataFormatException e) {
 			throw new RuntimeException("Error during Parse Operation", e);
@@ -189,7 +188,6 @@ public class DBConnector implements Connector {
 			}
 
 			transaction.commit();// transaction is committed
-			client.updatePatient(patient.getPatient());
 		} 
 		catch(DataFormatException e) {
 			throw new RuntimeException("Error during Parse Operation", e);
