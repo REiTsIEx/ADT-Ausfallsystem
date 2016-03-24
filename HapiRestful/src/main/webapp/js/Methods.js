@@ -4,50 +4,50 @@
 
 
 
-var url = "http://localhost:8080";
 
 
-function searchPatientByName() {
 
-	var param= "";
-	var method = "/Ausfallsystem/hapiservlet/Patient";
-
-	var svn = document.getElementById("svnSearch");
-	var lastname = document.getElementById('lastnameSearch');
-	if(lastname.value == "" && svn.value == "") {
-		alert("Bitte SVN oder Nachname eingeben!");
-		
-	}else{
-		if(svn.value == ""){
-
-	var firstname = document.getElementById('firstnameSearch');
-
-	
-	param = "?family="+lastname.value+"&firstname="+firstname.value;
-		}else{
-			param="/"+svn.value;
-		
-		
-		}
-		
-		
-	url = url+method+param;
-	
-    var xmlRequest = new XMLHttpRequest();
-    xmlRequest.open( "GET", url, true );
-    xmlRequest.withCredentials = false;
-    xmlRequest.send(null);
-    var xmlMessage = xmlRequest.responseXML;
-    if(xmlMessage != null) {
-    loadPatients(xmlMessage);
-    }
+//function searchPatientByName() {
+//	var method ="";
+//	var param= "";
+//	method = "/Ausfallsystem/hapiservlet/Patient";
+//
+//	var svn = document.getElementById("svnSearch");
+//	var lastname = document.getElementById('lastnameSearch');
+//	if(lastname.value == "" && svn.value == "") {
+//		alert("Bitte SVN oder Nachname eingeben!");
+//		
+//	}else{
+//		if(svn.value == ""){
+//
+//	var firstname = document.getElementById('firstnameSearch');
+//
+//	
+//	param = "?family="+lastname.value+"&firstname="+firstname.value;
+//		}else{
+//			param="/"+svn.value;
+//		
+//		
+//		}
+//		
+//		
+//	url = url+method+param;
+//	
+//    var xmlRequest = new XMLHttpRequest();
+//    xmlRequest.open( "GET", url, true );
+//    xmlRequest.withCredentials = false;
+//    xmlRequest.send(null);
+//    var xmlMessage = xmlRequest.responseXML;
+//    if(xmlMessage != null) {
+//    loadPatients(xmlMessage);
+//    }
 //    else{
 //    	
 //    	alert("Keine Patienten für diese Auswahlkriterien!")
 //    }
    			
-}
-}
+//}
+//}
 
 ////function loadPatients(xmlMessage) {
 //	
@@ -79,26 +79,27 @@ function searchPatientByName() {
 
 
 function addNewPatient() {
-	
+	url = "";
+	var url = "http://10.0.0.16:8080";
 	var method = "/Ausfallsystem/hapiservlet/Patient"
 		
 	var svn = document.getElementById('svn_value');
 	
-	var lastname = document.getElementById('lastnameAdd');
+	var lastname = document.getElementById('lastname');
+	var firstname =document.getElementById('firstname');
+	var gender = document.getElementById('gender');
+	var birthday = document.getElementById('birthdate');
 	
-	var firstname =document.getElementById('firstnameAdd');
 	
-	var gender = document.getElementById('genderAdd');
+	var street = document.getElementById('street');
+	var country = document.getElementById('country');
+	var city = document.getElementById('city');
+	var plz = document.getElementById('plz');
 	
-	var location = document.getElementById('locationAdd');
 	
-	var street = document.getElementById('streetAdd');
-	
-	var country = document.getElementById('countryAdd');
-	
-	var city = document.getElementById('cityAdd');
-	var plz = document.getElementById('plzAdd');
-	var birthday = document.getElementById('birthdateAdd');
+	var location = document.getElementById('location');
+ 	var phone = document.getElementById('phoneNumber')
+ 	var phonetype = document.getElementById('phoneType')
 	
 	if(lastname.value == "" || firstname.value == "" || svn.value == ""){
 		alert("Bitte alle Pflichteingaben abschließen!")
@@ -110,9 +111,32 @@ function addNewPatient() {
 		xmlRequest.open("POST",url);
 		xmlRequest.withCredentials = false;
 		xmlRequest.setRequestHeader("Content-Type", "application/json+fhir;charset=UTF-8");
-		xmlRequest.send(JSON.stringify({resourceType:"Patient", identifier:{value : svn.value}, name:{ family: lastname.value, given:firstname.value }, address:{city : city.value, country : country.value, line : street.value, postalCode : plz.value},gender: gender.value, location : location.value, birthDate: birthday.value}));
+		xmlRequest.send(JSON.stringify({
+			resourceType:"Patient", 
+			identifier: {
+				value: svn.value
+			
+				},
+				name:{
+					family: lastname.value,
+					given: firstname.value
+				},
+				telecom: {
+					system : 'phone',
+					value : phone.value,
+					use : phoneType.value
+				},
+				gender: gender.value,
+				birthdate: birthdate.value,
+				address: {
+					use: 'home',
+					line: street.value,
+					city: city.value,
+					postalCode : plz.value,
+					country: country.value
+	
+		}}));
 		
-
 	}
 }
 
