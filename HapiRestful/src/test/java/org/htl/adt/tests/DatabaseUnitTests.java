@@ -1,6 +1,7 @@
 package org.htl.adt.tests;
 
-import java.io.IOException;
+import static org.junit.Assert.assertTrue;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,8 +32,7 @@ public class DatabaseUnitTests {
 	}
 	
 	@After
-	public void cleanup() {
-		
+	public void cleanup() {		
 		
 	}
 	
@@ -49,6 +49,7 @@ public class DatabaseUnitTests {
 		Patient testPatient = new Patient();
 		testPatient.addIdentifier().setSystem("http://loinc.org").setValue("1234");
 		testPatient.addName().addFamily("Mustermann").addGiven("Max");
+		testPatient.addName().addFamily("Mustermann").addGiven("Zweitname");
 		testPatient.setGender(AdministrativeGenderEnum.MALE);
 
 		String fhirMessage = ctx.newXmlParser().encodeResourceToString(testPatient);
@@ -95,10 +96,13 @@ public class DatabaseUnitTests {
 		
 		try {
 			connector.addPatient(new PatientRequest("Patient hinzufügen", testPatient));
-		} catch (IOException e) {
+			
+		} catch (RuntimeException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		assertTrue(true);
 		
 	}
 	
@@ -116,7 +120,7 @@ public class DatabaseUnitTests {
 
 		try {
 			patientlist = connector.getAllPatients();
-		} catch (IOException e) {
+		} catch (RuntimeException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -146,7 +150,7 @@ public class DatabaseUnitTests {
 		
 		try {
 			patientlist = connector.searchPatientWithFamily(new PatientRequest("Patient nach Nachname suchen", testPatient));
-		} catch (IOException e) {
+		} catch (RuntimeException e) {
 			// TODO Auto-generated catch block
 			System.out.println("Error");
 			e.printStackTrace();
@@ -175,7 +179,7 @@ public class DatabaseUnitTests {
 		
 		try {
 			connector.updatePatient(new Identifier(testPatient.getId()), new PatientRequest("", testPatient));
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 

@@ -10,17 +10,17 @@ import ca.uhn.fhir.model.dstu2.resource.Patient;
 
 public interface Connector {
 	
-	public void addPatient(PatientRequest patient) throws IOException;
+	public void addPatient(PatientRequest patient);
 	
-	public void updatePatient(Identifier id, PatientRequest patient) throws IOException;
+	public void updatePatient(Identifier id, PatientRequest patient);
 
-	public List<Patient> searchPatient(PatientRequest patient) throws IOException;
+	public List<Patient> searchPatient(PatientRequest patient);
 	
-	public List<Patient> getAllPatients() throws IOException;
+	public List<Patient> getAllPatients();
 	
 	public void getConnection();
 	
 	public void setConnection(String url);
 	
-	public List<Patient> searchPatientWithFamily(PatientRequest patient) throws IOException;
+	public List<Patient> searchPatientWithFamily(PatientRequest patient);
 }
