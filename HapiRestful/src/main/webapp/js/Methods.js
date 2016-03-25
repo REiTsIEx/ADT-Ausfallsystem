@@ -114,7 +114,7 @@ function addNewPatient() {
 		
 		var xmlRequest = new XMLHttpRequest();
 		
-		xmlRequest.open("PUT",url);
+		xmlRequest.open("POST",url);
 		xmlRequest.withCredentials = false;
 		xmlRequest.setRequestHeader("Content-Type", "application/json+fhir;charset=UTF-8");
 		xmlRequest.send(JSON.stringify({
@@ -135,6 +135,76 @@ function addNewPatient() {
 				gender: gender.value,
 				birthdate: birthdate.value,
 				deceasedBoolean : deceasedBool.value,
+				address: {
+					use: 'home',
+					line:street.value,
+					city: city.value,
+					postalCode : plz.value,
+					country: country.value
+				},
+				careProvider:{
+					reference : insurance.value
+				}
+				}));
+	}
+
+function updatePatient() {
+	var svn = document.getElementById('svn_value');
+	url = "";
+	var url = "http://localhost:8080";
+	var method = "/Ausfallsystem/hapiservlet/Patient/"+svn.value;
+		
+	
+	
+	var lastname = document.getElementById('lastname');
+	var firstname =document.getElementById('firstname');
+	var gender = document.getElementById('gender');
+	var birthday = document.getElementById('birthdate');
+	
+	
+	var street = document.getElementById('street');
+	var country = document.getElementById('country');
+	var city = document.getElementById('city');
+	var plz = document.getElementById('plz');
+	
+	
+	var location = document.getElementById('location');
+ 	var phone = document.getElementById('phoneNumber');
+ 	var phonetype = document.getElementById('phoneType');
+	
+// 	var deceasedisChecked = document.getElementById("checkbocdeceasedtrue").checked;
+//	if(deceasedisChecked) {
+//	var deceasedBool = true;	
+//	}else{
+//		deceasedBool = false;
+//	}
+	
+	var insurance = document.getElementById('insurance');
+		url = url+method;
+		
+		var xmlRequest = new XMLHttpRequest();
+		
+		xmlRequest.open("PUT",url);
+		xmlRequest.withCredentials = false;
+		xmlRequest.setRequestHeader("Content-Type", "application/json+fhir;charset=UTF-8");
+		xmlRequest.send(JSON.stringify({
+			resourceType:"Patient", 
+			identifier: {
+				value: svn.value
+			
+				},
+				name:{
+					family: lastname.value,
+					given: firstname.value
+				},
+//				telecom: {
+//					system : 'phone',
+//					value : phone.value,
+//					use : phoneType.value
+//				},
+//				gender: gender.value,
+				birthdate: birthdate.value,
+				//deceasedBoolean : deceasedBool.value,
 				address: {
 					use: 'home',
 					line:street.value,

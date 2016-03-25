@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Patientensuche</title>
 <link rel="stylesheet" type="text/css" href="../css/SearchforPatientStyles.css">
-<!-- <script type="text/javascript" src="../js/Methods.js"></script> -->
+<script type="text/javascript" src="../js/Methods.js"></script>
 
 </head>
 
@@ -33,11 +33,7 @@
 </ul>
 
 </div>
-<ul id="clickedPatient">
 
-
-</ul>
-</div>
 <div class ="col-3 menu">
 
 <ul id="patientList">
@@ -46,6 +42,26 @@
 </ul>
 
 </div>
+<div class="col-3 menu">
+<ul  class="clickedPatientList" id="clickedPatient"  style="display:none">
+Persönliche Daten:
+<li>SVN-Nummer: <br> <input  type="text" placeholder="Optional" id="svn_value" name = "SVNField" value=></li>
+<li>Verischerung: <br> <input  type="text" placeholder="Optional" id="insurance" name = "insuranceField"></li>
+<li>Vorname:	<br><input  type="text" placeholder="Optional" id="firstname" name = "firstnameField"></li>
+<li>Nachname:	<br><input  type="text" placeholder="Optional" id="lastname" name = "lastnameField"></li>
+<li>Geburtsdatum: <br> <input  type="date" placeholder="Optional" id="birthdate" name = "birthdateField"></li>
+Anschrift
+<li>Straße: <br><input  type="text" placeholder="Optional" id="street" name = "streetField"></li>
+<li>Stadt: <br><input  type="text" placeholder="Optional" id="city" name = "cityField"></li>
+<li>Postleitzahl: <br><input  type="text" placeholder="Optional" id="plz" name = "plzField"></li>
+<li>Land: <br><input  type="text" placeholder="Optional" id="country" name = "countryField"></li>
+
+
+
+<li class="button" onclick="updatePatient()">Patientendaten überschreiben</li>
+</ul>
+</div>
+
 
 </div>
 
@@ -66,8 +82,8 @@ function searchPatient() {
 	entry.addEventListener("click",showPatient)
 	
 	  var smart = new FHIR.client({
-		    serviceUrl: "https://fhir-open-api-dstu2.smarthealthit.org",
-
+		    //serviceUrl: "https://fhir-open-api-dstu2.smarthealthit.org",
+				serviceUrl: "http://localhost:8080/Ausfallsystem/hapiservlet/"
 		    auth: {
 		      type: 'none'
 		    }
@@ -108,10 +124,13 @@ if(svnSearch.value != "") {
 			singlePatient = {
 					
 					svn : resource.identifier[0].value,
+					careProvider : resource.careProvider[0].reference,
 					gender :resource.gender,
 					familyName : name.family,
 					givenName : name.given,
 					birthdate : resource.birthDate,
+					street : address.line[0],
+					postalCode : address.postalCode,
 					city: address.city,
 					country : address.country
 					
@@ -136,8 +155,19 @@ function showPatient(){
 	    
 	    console.log(JSON.stringify(patientArray[index].givenName));
 			
-	    var showPatientList = document.getElementById('clickedPatient');
-			}
+	    document.getElementById("firstname").defaultValue = patientArray[index].givenName;
+	    document.getElementById("lastname").defaultValue = patientArray[index].familyName;
+	    document.getElementById("svn_value").defaultValue = patientArray[index].svn;
+	    document.getElementById("insurance").defaultValue = patientArray[index].careProvider;
+	    document.getElementById("birthdate").defaultValue = patientArray[index].birthdate;
+	    document.getElementById("street").defaultValue = patientArray[index].street;
+	    document.getElementById("city").defaultValue = patientArray[index].city;
+	    document.getElementById("plz").defaultValue = patientArray[index].postalCode;
+	    document.getElementById("country").defaultValue = patientArray[index].country;
+	    
+	    document.getElementById('clickedPatient').style.display = "block";
+}
+			
 </script>
 
 </body>

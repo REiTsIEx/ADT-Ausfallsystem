@@ -132,6 +132,7 @@
 /* Patient in Patientenliste Anfang */
 	.patientListbutton 
 	{
+	position:fixed;
     padding: 8px;
     text-align: center;
     margin-bottom: 7px;
@@ -140,6 +141,7 @@
     
     
 	}
+
 	
 	.patientListbutton:HOVER 
 	{
@@ -148,3 +150,24 @@
 	}
 /* Patient in Patientenliste  Ende */
 
+.clickedPatientList
+{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+	padding: 8px;
+    text-align: center;
+    margin-bottom: 7px;
+    background-color :#c0c0c0;
+    color: #000000;
+	
+}
+.clickedPatientList li {
+		padding: 8px;
+    text-align: center;
+    margin-bottom: 7px;
+    background-color :#c0c0c0;
+    color: #000000;
+	
+}
