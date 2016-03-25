@@ -19,9 +19,10 @@
 <div class="row">
 <div class="col-3 menu">
 <ul>
-<li>SVN-Nummer: <br> <input  type="text" placeholder="Pflichtfeld.." id="svn_value" name = "SVNField"></li>
-<li>Vorname:	<br><input  type="text" placeholder="Pflichtfeld.." id="firstname" name = "firstnameField"></li>
-<li>Nachname:	<br><input  type="text" placeholder="Pflichtfeld.." id="lastname" name = "lastnameField"></li>
+<li>SVN-Nummer: <br> <input  type="text" placeholder="Optional" id="svn_value" name = "SVNField"></li>
+<li>Verischerung: <br> <input  type="text" placeholder="Optional" id="insurance" name = "insuranceField"></li>
+<li>Vorname:	<br><input  type="text" placeholder="Optional" id="firstname" name = "firstnameField"></li>
+<li>Nachname:	<br><input  type="text" placeholder="Optional" id="lastname" name = "lastnameField"></li>
 <li>Geburtsdatum: <br> <input  type="date" placeholder="Optional" id="birthdate" name = "birthdateField"></li>
 <li>Geschlecht: <br>
 	<select id="gender">
@@ -62,6 +63,8 @@
   		<option value="ambulant">Ambulanz</option>
 	</select>
 </li>
+<li>Verstorben: 
+				<input type="checkbox" id="checkbocdeceasedtrue" name="deceased" value="true">Ja </li>
 <li class="button" onclick="addNewPatient()">Patient speichern</li>
 </ul>
 
@@ -69,117 +72,5 @@
 </div>
 
 </body>
-<script>
-// function addNewPatient() {
-	
-// 	  var smart = new FHIR.client({
-// 		    serviceUrl: "localhost:8080",
 
-// 		    auth: {
-// 		      type: 'none'
-// 		    }
-// 		  });
-
-	
-// 	var svn = document.getElementById('svn_value');
-// 	var lastname = document.getElementById('lastname');
-// 	var firstname =document.getElementById('firstname');
-// 	var gender = document.getElementById('gender');
-// 	var birthday = document.getElementById('birthdate');
-	
-	
-// 	var street = document.getElementById('street');
-// 	var country = document.getElementById('country');
-// 	var city = document.getElementById('city');
-// 	var plz = document.getElementById('plz');
-	
-// 	var location = document.getElementById('location');
-// 	var phone = document.getElementById('phoneNumber')
-// 	var phonetype = document.getElementById('phoneType')
-	
-// 	if(lastname.value == "" || firstname.value == "" || svn.value == ""){
-// 		alert("Bitte alle Pflichteingaben abschlieﬂen!")
-// 	}else{
-		
-// 		var newPatient = {
-				
-// 				content: {
-					
-// 					resourceType: 'Patient',
-// 					identifier: {
-// 						value: svn.value
-						
-// 					},
-// 					name:{
-// 						family: lastname.value,
-// 						given: firstname.value
-// 					},
-// 					telecom: {
-// 						system : 'phone',
-// 						value : phone.value,
-// 						use : phoneType.value
-// 					},
-// 					gender: gender.value,
-// 					birthdate: birthdate.value,
-// 					address: {
-// 						use: 'home',
-// 						line: street.value,
-// 						city: city.value,
-// 						postalCode : plz.value,
-// 						country: country.value
-// 					}
-					
-					
-// 				}
-				
-// 		}
-
-// 		myClient = fhir(smart, 		(function() {
-// 		    var mkFhir = require('../fhir');
-
-// 		    var defer = function(){
-// 		        pr = jQuery.Deferred();
-// 		        pr.promise = pr.promise();
-// 		        return pr;
-// 		    };
-// 		    var adapter = {
-// 		        defer: defer,
-// 		        http: function(args) {
-// 		            var ret = jQuery.Deferred();
-// 		            var opts = {
-// 		                type: args.method,
-// 		                url: args.url,
-// 		                headers: args.headers,
-// 		                dataType: "json",
-// 		                contentType: "application/json",
-// 		                data: args.data || args.params
-// 		            };
-// 		            jQuery.ajax(opts)
-// 		                .done(function(data, status, xhr) {ret.resolve({data: data, status: status, headers: xhr.getResponseHeader, config: args});})
-// 		                .fail(function(err) {ret.reject({error: err, data: err, config: args});});
-// 		            return ret.promise();
-// 		        }
-// 		    };
-
-// 		    var fhir = function(config) {
-// 		        return mkFhir(config, adapter);
-// 		    };
-// 		    fhir.defer = defer;
-// 		    module.exports = fhir;
-
-// 		}).call(this));
-
-// 		console.log(newPatient);
-// 		myclient.create(newPatient);
-	
-	
-	
-// 	}
-
-// }
-
-
-
-
-</script>
 </html>

@@ -33,10 +33,14 @@
 </ul>
 
 </div>
+<ul id="clickedPatient">
 
+
+</ul>
+</div>
 <div class ="col-3 menu">
 
-<ul id="demo">
+<ul id="patientList">
 
 
 </ul>
@@ -50,10 +54,10 @@
 <script src='../js/fhir-client.js'></script>
 <script>
 var patientArray = [];
-var list = document.getElementById('demo');
+var list = document.getElementById('patientList');
 function searchPatient() {
 	
-	$(demo).empty();
+	$(patientList).empty();
 	
 	
 
@@ -129,7 +133,7 @@ if(svnSearch.value != "") {
 function showPatient(){
 	    console.log($(this).parent('li').index()+1);
 	    var index = $(this).parent('li').index()+1;
-	    console.log(JSON.stringify(patientArray[0].givenName));
+	    console.log(JSON.stringify(patientArray[index].givenName));
 			}
 </script>
 

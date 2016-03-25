@@ -98,17 +98,22 @@ function addNewPatient() {
 	
 	
 	var location = document.getElementById('location');
- 	var phone = document.getElementById('phoneNumber')
- 	var phonetype = document.getElementById('phoneType')
+ 	var phone = document.getElementById('phoneNumber');
+ 	var phonetype = document.getElementById('phoneType');
 	
-	if(lastname.value == "" || firstname.value == "" || svn.value == ""){
-		alert("Bitte alle Pflichteingaben abschließen!")
+ 	var deceasedisChecked = document.getElementById("checkbocdeceasedtrue").checked;
+	if(deceasedisChecked) {
+	var deceasedBool = true;	
 	}else{
+		deceasedBool = false;
+	}
+	
+	var insurance = document.getElementById('insurance');
 		url = url+method;
 		
 		var xmlRequest = new XMLHttpRequest();
 		
-		xmlRequest.open("POST",url);
+		xmlRequest.open("PUT",url);
 		xmlRequest.withCredentials = false;
 		xmlRequest.setRequestHeader("Content-Type", "application/json+fhir;charset=UTF-8");
 		xmlRequest.send(JSON.stringify({
@@ -128,17 +133,50 @@ function addNewPatient() {
 				},
 				gender: gender.value,
 				birthdate: birthdate.value,
+				deceasedBoolean : deceasedBool.value,
 				address: {
 					use: 'home',
-					line: street.value,
+					line:street.value,
 					city: city.value,
 					postalCode : plz.value,
 					country: country.value
-	
-		}}));
+				},
+				careProvider:{
+					reference : insurance.value
+				}
+				}));
+		console.log(JSON.stringify({
+			resourceType:"Patient", 
+			identifier: {
+				value: svn.value
+			
+				},
+				name:{
+					family: lastname.value,
+					given: firstname.value
+				},
+				telecom: {
+					system : 'phone',
+					value : phone.value,
+					use : phoneType.value
+				},
+				gender: gender.value,
+				birthdate: birthdate.value,
+				deceasedBoolean : deceaseBool.value,
+				address: {
+					use: 'home',
+					line:street.value,
+					city: city.value,
+					postalCode : plz.value,
+					country: country.value
+				},
+				careProvider:{
+					reference : insurance.value
+				}
+				}));
 		
 	}
-}
+
 
 
 
