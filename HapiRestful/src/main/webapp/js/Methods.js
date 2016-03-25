@@ -79,11 +79,12 @@
 
 
 function addNewPatient() {
+	var svn = document.getElementById('svn_value');
 	url = "";
 	var url = "http://localhost:8080";
-	var method = "/Ausfallsystem/hapiservlet/Patient"
+	var method = "/Ausfallsystem/hapiservlet/Patient/"+svn
 		
-	var svn = document.getElementById('svn_value');
+	
 	
 	var lastname = document.getElementById('lastname');
 	var firstname =document.getElementById('firstname');
