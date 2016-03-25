@@ -80,7 +80,7 @@
 
 function addNewPatient() {
 	url = "";
-	var url = "http://10.0.0.16:8080";
+	var url = "http://localhost:8080";
 	var method = "/Ausfallsystem/hapiservlet/Patient"
 		
 	var svn = document.getElementById('svn_value');
