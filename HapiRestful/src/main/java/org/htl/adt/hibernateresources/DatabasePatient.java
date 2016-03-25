@@ -1,4 +1,4 @@
-package org.htl.adt.domainobjects;
+package org.htl.adt.hibernateresources;
 
 
 import javax.persistence.Column;

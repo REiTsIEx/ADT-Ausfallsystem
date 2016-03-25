@@ -11,9 +11,9 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.htl.adt.connector.DBFactory;
-import org.htl.adt.domainobjects.DatabasePatient;
 import org.htl.adt.domainobjects.Identifier;
 import org.htl.adt.domainobjects.PatientRequest;
+import org.htl.adt.hibernateresources.DatabasePatient;
 import org.htl.adt.interfaces.Connector;
 import org.junit.After;
 import org.junit.Before;
@@ -87,7 +87,7 @@ public class DatabaseUnitTests {
 	@Test
 	public void addPatient() {
 		Patient testPatient = new Patient();
-		testPatient.setId(new IdDt("50"));
+		testPatient.setId(new IdDt("8559"));
 		testPatient.addName().addFamily("Nachname789").addGiven("Vorname");
 		testPatient.setGender(AdministrativeGenderEnum.MALE);
 		
@@ -99,6 +99,7 @@ public class DatabaseUnitTests {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			System.out.print("Hallo");
 		}
 		
 		assertTrue(true);

@@ -4,19 +4,29 @@ package org.htl.adt.connector;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
+
 import org.apache.log4j.BasicConfigurator;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.criterion.CriteriaQuery;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
-import org.htl.adt.domainobjects.DatabasePatient;
+import org.htl.adt.domainobjects.EncounterRequest;
+import org.htl.adt.domainobjects.Identifier;
+import org.htl.adt.domainobjects.LocationRequest;
 import org.htl.adt.domainobjects.PatientRequest;
+import org.htl.adt.hibernateresources.DatabasePatient;
 import org.htl.adt.interfaces.Connector;
 
+import com.mysql.jdbc.exceptions.jdbc4.MySQLDataException;
+
 import ca.uhn.fhir.context.FhirContext;
+import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
 import ca.uhn.fhir.model.dstu2.resource.Encounter;
 import ca.uhn.fhir.model.dstu2.resource.Patient;
 import ca.uhn.fhir.model.primitive.IdDt;
@@ -47,14 +57,7 @@ public class DBConnector implements Connector {
 
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.htl.adt.interfaces.Connector#addPatient(org.htl.adt.domainobjects
-	 * .PatientRequest)
-	 */
-
+	
 	public void addPatient(PatientRequest patientRequest) {
 		// TODO Auto-generated method stub
 
@@ -105,9 +108,47 @@ public class DBConnector implements Connector {
 		}
 	}
 
-	public List<Patient> searchPatient(PatientRequest patient) {
-		return null;
-		// Test
+	public List<Patient> searchPatient(PatientRequest patientRequest) {
+		Session session = null;
+		Transaction transaction = null;
+		
+		List<DatabasePatient> datalist = new ArrayList<DatabasePatient>();
+		List<Patient> patientlist = new ArrayList<Patient>();
+		
+		try {
+
+			FhirContext ctx = FhirContext.forDstu2();
+			IParser parser = ctx.newXmlParser();
+
+			session = sessionFactory.openSession();
+
+			transaction = session.beginTransaction();
+
+			
+			
+			datalist = session.createCriteria(DatabasePatient.class).list();
+
+			/*for (DatabasePatient data : datalist) {
+				Patient fhirPatient = parser.parseResource(Patient.class,
+						data.getFhirMessage());
+				patientlist.add(fhirPatient);
+			}*/
+
+			transaction.commit();// transaction is committed
+
+		} catch (DataFormatException e) {
+			throw new RuntimeException("Error during Parse Operation", e);
+		} catch (HibernateException e) {
+			if (transaction != null) {
+				transaction.rollback();
+			}
+			if (session != null) {
+				session.close();
+			}
+			throw new RuntimeException(
+					"Error during select Operation - had to rollback transaction!",	e);
+		}
+		return patientlist;
 	}
 
 	public List<Patient> getAllPatients() {
@@ -152,7 +193,7 @@ public class DBConnector implements Connector {
 		return patientlist;
 	}
 
-	public void updatePatient(PatientRequest patient) {
+	public void updatePatient(PatientRequest patientRequest) {
 		// TODO Auto-generated method stub
 		Session session = null;
 		Transaction transaction = null;
@@ -163,7 +204,7 @@ public class DBConnector implements Connector {
 			session = sessionFactory.openSession();
 			transaction = session.beginTransaction();		
 			
-			IdDt patientId = patient.getPatient().getId();		//Identifier of the patient that should be updated
+			IdDt patientId = patientRequest.getPatient().getId();		//Identifier of the patient that should be updated
 
 			List<DatabasePatient> selectValue = session
 					.createCriteria(DatabasePatient.class)
@@ -173,7 +214,7 @@ public class DBConnector implements Connector {
 
 			if (!selectValue.isEmpty()) {
 				//Occurs when patient already exists in the Database
-				Patient insertPatient = patient.getPatient();
+				Patient insertPatient = patientRequest.getPatient();
 				
 				String patientIdentifier = insertPatient.getId().getIdPart();
 				String patientLastName = insertPatient.getNameFirstRep().getFamilyAsSingleString();
@@ -188,7 +229,7 @@ public class DBConnector implements Connector {
 
 			} else {
 				//Occurs when patient doesn't exists in the Database
-				Patient insertPatient = patient.getPatient();
+				Patient insertPatient = patientRequest.getPatient();
 
 				String patientIdentifier = insertPatient.getId().getIdPart();
 				String patientLastName = insertPatient.getNameFirstRep().getFamilyAsSingleString();
@@ -272,7 +313,7 @@ public class DBConnector implements Connector {
 		return patientlist;
 	}
 
-	public Patient getPatientbyIdentifier(PatientRequest patient) {
+	public Patient getPatientbyIdentifier(PatientRequest patientRequest) {
 		// TODO Auto-generated method stub
 		Session session = null;
 		Transaction transaction = null;
@@ -287,7 +328,7 @@ public class DBConnector implements Connector {
 			session = sessionFactory.openSession();
 			transaction = session.beginTransaction();		
 						
-			IdDt patientId = patient.getPatient().getId(); //Identifier of the patient that should be searched
+			IdDt patientId = patientRequest.getPatient().getId(); //Identifier of the patient that should be searched
 			
 			List<DatabasePatient> selectValue = session
 					.createCriteria(DatabasePatient.class)
@@ -311,7 +352,10 @@ public class DBConnector implements Connector {
 					"Error during the reading of the Patient Parameters - NullPointException of one of the Parameters",	e);	
 		} catch (DataFormatException e) {
 			throw new RuntimeException("Error during Parse Operation", e);
-		} catch (HibernateException e) {
+		}catch(org.hibernate.exception.ConstraintViolationException e){
+			throw new RuntimeException(
+					"Error during insert Operation - had to rollback transaction!",	e);
+		}catch (HibernateException e) {
 			if (transaction != null) {
 				transaction.rollback();
 			}
@@ -325,11 +369,23 @@ public class DBConnector implements Connector {
 			return returnPatient;
 	}
 	
-	public void addEncounter(PatientRequest patient, Encounter encounter) {
+	public void addEncounter(PatientRequest patientRequest,	EncounterRequest encounterRequest) {
 		// TODO Auto-generated method stub
 		
 	}
 
+	public void addLocationtoEncounter(EncounterRequest encounterRequest,
+			LocationRequest locationRequest) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public List<Encounter> getEncounterbyPatient(Identifier patientIdentifier) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	
 	
 	public void getConnection() {
 		// TODO Auto-generated method stub
@@ -340,6 +396,11 @@ public class DBConnector implements Connector {
 		// TODO Auto-generated method stub
 
 	}
+
+
+	
+
+	
 
 
 }

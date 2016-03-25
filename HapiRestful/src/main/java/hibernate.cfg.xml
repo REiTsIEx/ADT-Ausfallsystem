@@ -12,7 +12,7 @@
     
     <property name="show_sql">true</property>
     
-    <mapping resource= "org/htl/adt/domainobjects/DatabasePatient.hbm.xml"/>
+    <mapping resource= "org/htl/adt/hibernateresources/DatabasePatient.hbm.xml"/>
     
      
   </session-factory>
