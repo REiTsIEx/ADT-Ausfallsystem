@@ -89,7 +89,7 @@ public class DatabaseUnitTests {
 	@Test
 	public void addPatient() {
 		Patient testPatient = new Patient();
-		testPatient.setId(new IdDt("8559"));
+		testPatient.setId(new IdDt("8577"));
 		testPatient.addName().addFamily("Nachname789").addGiven("Vorname");
 		testPatient.setGender(AdministrativeGenderEnum.MALE);
 		
@@ -148,7 +148,7 @@ public class DatabaseUnitTests {
 				
 		Map<String, String> params = new HashMap<String, String>();
 		
-		params.put("patientGender", "male");
+		//params.put("patientGender", "male");
 		params.put("familyName", "Nach");
 		params.put("firstName", "Tobias");
 		params.put("patientIdentifier", "101");
