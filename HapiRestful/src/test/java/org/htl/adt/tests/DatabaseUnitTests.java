@@ -28,7 +28,7 @@ public class DatabaseUnitTests {
 
 	@Before
 	public void init() {
-		BasicConfigurator.configure();
+
 	}
 	
 	@After
@@ -87,9 +87,8 @@ public class DatabaseUnitTests {
 	@Test
 	public void addPatient() {
 		Patient testPatient = new Patient();
-		testPatient.setId(new IdDt(1));
-		testPatient.setId(new IdDt("57"));;
-		testPatient.addName().addFamily("Nachname789").addGiven("Marcel");
+		testPatient.setId(new IdDt("50"));
+		testPatient.addName().addFamily("Nachname789").addGiven("Vorname");
 		testPatient.setGender(AdministrativeGenderEnum.MALE);
 		
 		Connector connector = DBFactory.getInstance().getConnector("DBConnector");
@@ -97,7 +96,7 @@ public class DatabaseUnitTests {
 		try {
 			connector.addPatient(new PatientRequest("Patient hinzufügen", testPatient));
 			
-		} catch (RuntimeException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -139,14 +138,13 @@ public class DatabaseUnitTests {
 	*/
 	@Test
 	public void getPatientbyLastName() {
-		
-		
+				
 		Connector connector = DBFactory.getInstance().getConnector("DBConnector");
 		
 		List<Patient> patientlist = new ArrayList<Patient>();
 		
 		Patient testPatient = new Patient();
-		testPatient.addName().addFamily("irgendwas");
+		testPatient.addName().addFamily("Nachname789");
 		
 		try {
 			patientlist = connector.searchPatientWithFamily(new PatientRequest("Patient nach Nachname suchen", testPatient));
@@ -171,18 +169,41 @@ public class DatabaseUnitTests {
 	public void updatePatient() {
 		Patient testPatient = new Patient();
 		testPatient.setId(new IdDt("101"));
-		testPatient.addName().addFamily("Nachname").addGiven("Tobias");
+		testPatient.addName().addFamily("Nach").addGiven("Tobias");
 		testPatient.setGender(AdministrativeGenderEnum.MALE);
 		
 		Connector connector = DBFactory.getInstance().getConnector("DBConnector");
 		
 		
 		try {
-			connector.updatePatient(new Identifier(testPatient.getId()), new PatientRequest("", testPatient));
+			connector.updatePatient(new PatientRequest("", testPatient));
 		} catch (RuntimeException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
+		
+	}
+	
+	/**
+	* 
+	* Sucht einen Patienten mit dem Identifier in der Datenbank
+	*/
+	@Test
+	public void getPatientbyIdentifier() {
+		Connector connector = DBFactory.getInstance().getConnector("DBConnector");
+		
+		Patient searchPatient = new Patient();
+		searchPatient.setId(new IdDt("101"));
+		Patient returnPatient = null;
+				
+		try {
+			returnPatient = connector.getPatientbyIdentifier(new PatientRequest("Patient nach Nachname suchen", searchPatient));
+		} catch (RuntimeException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		System.out.println(returnPatient.getId().getIdPart() +  ": " + returnPatient.getNameFirstRep().getFamilyAsSingleString() + " " + returnPatient.getNameFirstRep().getGivenFirstRep().getValue());
 		
 	}
 
