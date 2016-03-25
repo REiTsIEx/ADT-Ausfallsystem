@@ -47,7 +47,7 @@ public class RestfulEncounterResourceProvider implements IResourceProvider{
 		encounter.setId(new IdDt(1));
 		Patient patientToRead = new Patient();
 		patientToRead.setId(new IdDt(1));
-		patientToRead.addName().addFamily("Mustermann");
+		patientToRead.addName().addFamily("Reiter");
 		List<Patient> allPatients = client.searchPatient(patientToRead);
 		//Patient patient = allPatients.getFirst();
 		ResourceReferenceDt ref = new ResourceReferenceDt(allPatients.get(0));

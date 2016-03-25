@@ -69,7 +69,7 @@ public class TestDBConnector implements Connector{
 
 	}
 	
-	public List<Patient> searchPatientWithParams(Map<String, String> patientParams){
+	public List<Patient> searchPatientWithParameters(Map<String, String> patientParams){
 		List<Patient> retValue = new ArrayList<Patient>();
 		String patientFamilyName = patientParams.get("familyName");
 		for (Patient next : db.myPatients.values()){

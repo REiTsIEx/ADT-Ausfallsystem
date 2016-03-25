@@ -8,13 +8,14 @@ import org.htl.adt.domainobjects.EncounterRequest;
 import org.htl.adt.domainobjects.Identifier;
 import org.htl.adt.domainobjects.LocationRequest;
 import org.htl.adt.domainobjects.PatientRequest;
+import org.htl.adt.exception.AdtSystemErrorException;
 
 import ca.uhn.fhir.model.dstu2.resource.Encounter;
 import ca.uhn.fhir.model.dstu2.resource.Patient;
 
 public interface Connector {
 	
-	public void addPatient(PatientRequest patientRequest);
+	public void addPatient(PatientRequest patientRequest) throws AdtSystemErrorException;
 	
 	public void updatePatient(PatientRequest patientRequest);
 	

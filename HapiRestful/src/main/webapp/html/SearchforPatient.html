@@ -46,7 +46,7 @@
 <ul  class="clickedPatientList" id="clickedPatient"  style="display:none">
 Persönliche Daten:
 <li>SVN-Nummer: <br> <input  type="text" placeholder="Optional" id="svn_value" name = "SVNField" value=></li>
-<li>Verischerung: <br> <input  type="text" placeholder="Optional" id="insurance" name = "insuranceField"></li>
+<li>Versicherung: <br> <input  type="text" placeholder="Optional" id="insurance" name = "insuranceField"></li>
 <li>Vorname:	<br><input  type="text" placeholder="Optional" id="firstname" name = "firstnameField"></li>
 <li>Nachname:	<br><input  type="text" placeholder="Optional" id="lastname" name = "lastnameField"></li>
 <li>Geburtsdatum: <br> <input  type="date" placeholder="Optional" id="birthdate" name = "birthdateField"></li>
@@ -72,7 +72,7 @@ Anschrift
 var patientArray = [];
 var list = document.getElementById('patientList');
 function searchPatient() {
-	
+	document.getElementById('clickedPatient').style.display = "none";
 	$(patientList).empty();
 	
 	
@@ -83,7 +83,7 @@ function searchPatient() {
 	
 	  var smart = new FHIR.client({
 		    //serviceUrl: "https://fhir-open-api-dstu2.smarthealthit.org",
-				serviceUrl: "http://localhost:8080/Ausfallsystem/hapiservlet/"
+				serviceUrl: "http://localhost:8080/Ausfallsystem/hapiservlet",
 		    auth: {
 		      type: 'none'
 		    }
@@ -108,7 +108,7 @@ if(svnSearch.value != "") {
 			});
 		       
 		});
-}else{
+}else if(lastnameSearch.value != ""){
 
   smart.api.search({type: "Patient", query: {family: lastnameSearch.value, given: firstnameSearch.value}
 	}).then(function(patientList){
@@ -124,7 +124,7 @@ if(svnSearch.value != "") {
 			singlePatient = {
 					
 					svn : resource.identifier[0].value,
-					careProvider : resource.careProvider[0].reference,
+					//careProvider : resource.careProvider[0].reference,
 					gender :resource.gender,
 					familyName : name.family,
 					givenName : name.given,
@@ -141,12 +141,15 @@ if(svnSearch.value != "") {
 			list.appendChild(entry);
 			patientArray.push(singlePatient);
 			
-			console.log(singlePatient);
+			console.log(singlePatient.birthdate);
 		});
 		}else{
 		alert("Keine Ergebnisse");	
 		}
 	});
+}else{
+	alert("Bitte Nachname oder Sozialversicherungsnummer eingeben!")
+	
 }
 }
 function showPatient(){
@@ -158,7 +161,7 @@ function showPatient(){
 	    document.getElementById("firstname").defaultValue = patientArray[index].givenName;
 	    document.getElementById("lastname").defaultValue = patientArray[index].familyName;
 	    document.getElementById("svn_value").defaultValue = patientArray[index].svn;
-	    document.getElementById("insurance").defaultValue = patientArray[index].careProvider;
+	   // document.getElementById("insurance").defaultValue = patientArray[index].careProvider;
 	    document.getElementById("birthdate").defaultValue = patientArray[index].birthdate;
 	    document.getElementById("street").defaultValue = patientArray[index].street;
 	    document.getElementById("city").defaultValue = patientArray[index].city;

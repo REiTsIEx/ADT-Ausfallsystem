@@ -133,7 +133,7 @@ function addNewPatient() {
 					use : phoneType.value
 				},
 				gender: gender.value,
-				birthdate: birthdate.value,
+				birthDate: birthday.value,
 				deceasedBoolean : deceasedBool.value,
 				address: {
 					use: 'home',
@@ -146,6 +146,7 @@ function addNewPatient() {
 					reference : insurance.value
 				}
 				}));
+		alert("Patient mit der ID " + svn.value +" wurde angelegt!")
 	}
 
 function updatePatient() {
@@ -203,7 +204,7 @@ function updatePatient() {
 //					use : phoneType.value
 //				},
 //				gender: gender.value,
-				birthdate: birthdate.value,
+				birthDate: birthday.value,
 				//deceasedBoolean : deceasedBool.value,
 				address: {
 					use: 'home',
@@ -216,6 +217,7 @@ function updatePatient() {
 					reference : insurance.value
 				}
 				}));
+		alert("Patient mit der ID " + svn.value +" wurde überschrieben!")
 	}
 
 

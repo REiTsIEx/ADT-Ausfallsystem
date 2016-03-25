@@ -22,6 +22,7 @@ import org.htl.adt.domainobjects.EncounterRequest;
 import org.htl.adt.domainobjects.Identifier;
 import org.htl.adt.domainobjects.LocationRequest;
 import org.htl.adt.domainobjects.PatientRequest;
+import org.htl.adt.exception.CommunicationException;
 import org.htl.adt.hibernateresources.DatabasePatient;
 import org.htl.adt.interfaces.Connector;
 
@@ -40,7 +41,7 @@ public class DBConnector implements Connector {
 	private Configuration config;
 	private SessionFactory sessionFactory;
 
-	public DBConnector() {
+	public DBConnector() throws CommunicationException {
 		try {
 
 			BasicConfigurator.configure();
@@ -51,7 +52,7 @@ public class DBConnector implements Connector {
 			sessionFactory = config.buildSessionFactory();
 
 		} catch (HibernateException e) {
-			throw new RuntimeException(
+			throw new CommunicationException(
 					"Error during the Creation of the Hibernate Configuration",
 					e);
 

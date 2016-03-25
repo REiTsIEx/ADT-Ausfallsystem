@@ -1,5 +1,8 @@
 package org.htl.adt.connector;
 
+
+
+import org.htl.adt.exception.CommunicationException;
 import org.htl.adt.interfaces.Connector;
 
 public class DBFactory {
@@ -17,7 +20,7 @@ public class DBFactory {
 		return factory;
 	}
 	
-	public Connector getConnector(String typeOfConnector){
+	public Connector getConnector(String typeOfConnector) throws CommunicationException {
 		if(typeOfConnector == null){
 			return null;
 		}
