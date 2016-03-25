@@ -7,10 +7,13 @@ import java.util.Map;
 
 import org.htl.adt.client.RestfulClient;
 import org.htl.adt.db.TestDB;
+import org.htl.adt.domainobjects.EncounterRequest;
 import org.htl.adt.domainobjects.Identifier;
+import org.htl.adt.domainobjects.LocationRequest;
 import org.htl.adt.domainobjects.PatientRequest;
 import org.htl.adt.interfaces.Connector;
 
+import ca.uhn.fhir.model.dstu2.resource.Encounter;
 import ca.uhn.fhir.model.dstu2.resource.OperationOutcome;
 import ca.uhn.fhir.model.dstu2.resource.Patient;
 import ca.uhn.fhir.model.dstu2.valueset.AdministrativeGenderEnum;
@@ -24,25 +27,19 @@ public class TestDBConnector implements Connector{
 	Long nextID = 3L;
 	RestfulClient client = new RestfulClient();
 
-	public void addPatient(PatientRequest patient) {
+	public void addPatient(PatientRequest patientRequest) {
 		//IdDt newPatientID = new IdDt();
 		//newPatientID.withVersion(nextID.toString());
-		patient.getPatient().setId(new IdDt(nextID));
+		patientRequest.getPatient().setId(new IdDt(nextID));
 		//patient.patient.setId(newPatientID);
-		db.myPatients.put(nextID, patient.getPatient());
+		db.myPatients.put(nextID, patientRequest.getPatient());
 		nextID++;
 		//client.createPatient(patient.getPatient());
 	}
 
-	public void updatePatient(Identifier id, PatientRequest patient) {
-		/*Patient oldPatient = db.myPatients.get(id.identifier.getIdPartAsLong());
-		oldPatient.addName(patient.patient.getNameFirstRep());
-		db.myPatients.put(id.identifier.getIdPartAsLong(), oldPatient);*/
-		db.myPatients.put(id.getIdentifier().getIdPartAsLong(), patient.getPatient());
-	}
 
-	public List<Patient> searchPatient(PatientRequest patient) {
-		IdDt patID = patient.getPatient().getId();
+	public List<Patient> searchPatient(PatientRequest patientRequest) {
+		IdDt patID = patientRequest.getPatient().getId();
 		Patient dbPatient = db.myPatients.get(patID.getIdPartAsLong());
 		if(dbPatient == null){
 			throw new ResourceNotFoundException("Der Patient mit der ID " + patID.getIdPart() + " ist nicht vorhanden");
@@ -72,17 +69,18 @@ public class TestDBConnector implements Connector{
 
 	}
 	
-	public List<Patient> searchPatientWithFamily(PatientRequest patient){
+	public List<Patient> searchPatientWithParams(Map<String, String> patientParams){
 		List<Patient> retValue = new ArrayList<Patient>();
+		String patientFamilyName = patientParams.get("familyName");
 		for (Patient next : db.myPatients.values()){
 			String familyName = next.getNameFirstRep().getFamilyAsSingleString().toLowerCase();
-			if(!familyName.contains(patient.getMessageText().toLowerCase())){
+			if(!familyName.contains(patientFamilyName.toLowerCase())){
 				continue;
 			}
 			retValue.add(next);
 		}
 		if(retValue.isEmpty())
-			throw new ResourceNotFoundException("Patient mit dem Nachnamen " + patient.messageText + " nicht vorhanden");
+			throw new ResourceNotFoundException("Patient mit dem Nachnamen " + patientFamilyName + " nicht vorhanden");
 		/*Patient newPatient = new Patient();
 		newPatient.setId(new IdDt(3));
 		newPatient.addIdentifier().setSystem("http://test.com/Patient").setValue("1234");
@@ -90,6 +88,33 @@ public class TestDBConnector implements Connector{
 		newPatient.setGender(AdministrativeGenderEnum.MALE);
 		client.createPatient(newPatient);*/
 		return retValue;
+	}
+
+	public void updatePatient(PatientRequest patientRequest) {
+		/*Patient oldPatient = db.myPatients.get(id.identifier.getIdPartAsLong());
+		oldPatient.addName(patient.patient.getNameFirstRep());
+		db.myPatients.put(id.identifier.getIdPartAsLong(), oldPatient);*/
+		db.myPatients.put(patientRequest.getPatient().getId().getIdPartAsLong(), patientRequest.getPatient());
+	}
+
+	public Patient getPatientbyIdentifier(PatientRequest patientRequest) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void addEncounter(PatientRequest patientRequest, EncounterRequest encounterRequest) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void addLocationtoEncounter(EncounterRequest encounterRequest, LocationRequest locationRequest) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public List<Encounter> getEncounterbyPatient(Identifier patientIdentifier) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

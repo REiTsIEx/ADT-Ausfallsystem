@@ -21,52 +21,26 @@ public class TestFHIRRestServlet implements RestServer {
 	//TestDBConnector db = new TestDBConnector();
 
 	public List<Patient> getAllPatient() {
-		try {
-			return db.getAllPatients();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		return db.getAllPatients();
+		
 	}
 
-	public void addPatient(PatientRequest patient) {
-		try {
-			db.addPatient(patient);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public void addPatient(PatientRequest patientRequest) {
+		db.addPatient(patientRequest);
 	}
 	
-	public Patient searchPatientWithID(PatientRequest patient) {
-		try {
-			return db.searchPatient(patient).get(0);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+	public Patient searchPatientWithID(PatientRequest patientRefactor) {
+		return db.searchPatient(patientRefactor).get(0);
 	}
 	
-	public List<Patient> searchPatient(PatientRequest patient) {
+	public List<Patient> searchPatient(PatientRequest patientRequest) {
 		List<Patient> patients = null;
-		try {
-			patients.add(db.searchPatient(patient).get(0));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		patients.add(db.searchPatient(patientRequest).get(0));
 		return patients;
 	}
 
-	public void updatePatient(Identifier id, PatientRequest patient) {
-		try {
-			db.updatePatient(id, patient);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public void updatePatient(Identifier id, PatientRequest patientRequest) {
+		db.updatePatient(patientRequest);
 
 	}
 
@@ -81,12 +55,7 @@ public class TestFHIRRestServlet implements RestServer {
 	}
 	
 	public List<Patient> searchPatientWithFamily(PatientRequest patient){
-		try {
-			return db.searchPatientWithFamily(patient);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		//return db.searchPatientWithFamily(patient);
 		return null;
 	}
 

@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.naming.CommunicationException;
+
 import org.hibernate.HibernateException;
 import org.htl.adt.connector.DBFactory;
 import org.htl.adt.domainobjects.Identifier;
@@ -39,7 +41,7 @@ public class RestfulPatientResourceProvider implements IResourceProvider {
 
 	private Map<Long, Patient> myPatients = new HashMap<Long, Patient>();
 	private long nextID = 1L;
-	
+	Connector db;
 	//private RestServer restServer = RestFactory.getInstance().getServer("TestServer");
 	////Connector dB = DBFactory.getInstance().getConnector("DBConnector");
 	//TestFHIRRestServlet myServlet = new TestFHIRRestServlet();
@@ -60,14 +62,6 @@ public class RestfulPatientResourceProvider implements IResourceProvider {
 		patient.addName().addFamily("Simpson").addGiven("Homer").addGiven("J");
 		patient.setGender(AdministrativeGenderEnum.MALE);
 		myPatients.put(id, patient);
-		
-		/*Long id = myNextID++;
-		
-		Patient pat1 = new Patient();
-		pat1.setId(new IdDt(id));
-		pat1.addIdentifier().setSystem("http://test.com/Patients").setValue("1234");
-		pat1.addName().addFamily("Max").addGiven("Mustermann").addGiven("M");
-		myPatients.put(id, pat1);*/
 	}
 
 	@Read(version=true)
@@ -127,31 +121,40 @@ public class RestfulPatientResourceProvider implements IResourceProvider {
 		if(retValue.isEmpty())
 			throw new InternalErrorException("Patient mit diesem Nachnamn nicht vorhanden");
 		return retValue;*/
-		try{
-		Connector db = DBFactory.getInstance().getConnector("DBConnector");
+		
+		Map<String, String> params = new HashMap<String, String>();
 		Patient pat = new Patient();
 		pat.setId(new IdDt(1));
 		if(familyName != null){
-			pat.addName().addFamily(familyName.getValue());	
+			pat.addName().addFamily(familyName.getValue());
+			params.put("familyName", familyName.getValue());
 		}
 		if(patientIdentifier != null){
-			throw new InternalErrorException("Identifier angekommen");
+			pat.addIdentifier().setValue(patientIdentifier.getValue());
+			params.put("patientIdentifier", patientIdentifier.getValue());
+			//throw new InternalErrorException("Identifier angekommen");
 		}
 		if(firstName != null){
 			pat.addName().addGiven(firstName.getValue());
+			params.put("firstName", firstName.getValue());
 		}
 		if(patientGender != null){
 			if(patientGender.getValue().equals("M") || patientGender.getValue().equals("MALE")){
 				pat.setGender(AdministrativeGenderEnum.MALE);
+				params.put("patientGender", "M");
 			} else if (patientGender.getValue().equals("F")) {
 				pat.setGender(AdministrativeGenderEnum.FEMALE);
+				params.put("patientGender", "F");
 			}
 		}
+		try{
+			db = DBFactory.getInstance().getConnector("DBConnector");
+			} catch(HibernateException e){
+				throw new InternalErrorException("Keine DB vorhanden");
+			}
 		PatientRequest request = new PatientRequest(familyName.getValue(), pat);
-		return db.searchPatientWithFamily(request);
-		} catch(Exception e){
-			throw new InternalErrorException("Fehler bei der DB");
-		}
+		return db.searchPatientWithParams(params);
+		
 	}
 	
 	@Search

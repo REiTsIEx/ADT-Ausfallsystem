@@ -2,6 +2,7 @@ package org.htl.adt.interfaces;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import org.htl.adt.domainobjects.EncounterRequest;
 import org.htl.adt.domainobjects.Identifier;
@@ -33,5 +34,5 @@ public interface Connector {
 	
 	public void setConnection(String url);
 	
-	public List<Patient> searchPatientWithFamily(PatientRequest patientRequest);
+	public List<Patient> searchPatientWithParams(Map<String, String> patientParams);
 }
