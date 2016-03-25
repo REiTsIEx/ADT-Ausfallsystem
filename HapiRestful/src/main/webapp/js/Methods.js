@@ -145,36 +145,6 @@ function addNewPatient() {
 					reference : insurance.value
 				}
 				}));
-		console.log(JSON.stringify({
-			resourceType:"Patient", 
-			identifier: {
-				value: svn.value
-			
-				},
-				name:{
-					family: lastname.value,
-					given: firstname.value
-				},
-				telecom: {
-					system : 'phone',
-					value : phone.value,
-					use : phoneType.value
-				},
-				gender: gender.value,
-				birthdate: birthdate.value,
-				deceasedBoolean : deceaseBool.value,
-				address: {
-					use: 'home',
-					line:street.value,
-					city: city.value,
-					postalCode : plz.value,
-					country: country.value
-				},
-				careProvider:{
-					reference : insurance.value
-				}
-				}));
-		
 	}
 
 

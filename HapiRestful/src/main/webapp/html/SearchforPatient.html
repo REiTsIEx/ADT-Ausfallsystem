@@ -108,7 +108,7 @@ if(svnSearch.value != "") {
 			singlePatient = {
 					
 					svn : resource.identifier[0].value,
-					gender : resource.gender,
+					gender :resource.gender,
 					familyName : name.family,
 					givenName : name.given,
 					birthdate : resource.birthDate,
@@ -131,9 +131,12 @@ if(svnSearch.value != "") {
 }
 }
 function showPatient(){
-	    console.log($(this).parent('li').index()+1);
+	
 	    var index = $(this).parent('li').index()+1;
+	    
 	    console.log(JSON.stringify(patientArray[index].givenName));
+			
+	    var showPatientList = document.getElementById('clickedPatient');
 			}
 </script>
 
