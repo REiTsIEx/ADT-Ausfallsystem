@@ -79,11 +79,12 @@
 
 
 function addNewPatient() {
-	url = "";
-	var url = "http://10.0.0.16:8080";
-	var method = "/Ausfallsystem/hapiservlet/Patient"
-		
 	var svn = document.getElementById('svn_value');
+	url = "";
+	var url = "http://localhost:8080";
+	var method = "/Ausfallsystem/hapiservlet/Patient/"+svn.value;
+		
+	
 	
 	var lastname = document.getElementById('lastname');
 	var firstname =document.getElementById('firstname');
@@ -98,17 +99,22 @@ function addNewPatient() {
 	
 	
 	var location = document.getElementById('location');
- 	var phone = document.getElementById('phoneNumber')
- 	var phonetype = document.getElementById('phoneType')
+ 	var phone = document.getElementById('phoneNumber');
+ 	var phonetype = document.getElementById('phoneType');
 	
-	if(lastname.value == "" || firstname.value == "" || svn.value == ""){
-		alert("Bitte alle Pflichteingaben abschließen!")
+ 	var deceasedisChecked = document.getElementById("checkbocdeceasedtrue").checked;
+	if(deceasedisChecked) {
+	var deceasedBool = true;	
 	}else{
+		deceasedBool = false;
+	}
+	
+	var insurance = document.getElementById('insurance');
 		url = url+method;
 		
 		var xmlRequest = new XMLHttpRequest();
 		
-		xmlRequest.open("POST",url);
+		xmlRequest.open("PUT",url);
 		xmlRequest.withCredentials = false;
 		xmlRequest.setRequestHeader("Content-Type", "application/json+fhir;charset=UTF-8");
 		xmlRequest.send(JSON.stringify({
@@ -128,17 +134,20 @@ function addNewPatient() {
 				},
 				gender: gender.value,
 				birthdate: birthdate.value,
+				deceasedBoolean : deceasedBool.value,
 				address: {
 					use: 'home',
-					line: street.value,
+					line:street.value,
 					city: city.value,
 					postalCode : plz.value,
 					country: country.value
-	
-		}}));
-		
+				},
+				careProvider:{
+					reference : insurance.value
+				}
+				}));
 	}
-}
+
 
 
 
