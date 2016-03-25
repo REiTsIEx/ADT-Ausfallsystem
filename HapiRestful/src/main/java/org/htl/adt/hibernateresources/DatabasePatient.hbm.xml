@@ -5,11 +5,12 @@
 <hibernate-mapping package="org.htl.adt.hibernateresources">
     <class name="DatabasePatient" table="Patient">
         
-        <id name="identifier" column="Identifier"/>
+        <id name="patientIdentifier" column="Identifier"/>
         
         <property name="patient_id" column="Patient_id"/>     
         <property name="firstName" column="FirstName"/>
-      	<property name="lastName" column="LastName"/>
+      	<property name="familyName" column="LastName"/>
+      	<property name="patientGender" column="Gender"/>           	
       	<property name="fhirMessage" column="FhirMessage"/>
       	
     </class>

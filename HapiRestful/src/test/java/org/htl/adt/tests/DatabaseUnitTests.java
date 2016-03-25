@@ -3,7 +3,9 @@ package org.htl.adt.tests;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.BasicConfigurator;
 import org.hibernate.Session;
@@ -47,7 +49,7 @@ public class DatabaseUnitTests {
 		FhirContext ctx = FhirContext.forDstu2();
 
 		Patient testPatient = new Patient();
-		testPatient.addIdentifier().setSystem("http://loinc.org").setValue("1234");
+		testPatient.setId(new IdDt(123));;
 		testPatient.addName().addFamily("Mustermann").addGiven("Max");
 		testPatient.addName().addFamily("Mustermann").addGiven("Zweitname");
 		testPatient.setGender(AdministrativeGenderEnum.MALE);
@@ -67,7 +69,7 @@ public class DatabaseUnitTests {
 		Transaction t = session.beginTransaction();
 
 
-		DatabasePatient c1 = new DatabasePatient("12345", testPatient.getNameFirstRep().getNameAsSingleString(), testPatient.getNameFirstRep().getFamilyAsSingleString(), fhirMessage);
+		DatabasePatient c1 = new DatabasePatient("12345", testPatient.getNameFirstRep().getNameAsSingleString(),testPatient.getGender() ,testPatient.getNameFirstRep().getFamilyAsSingleString(), fhirMessage);
 		session.save(c1);
 		
 
@@ -138,17 +140,23 @@ public class DatabaseUnitTests {
 	* Die Patienten werden mithilfe des DBConnectors aus der Datenbank abgerufen
 	*/
 	@Test
-	public void getPatientbyLastName() {
+	public void searchPatientWithParameters() {
 				
 		Connector connector = DBFactory.getInstance().getConnector("DBConnector");
 		
 		List<Patient> patientlist = new ArrayList<Patient>();
+				
+		Map<String, String> params = new HashMap<String, String>();
 		
-		Patient testPatient = new Patient();
-		testPatient.addName().addFamily("Nachname789");
+		params.put("patientGender", "male");
+		params.put("familyName", "Nach");
+		params.put("firstName", "Tobias");
+		params.put("patientIdentifier", "101");
+
+
 		
 		try {
-			patientlist = connector.searchPatientWithFamily(new PatientRequest("Patient nach Nachname suchen", testPatient));
+			patientlist = connector.searchPatientWithParameters(params);
 		} catch (RuntimeException e) {
 			// TODO Auto-generated catch block
 			System.out.println("Error");
@@ -156,7 +164,7 @@ public class DatabaseUnitTests {
 		}
 		
 		for (Patient patient : patientlist) {
-			System.out.println(patient.getNameFirstRep().getFamilyAsSingleString().toLowerCase());
+			System.out.println("Identifier: " + patient.getId().getIdPart() + " - " + patient.getNameFirstRep().getNameAsSingleString() );
 		}
 		
 	}

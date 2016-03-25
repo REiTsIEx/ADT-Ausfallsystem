@@ -34,5 +34,5 @@ public interface Connector {
 	
 	public void setConnection(String url);
 	
-	public List<Patient> searchPatientWithParams(Map<String, String> patientParams);
+	public List<Patient> searchPatientWithParameters(Map<String, String> patientParameter);
 }

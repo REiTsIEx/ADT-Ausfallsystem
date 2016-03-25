@@ -16,38 +16,20 @@ public class DatabasePatient{
 	
 	@Id
 	@Column(name = "Identifier")
-	private String identifier;
+	private String patientIdentifier;
 	
 	@Column(name = "FirstName")
 	private String firstName;
 	
+	@Column(name = "Gender")
+	private String patientGender;
+	
+
 	@Column(name = "LastName")
-	private String lastName;
+	private String familyName;
 	
 	@Column(name = "FhirMessage")
 	private String fhirMessage;
-	
-	
-
-	public DatabasePatient() {
-		super();
-	}
-
-	public DatabasePatient(String identifier, String firstName, String lastName, String fhirMessage) {
-		super();
-		this.identifier = identifier;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.fhirMessage = fhirMessage;
-	}
-
-	public String getIdentifier() {
-		return identifier;
-	}
-
-	public void setIdentifier(String identifier) {
-		this.identifier = identifier;
-	}
 
 	public int getPatient_id() {
 		return patient_id;
@@ -55,6 +37,14 @@ public class DatabasePatient{
 
 	public void setPatient_id(int patient_id) {
 		this.patient_id = patient_id;
+	}
+
+	public String getPatientIdentifier() {
+		return patientIdentifier;
+	}
+
+	public void setPatientIdentifier(String patientIdentifier) {
+		this.patientIdentifier = patientIdentifier;
 	}
 
 	public String getFirstName() {
@@ -65,12 +55,20 @@ public class DatabasePatient{
 		this.firstName = firstName;
 	}
 
-	public String getLastName() {
-		return lastName;
+	public String getPatientGender() {
+		return patientGender;
 	}
 
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
+	public void setPatientGender(String patientGender) {
+		this.patientGender = patientGender;
+	}
+
+	public String getFamilyName() {
+		return familyName;
+	}
+
+	public void setFamilyName(String familyName) {
+		this.familyName = familyName;
 	}
 
 	public String getFhirMessage() {
@@ -80,11 +78,21 @@ public class DatabasePatient{
 	public void setFhirMessage(String fhirMessage) {
 		this.fhirMessage = fhirMessage;
 	}
-	
-	
-	
-	
-	
+
+	public DatabasePatient(String patientIdentifier, String firstName,
+			String patientGender, String familyName, String fhirMessage) {
+		super();
+		this.patientIdentifier = patientIdentifier;
+		this.firstName = firstName;
+		this.patientGender = patientGender;
+		this.familyName = familyName;
+		this.fhirMessage = fhirMessage;
+	}
+
+	public DatabasePatient() {
+		super();
+	}
+
 	
 	
 

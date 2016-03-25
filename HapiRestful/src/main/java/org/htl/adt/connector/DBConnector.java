@@ -3,17 +3,19 @@ package org.htl.adt.connector;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
-import javax.persistence.criteria.CriteriaBuilder;
 
 import org.apache.log4j.BasicConfigurator;
+import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.CriteriaQuery;
+import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.htl.adt.domainobjects.EncounterRequest;
@@ -73,13 +75,14 @@ public class DBConnector implements Connector {
 			FhirContext ctx = FhirContext.forDstu2();
 
 			Patient insertPatient = patientRequest.getPatient();
-
+			
 			String patientIdentifier = insertPatient.getId().getIdPart();
 			String patientLastName = insertPatient.getNameFirstRep().getFamilyAsSingleString();
 			String patientFirstName = insertPatient.getNameFirstRep().getGiven().get(0).getValue();
+			String patientGender = insertPatient.getGender();
 			String fhirMessage = ctx.newXmlParser().encodeResourceToString(insertPatient);
 
-			DatabasePatient data = new DatabasePatient(patientIdentifier, patientFirstName, patientLastName, fhirMessage);
+			DatabasePatient data = new DatabasePatient(patientIdentifier, patientFirstName, patientGender, patientLastName, fhirMessage);
 
 			session.save(data);
 
@@ -108,7 +111,9 @@ public class DBConnector implements Connector {
 		}
 	}
 
-	public List<Patient> searchPatient(PatientRequest patientRequest) {
+	public List<Patient> searchPatientWithParameters(
+			Map<String, String> patientParameter) {
+		// TODO Auto-generated method stub
 		Session session = null;
 		Transaction transaction = null;
 		
@@ -121,18 +126,21 @@ public class DBConnector implements Connector {
 			IParser parser = ctx.newXmlParser();
 
 			session = sessionFactory.openSession();
-
 			transaction = session.beginTransaction();
-
 			
-			
-			datalist = session.createCriteria(DatabasePatient.class).list();
+			Criteria criteria = session.createCriteria(DatabasePatient.class);
 
-			/*for (DatabasePatient data : datalist) {
+			for(Map.Entry<String, String> cursor : patientParameter.entrySet()){
+				criteria.add(Restrictions.like(cursor.getKey(), cursor.getValue()));
+			}
+			
+			datalist = criteria.list();
+			
+			for (DatabasePatient data : datalist) {
 				Patient fhirPatient = parser.parseResource(Patient.class,
 						data.getFhirMessage());
 				patientlist.add(fhirPatient);
-			}*/
+			}
 
 			transaction.commit();// transaction is committed
 
@@ -150,6 +158,7 @@ public class DBConnector implements Connector {
 		}
 		return patientlist;
 	}
+	
 
 	public List<Patient> getAllPatients() {
 		// TODO Auto-generated method stub
@@ -208,7 +217,7 @@ public class DBConnector implements Connector {
 
 			List<DatabasePatient> selectValue = session
 					.createCriteria(DatabasePatient.class)
-					.add(Restrictions.like("identifier", patientId.getIdPart()))
+					.add(Restrictions.like("patientIdentifier", patientId.getIdPart()))
 					.addOrder(Order.asc("patient_id"))
 					.list();
 
@@ -219,9 +228,10 @@ public class DBConnector implements Connector {
 				String patientIdentifier = insertPatient.getId().getIdPart();
 				String patientLastName = insertPatient.getNameFirstRep().getFamilyAsSingleString();
 				String patientFirstName = insertPatient.getNameFirstRep().getGiven().get(0).getValue();
+				String patientGender = insertPatient.getGender();
 				String fhirMessage = ctx.newXmlParser().encodeResourceToString(insertPatient);
 
-				DatabasePatient insertValue = new DatabasePatient(patientIdentifier, patientFirstName, patientLastName, fhirMessage);
+				DatabasePatient insertValue = new DatabasePatient(patientIdentifier, patientFirstName,patientGender, patientLastName, fhirMessage);
 
 				insertValue.setPatient_id(selectValue.get(0).getPatient_id());
 
@@ -234,9 +244,10 @@ public class DBConnector implements Connector {
 				String patientIdentifier = insertPatient.getId().getIdPart();
 				String patientLastName = insertPatient.getNameFirstRep().getFamilyAsSingleString();
 				String patientFirstName = insertPatient.getNameFirstRep().getGiven().get(0).getValue();
+				String patientGender = insertPatient.getGender();
 				String fhirMessage = ctx.newXmlParser().encodeResourceToString(insertPatient);
 
-				DatabasePatient insertValue = new DatabasePatient(patientIdentifier, patientFirstName, patientLastName, fhirMessage);
+				DatabasePatient insertValue = new DatabasePatient(patientIdentifier, patientFirstName, patientGender , patientLastName, fhirMessage);
 
 				session.save(insertValue);
 
@@ -264,55 +275,6 @@ public class DBConnector implements Connector {
 
 	}
 
-	public List<Patient> searchPatientWithFamily(PatientRequest patientRequest) {
-		// TODO Auto-generated method stub
-		FhirContext ctx = FhirContext.forDstu2();
-		IParser parser = ctx.newXmlParser();
-
-		List<DatabasePatient> datalist;
-		List<Patient> patientlist = new ArrayList<Patient>();
-
-		Session session = null;
-		Transaction transaction = null;
-
-		try {
-
-			session = sessionFactory.openSession();
-
-			transaction = session.beginTransaction();
-
-			String criteriaLastName = patientRequest.getPatient()
-					.getNameFirstRep().getFamilyAsSingleString();
-
-			datalist = session.createCriteria(DatabasePatient.class)
-					.add(Restrictions.like("lastName", criteriaLastName))
-					.addOrder(Order.asc("patient_id")).list();
-
-			for (DatabasePatient data : datalist) {
-				Patient fhirPatient = parser.parseResource(Patient.class,
-						data.getFhirMessage());
-				patientlist.add(fhirPatient);
-			}
-
-			transaction.commit();// transaction is committed
-
-		} catch (DataFormatException e) {
-			throw new RuntimeException("Error during Parse Operation", e);
-		} catch (HibernateException e) {
-			if (transaction != null) {
-				transaction.rollback();
-			}
-			if (session != null) {
-				session.close();
-			}
-			throw new RuntimeException(
-					"Error during insert Operation - had to rollback transaction!",
-					e);
-		}
-
-		return patientlist;
-	}
-
 	public Patient getPatientbyIdentifier(PatientRequest patientRequest) {
 		// TODO Auto-generated method stub
 		Session session = null;
@@ -332,7 +294,7 @@ public class DBConnector implements Connector {
 			
 			List<DatabasePatient> selectValue = session
 					.createCriteria(DatabasePatient.class)
-					.add(Restrictions.like("identifier", patientId.getIdPart()))
+					.add(Restrictions.like("patientIdentifier", patientId.getIdPart()))
 					.addOrder(Order.asc("patient_id"))
 					.list();
 			
@@ -396,6 +358,15 @@ public class DBConnector implements Connector {
 		// TODO Auto-generated method stub
 
 	}
+
+
+	public List<Patient> searchPatient(PatientRequest patientRequest) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	
 
 
 	
