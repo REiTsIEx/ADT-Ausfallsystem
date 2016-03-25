@@ -2,7 +2,16 @@ package org.htl.adt.domainobjects;
 
 public abstract class Request {
 
-	public String messageText;
+	private String messageText;
+
+	public Request(String messageText) {
+		super();
+		this.messageText = messageText;
+	}
+
+	public Request() {
+		super();
+	}
 
 	public String getMessageText() {
 		return messageText;

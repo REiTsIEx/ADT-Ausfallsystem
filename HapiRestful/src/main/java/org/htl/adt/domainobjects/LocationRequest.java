@@ -4,16 +4,24 @@ import ca.uhn.fhir.model.dstu2.resource.Location;
 import ca.uhn.fhir.model.dstu2.resource.Patient;
 
 public class LocationRequest extends Request{
-	public Location location;
+	private Location location;
 	
 	
+	public Location getLocation() {
+		return location;
+	}
+
+	public void setLocation(Location location) {
+		this.location = location;
+	}
+
 	public LocationRequest(String messageText, Location messageObject) {
-		this.messageText = messageText;
+		super(messageText);
 		this.location = messageObject;
 	}
 
 	public LocationRequest() {
-		
+		super();
 	}
 
 }

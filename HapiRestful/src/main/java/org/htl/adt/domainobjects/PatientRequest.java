@@ -8,13 +8,13 @@ public class PatientRequest extends Request {
 	
 	
 	public PatientRequest(String messageText, Patient messageObject) {
-		this.messageText = messageText;
+		super(messageText);
 		this.patient = messageObject;
 		
 	}
 
 	public PatientRequest() {
-		
+		super();
 	}
 
 	public Patient getPatient() {
