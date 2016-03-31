@@ -17,13 +17,13 @@ public interface Connector {
 	
 	public void addPatient(PatientRequest patientRequest) throws AdtSystemErrorException;
 	
-	public void updatePatient(PatientRequest patientRequest);
+	public void updatePatient(PatientRequest patientRequest) throws AdtSystemErrorException;
 	
-	public Patient getPatientbyIdentifier(PatientRequest patientRequest);
+	public Patient getPatientbyIdentifier(PatientRequest patientRequest) throws AdtSystemErrorException;
 
-	public List<Patient> searchPatient(PatientRequest patientRequest);
+	public List<Patient> searchPatient(PatientRequest patientRequest) throws AdtSystemErrorException;
 	
-	public List<Patient> getAllPatients();
+	public List<Patient> getAllPatients() throws AdtSystemErrorException;
 	
 	public void addEncounter(PatientRequest patientRequest, EncounterRequest encounterRequest);
 	

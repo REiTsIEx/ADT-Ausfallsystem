@@ -7,12 +7,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.naming.CommunicationException;
 
 import org.hibernate.HibernateException;
 import org.htl.adt.connector.DBFactory;
 import org.htl.adt.domainobjects.Identifier;
 import org.htl.adt.domainobjects.PatientRequest;
+import org.htl.adt.exception.AdtSystemErrorException;
+import org.htl.adt.exception.CommunicationException;
 import org.htl.adt.interfaces.Connector;
 import org.htl.adt.interfaces.RestServer;
 import org.htl.adt.restservlet.RestFactory;
@@ -84,20 +85,24 @@ public class RestfulPatientResourceProvider implements IResourceProvider {
 		try {
 			List<Patient> values = db.searchPatient(patientRequest);
 			return values.get(0);
-		} catch (ResourceNotFoundException e) {
+		} catch (AdtSystemErrorException e) {
 			throw new ResourceNotFoundException(
 					"Der Patient mit der ID " + patID.getIdPart() + " wurde nicht gefunden");
 		}
+	
 	}
 
 	@Create
 	public MethodOutcome create(@ResourceParam Patient patient) {
 		if (patient != null) {
+			try{
 			PatientRequest patientRequest = new PatientRequest("Der anzulegende Patient", patient);
 			db.addPatient(patientRequest);
 			return new MethodOutcome(
 					new IdDt("Patient", patient.getId().toString(), patient.getId().getVersionIdPart()));
-
+			} catch (AdtSystemErrorException e){
+				throw new InternalErrorException("Der Patient konnte nich angelegt werden");
+			}
 			// OperationOutcome oo = new OperationOutcome();
 			// oo.addIssue().setSeverity(IssueSeverityEnum.INFORMATION).setDetails(patient.toString());
 			// throw new InternalErrorException("Patient wurde angelegt", oo);
@@ -162,7 +167,11 @@ public class RestfulPatientResourceProvider implements IResourceProvider {
 
 	@Search
 	public List<Patient> search() {
-		return db.getAllPatients();
+		try {
+			return db.getAllPatients();
+		} catch (AdtSystemErrorException e) {
+			throw new ResourceNotFoundException("Es konnten keine Patienten in der Datenbank gefunden werden");
+		}
 	}
 
 	@Update
@@ -172,7 +181,7 @@ public class RestfulPatientResourceProvider implements IResourceProvider {
 			try {
 				db.updatePatient(patientRequest);
 				return new MethodOutcome(id);
-			} catch (ResourceNotFoundException e) {
+			} catch (AdtSystemErrorException e) {
 				throw new ResourceNotFoundException("Der zu aktualisierende Patient konnte nicht gefunden werden.");
 			}
 		} else {
