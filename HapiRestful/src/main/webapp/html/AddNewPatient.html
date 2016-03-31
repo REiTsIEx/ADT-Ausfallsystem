@@ -3,73 +3,86 @@
 <head>
 <meta charset="ISO-8859-1">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" type="text/css" href="../css/AddPatientStyles.css">
+<link rel="stylesheet" type="text/css"
+	href="../css/AddPatientStyles.css">
 <script type="text/javascript" src="../js/Methods.js"></script>
 <title>Patient anlegen</title>
 </head>
 
 <div>
-<ulBar>
-  <liBar><a class="active" href="HomeScreen.html"><b>Hauptseite</b></a></liBar>
-</ulBar>
+	<ulBar> <liBar>
+	<a class="active" href="HomeScreen.html"><b>Hauptseite</b></a></liBar> </ulBar>
 </div>
 
-<div class="header"><br> Patienten anlegen </div>
+<div class="header">
+	<br> Patienten anlegen
+</div>
 <body>
-<div class="row">
-<div class="col-3 menu">
-<ul>
-<li>SVN-Nummer: <br> <input  type="text" placeholder="Optional" id="svn_value" name = "SVNField"></li>
-<li>Verischerung: <br> <input  type="text" placeholder="Optional" id="insurance" name = "insuranceField"></li>
-<li>Vorname:	<br><input  type="text" placeholder="Optional" id="firstname" name = "firstnameField"></li>
-<li>Nachname:	<br><input  type="text" placeholder="Optional" id="lastname" name = "lastnameField"></li>
-<li>Geburtsdatum: <br> <input  type="date" placeholder="Optional" id="birthdate" name = "birthdateField"></li>
-<li>Geschlecht: <br>
-	<select id="gender">
-  		<option value="MALE">Männlich</option>
-  		<option value="FEMALE">Weiblich</option>
-  		<option value="UNDEFINED">undefiniert</option>
-	</select>
-</li>
-</ul>
-</div>
+	<div class="row">
+		<div class="col-3 menu">
+			<ul>
+				<li>SVN-Nummer: <br> <input type="text"
+					placeholder="Optional" id="svn_value" name="SVNField"></li>
+				<li>Verischerung: <br> <input type="text"
+					placeholder="Optional" id="insurance" name="insuranceField"></li>
+				<li>Vorname: <br>
+				<input type="text" placeholder="Optional" id="firstname"
+					name="firstnameField"></li>
+				<li>Nachname: <br>
+				<input type="text" placeholder="Optional" id="lastname"
+					name="lastnameField"></li>
+				<li>Geburtsdatum: <br> <input type="date"
+					placeholder="Optional" id="birthdate" name="birthdateField"></li>
+				<li>Geschlecht: <br> <select id="gender">
+						<option value="MALE">Männlich</option>
+						<option value="FEMALE">Weiblich</option>
+						<option value="UNDEFINED">undefiniert</option>
+				</select>
+				</li>
+			</ul>
+		</div>
 
 
-<div class="col-3 menu">
+		<div class="col-3 menu">
 
-<ul>
-<li>Straße: <br><input  type="text" placeholder="Optional" id="street" name = "streetField"></li>
-<li>Stadt: <br><input  type="text" placeholder="Optional" id="city" name = "cityField"></li>
-<li>Postleitzahl: <br><input  type="text" placeholder="Optional" id="plz" name = "plzField"></li>
-<li>Land: <br><input  type="text" placeholder="Optional" id="country" name = "countryField"></li>
-</ul>
+			<ul>
+				<li>Straße: <br>
+				<input type="text" placeholder="Optional" id="street"
+					name="streetField"></li>
+				<li>Stadt: <br>
+				<input type="text" placeholder="Optional" id="city" name="cityField"></li>
+				<li>Postleitzahl: <br>
+				<input type="text" placeholder="Optional" id="plz" name="plzField"></li>
+				<li>Land: <br>
+				<input type="text" placeholder="Optional" id="country"
+					name="countryField"></li>
+			</ul>
 
-</div>
-<div class="col-3 menu">
-<ul>
+		</div>
+		<div class="col-3 menu">
+			<ul>
 
-<li>Telefonnummer: 
-				<input type="text" placeholder="Optional" id="phoneNumber">
-					<select id="phoneType" >
+				<li>Telefonnummer: <input type="text" placeholder="Optional"
+					id="phoneNumber"> <select id="phoneType">
 						<option value="mobile">Mobitelefon</option>
-						<option value="home">Haustelefon</option> 
-					</select>
-</li>
- 
-<li>Station: <br>
-	<select id="locationAdd">
-  		<option value="radiology">Radiologie</option>
-  		<option value="intensive">Intensivstation</option>
-  		<option value="ambulant">Ambulanz</option>
-	</select>
-</li>
-<li>Verstorben: 
-				<input type="checkbox" id="checkbocdeceasedtrue" name="deceased" value="true">Ja </li>
-<li class="button" onclick="addNewPatient()">Patient speichern</li>
-</ul>
+						<option value="home">Haustelefon</option>
+				</select>
+				</li>
 
-</div>
-</div>
+				<li>Station: <br> <select id="locationAdd">
+						<option value="radiology">Radiologie</option>
+						<option value="intensive">Intensivstation</option>
+						<option value="ambulant">Ambulanz</option>
+				</select>
+				</li>
+				<li>Verstorben: <input type="checkbox"
+					id="checkbocdeceasedtrue" name="deceased" value="true">Ja
+				</li>
+				<li class="button" onclick="addNewPatient()">Patient speichern</li>
+			</ul>
+
+		</div>
+	</div>
 
 </body>
 
