@@ -11,6 +11,7 @@ import org.htl.adt.domainobjects.EncounterRequest;
 import org.htl.adt.domainobjects.Identifier;
 import org.htl.adt.domainobjects.LocationRequest;
 import org.htl.adt.domainobjects.PatientRequest;
+import org.htl.adt.exception.AdtSystemErrorException;
 import org.htl.adt.interfaces.Connector;
 
 import ca.uhn.fhir.model.dstu2.resource.Encounter;
@@ -115,6 +116,12 @@ public class TestDBConnector implements Connector{
 	public List<Encounter> getEncounterbyPatient(Identifier patientIdentifier) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+
+	public void deleteAllPatients() throws AdtSystemErrorException {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
