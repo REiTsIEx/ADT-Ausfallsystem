@@ -47,7 +47,7 @@ public class RestfulPatientResourceProvider implements IResourceProvider {
 
 	// private RestServer restServer =
 	// RestFactory.getInstance().getServer("TestServer");
-	Connector db = DBFactory.getInstance().getConnector("DBConnector");
+	Connector db;
 	// TestFHIRRestServlet myServlet = new TestFHIRRestServlet();
 	// DB db = new DB();
 
@@ -56,6 +56,12 @@ public class RestfulPatientResourceProvider implements IResourceProvider {
 	}
 
 	public RestfulPatientResourceProvider() {
+		try {
+			db = DBFactory.getInstance().getConnector("DBConnector");
+		} catch (CommunicationException e) {
+			throw new InternalErrorException("Es konnte keine Verbindung mit der Datenbank hergestellt werden");
+		}
+		
 		long id = nextID++;
 		Patient patient = new Patient();
 		patient.setId(new IdDt(id));
@@ -160,7 +166,7 @@ public class RestfulPatientResourceProvider implements IResourceProvider {
 		PatientRequest request = new PatientRequest(familyName.getValue(), pat);
 		try {
 			return db.searchPatientWithParameters(params);
-		} catch (ResourceNotFoundException e) {
+		} catch (AdtSystemErrorException e) {
 			throw new ResourceNotFoundException("Es wurde kein Patient mit den eingegebenen Parametern gefunden.");
 		}
 	}
@@ -171,7 +177,7 @@ public class RestfulPatientResourceProvider implements IResourceProvider {
 			return db.getAllPatients();
 		} catch (AdtSystemErrorException e) {
 			throw new ResourceNotFoundException("Es konnten keine Patienten in der Datenbank gefunden werden");
-		}
+		} 
 	}
 
 	@Update
