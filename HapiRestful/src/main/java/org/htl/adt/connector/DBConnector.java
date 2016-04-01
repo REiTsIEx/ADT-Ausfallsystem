@@ -24,6 +24,7 @@ import org.htl.adt.domainobjects.LocationRequest;
 import org.htl.adt.domainobjects.PatientRequest;
 import org.htl.adt.exception.AdtSystemErrorException;
 import org.htl.adt.exception.CommunicationException;
+import org.htl.adt.hibernateresources.DatabaseEncounter;
 import org.htl.adt.hibernateresources.DatabasePatient;
 import org.htl.adt.interfaces.Connector;
 
@@ -353,8 +354,53 @@ public class DBConnector implements Connector {
 		}
 	}
 	
-	public void addEncounter(PatientRequest patientRequest,	EncounterRequest encounterRequest) {
+	public void addEncounter(PatientRequest patientRequest,	EncounterRequest encounterRequest) throws AdtSystemErrorException {
 		// TODO Auto-generated method stub
+		Session session = null;
+		Transaction transaction = null;
+
+		try {
+
+			session = sessionFactory.openSession();
+
+			transaction = session.beginTransaction();
+
+			FhirContext ctx = FhirContext.forDstu2();
+
+			Patient insertPatient = patientRequest.getPatient();
+			Encounter insertEncounter = encounterRequest.getEncounter();
+			
+			String encounterIdentifier = insertEncounter.getId().getIdPart();
+			String patientIdentifier = insertPatient.getId().getIdPart();			
+			String fhirMessage = ctx.newXmlParser().encodeResourceToString(insertEncounter);
+
+			DatabaseEncounter data = new DatabaseEncounter(encounterIdentifier, patientIdentifier, fhirMessage);
+
+			session.save(data);
+
+			transaction.commit();// transaction is committed
+
+		} catch (IndexOutOfBoundsException e) {
+			throw new AdtSystemErrorException(
+					"Error during the reading of the Encounter Parameters - IndexOutOfBoundException of one of the Parameters",
+					e);
+		} catch (NullPointerException e) {
+			throw new AdtSystemErrorException(
+					"Error during the reading of the Encounter Parameters - NullPointException of one of the Parameters",
+					e);
+		} catch (DataFormatException e) {
+			throw new AdtSystemErrorException("Error during Parse Operation", e);
+		} catch (HibernateException e) {
+			if (transaction != null) {
+				transaction.rollback();
+			}
+			if (session != null) {
+				session.close();
+			}
+			throw new AdtSystemErrorException(
+					"Error during insert Operation - had to rollback transaction!",
+					e);
+		}
 		
 	}
 

@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "Patient")
+@Table(name = "Encounter")
 public class DatabaseEncounter {
 	
 	@Column(name = "Encounter_id")
@@ -22,7 +22,7 @@ public class DatabaseEncounter {
 	private String patientIdentifier;
 	
 	@Column(name = "Priority")
-	private String priotity;
+	private String priority;
 	
 	@Column(name = "Reason")
 	private String reason;
@@ -38,18 +38,28 @@ public class DatabaseEncounter {
 	
 	@Column(name = "FhirMessage")
 	private String fhirMessage;
+	
+	
+
+	public DatabaseEncounter(String encounterIdentifier,
+			String patientIdentifier, String fhirMessage) {
+		super();
+		this.encounterIdentifier = encounterIdentifier;
+		this.patientIdentifier = patientIdentifier;
+		this.fhirMessage = fhirMessage;
+	}
 
 	public DatabaseEncounter() {
 		super();
 	}
 
 	public DatabaseEncounter(String encounterIdentifier,
-			String patientIdentifier, String priotity, String reason,
+			String patientIdentifier, String priority, String reason,
 			String status, Date startDate, String endDate, String fhirMessage) {
-		super();
+		super();		
 		this.encounterIdentifier = encounterIdentifier;
 		this.patientIdentifier = patientIdentifier;
-		this.priotity = priotity;
+		this.priority = priority;
 		this.reason = reason;
 		this.status = status;
 		this.startDate = startDate;
@@ -81,12 +91,12 @@ public class DatabaseEncounter {
 		this.patientIdentifier = patientIdentifier;
 	}
 
-	public String getPriotity() {
-		return priotity;
+	public String getPriority() {
+		return priority;
 	}
 
-	public void setPriotity(String priotity) {
-		this.priotity = priotity;
+	public void setPriority(String priority) {
+		this.priority = priority;
 	}
 
 	public String getReason() {
@@ -128,6 +138,8 @@ public class DatabaseEncounter {
 	public void setFhirMessage(String fhirMessage) {
 		this.fhirMessage = fhirMessage;
 	}
-	
 
+	
+	
+	
 }

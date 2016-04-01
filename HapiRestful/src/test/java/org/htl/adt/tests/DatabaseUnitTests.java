@@ -13,6 +13,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.htl.adt.connector.DBFactory;
+import org.htl.adt.domainobjects.EncounterRequest;
 import org.htl.adt.domainobjects.Identifier;
 import org.htl.adt.domainobjects.PatientRequest;
 import org.htl.adt.exception.AdtSystemErrorException;
@@ -24,6 +25,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import ca.uhn.fhir.context.FhirContext;
+import ca.uhn.fhir.model.dstu2.resource.Encounter;
 import ca.uhn.fhir.model.dstu2.resource.Patient;
 import ca.uhn.fhir.model.dstu2.valueset.AdministrativeGenderEnum;
 import ca.uhn.fhir.model.primitive.IdDt;
@@ -88,6 +90,43 @@ public class DatabaseUnitTests {
 		}
 		
 		assertTrue(testPatient.getId().getIdPart().equals(returnPatient.getId().getIdPart()));
+		
+	}
+	
+	@Test
+	public void addEncounter() {
+		Patient testPatient = new Patient();
+		testPatient.setId(new IdDt("8577"));
+		testPatient.addName().addFamily("Nachname789").addGiven("Vorname");
+		testPatient.setGender(AdministrativeGenderEnum.MALE);
+		
+		Encounter testEncounter = new Encounter();
+		testEncounter.setId(new IdDt("5"));
+		
+		
+		Connector connector = null;
+		try {
+			
+			connector = DBFactory.getInstance().getConnector("DBConnector");
+			
+		} catch (CommunicationException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		try {
+			
+			
+			connector.addEncounter(new PatientRequest("Patient für den Encounter hinzugefügt wird",testPatient), new EncounterRequest("", testEncounter));
+
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			
+		}
+		
+		assertTrue(true);//Abfrage fehlt noch
 		
 	}
 	
