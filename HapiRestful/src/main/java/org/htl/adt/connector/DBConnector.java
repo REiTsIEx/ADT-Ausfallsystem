@@ -22,6 +22,7 @@ import org.htl.adt.domainobjects.EncounterRequest;
 import org.htl.adt.domainobjects.Identifier;
 import org.htl.adt.domainobjects.LocationRequest;
 import org.htl.adt.domainobjects.PatientRequest;
+import org.htl.adt.exception.AdtSystemErrorException;
 import org.htl.adt.exception.CommunicationException;
 import org.htl.adt.hibernateresources.DatabasePatient;
 import org.htl.adt.interfaces.Connector;
@@ -55,13 +56,12 @@ public class DBConnector implements Connector {
 			throw new CommunicationException(
 					"Error during the Creation of the Hibernate Configuration",
 					e);
-
 		}
 
 	}
 
 	
-	public void addPatient(PatientRequest patientRequest) {
+	public void addPatient(PatientRequest patientRequest) throws AdtSystemErrorException {
 		// TODO Auto-generated method stub
 
 		Session session = null;
@@ -90,15 +90,15 @@ public class DBConnector implements Connector {
 			transaction.commit();// transaction is committed
 
 		} catch (IndexOutOfBoundsException e) {
-			throw new RuntimeException(
+			throw new AdtSystemErrorException(
 					"Error during the reading of the Patient Parameters - IndexOutOfBoundException of one of the Parameters",
 					e);
 		} catch (NullPointerException e) {
-			throw new RuntimeException(
+			throw new AdtSystemErrorException(
 					"Error during the reading of the Patient Parameters - NullPointException of one of the Parameters",
 					e);
 		} catch (DataFormatException e) {
-			throw new RuntimeException("Error during Parse Operation", e);
+			throw new AdtSystemErrorException("Error during Parse Operation", e);
 		} catch (HibernateException e) {
 			if (transaction != null) {
 				transaction.rollback();
@@ -106,14 +106,14 @@ public class DBConnector implements Connector {
 			if (session != null) {
 				session.close();
 			}
-			throw new RuntimeException(
+			throw new AdtSystemErrorException(
 					"Error during insert Operation - had to rollback transaction!",
 					e);
 		}
 	}
 
 	public List<Patient> searchPatientWithParameters(
-			Map<String, String> patientParameter) {
+			Map<String, String> patientParameter) throws AdtSystemErrorException {
 		// TODO Auto-generated method stub
 		Session session = null;
 		Transaction transaction = null;
@@ -146,7 +146,7 @@ public class DBConnector implements Connector {
 			transaction.commit();// transaction is committed
 
 		} catch (DataFormatException e) {
-			throw new RuntimeException("Error during Parse Operation", e);
+			throw new AdtSystemErrorException("Error during Parse Operation", e);
 		} catch (HibernateException e) {
 			if (transaction != null) {
 				transaction.rollback();
@@ -154,14 +154,13 @@ public class DBConnector implements Connector {
 			if (session != null) {
 				session.close();
 			}
-			throw new RuntimeException(
-					"Error during select Operation - had to rollback transaction!",	e);
+			throw new AdtSystemErrorException("Error during select Operation - had to rollback transaction!",	e);
 		}
 		return patientlist;
 	}
 	
 
-	public List<Patient> getAllPatients() {
+	public List<Patient> getAllPatients() throws AdtSystemErrorException {
 		// TODO Auto-generated method stub
 		Session session = null;
 		Transaction transaction = null;
@@ -189,7 +188,7 @@ public class DBConnector implements Connector {
 			transaction.commit();// transaction is committed
 
 		} catch (DataFormatException e) {
-			throw new RuntimeException("Error during Parse Operation", e);
+			throw new AdtSystemErrorException("Error during Parse Operation", e);
 		} catch (HibernateException e) {
 			if (transaction != null) {
 				transaction.rollback();
@@ -197,13 +196,13 @@ public class DBConnector implements Connector {
 			if (session != null) {
 				session.close();
 			}
-			throw new RuntimeException(
+			throw new AdtSystemErrorException(
 					"Error during select Operation - had to rollback transaction!",	e);
 		}
 		return patientlist;
 	}
 
-	public void updatePatient(PatientRequest patientRequest) {
+	public void updatePatient(PatientRequest patientRequest) throws AdtSystemErrorException {
 		// TODO Auto-generated method stub
 		Session session = null;
 		Transaction transaction = null;
@@ -256,13 +255,13 @@ public class DBConnector implements Connector {
 
 			transaction.commit();// transaction is committed
 		} catch (IndexOutOfBoundsException e) {
-			throw new RuntimeException(
+			throw new AdtSystemErrorException(
 					"Error during the reading of the Patient Parameters - IndexOutOfBoundException of one of the Parameters", e);
 		} catch (NullPointerException e) {
-			throw new RuntimeException(
+			throw new AdtSystemErrorException(
 					"Error during the reading of the Patient Parameters - NullPointException of one of the Parameters",	e);	
 		} catch (DataFormatException e) {
-			throw new RuntimeException("Error during Parse Operation", e);
+			throw new AdtSystemErrorException("Error during Parse Operation", e);
 		} catch (HibernateException e) {
 			if (transaction != null) {
 				transaction.rollback();
@@ -270,13 +269,13 @@ public class DBConnector implements Connector {
 			if (session != null) {
 				session.close();
 			}
-			throw new RuntimeException(
+			throw new AdtSystemErrorException(
 					"Error during insert Operation - had to rollback transaction!",	e);
 		}
 
 	}
 
-	public Patient getPatientbyIdentifier(PatientRequest patientRequest) {
+	public Patient getPatientbyIdentifier(PatientRequest patientRequest) throws AdtSystemErrorException {
 		// TODO Auto-generated method stub
 		Session session = null;
 		Transaction transaction = null;
@@ -308,15 +307,15 @@ public class DBConnector implements Connector {
 			transaction.commit();// transaction is committed
 			
 		} catch (IndexOutOfBoundsException e) {
-			throw new RuntimeException(
+			throw new AdtSystemErrorException(
 					"Error during the reading of the Patient Parameters - IndexOutOfBoundException of one of the Parameters", e);
 		} catch (NullPointerException e) {
-			throw new RuntimeException(
+			throw new AdtSystemErrorException(
 					"Error during the reading of the Patient Parameters - NullPointException of one of the Parameters",	e);	
 		} catch (DataFormatException e) {
-			throw new RuntimeException("Error during Parse Operation", e);
+			throw new AdtSystemErrorException("Error during Parse Operation", e);
 		}catch(org.hibernate.exception.ConstraintViolationException e){
-			throw new RuntimeException(
+			throw new AdtSystemErrorException(
 					"Error during insert Operation - had to rollback transaction!",	e);
 		}catch (HibernateException e) {
 			if (transaction != null) {
@@ -325,11 +324,33 @@ public class DBConnector implements Connector {
 			if (session != null) {
 				session.close();
 			}
-			throw new RuntimeException(
+			throw new AdtSystemErrorException(
 					"Error during insert Operation - had to rollback transaction!",	e);
 		}
 		
 			return returnPatient;
+	}
+	
+	public void deleteAllPatients() throws AdtSystemErrorException{
+		Session session = null;
+		Transaction transaction = null;
+		try{
+			
+			session = sessionFactory.openSession();
+			transaction = session.beginTransaction();
+			
+			session.createSQLQuery("TRUNCATE fhirdatabase.patient");
+
+		}catch (HibernateException e) {
+			if (transaction != null) {
+				transaction.rollback();
+			}
+			if (session != null) {
+				session.close();
+			}
+			throw new AdtSystemErrorException(
+					"Error during delete Operation - had to rollback transaction!",	e);
+		}
 	}
 	
 	public void addEncounter(PatientRequest patientRequest,	EncounterRequest encounterRequest) {
