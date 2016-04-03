@@ -1,6 +1,5 @@
 package org.htl.adt.interfaces;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -9,9 +8,9 @@ import org.htl.adt.domainobjects.Identifier;
 import org.htl.adt.domainobjects.LocationRequest;
 import org.htl.adt.domainobjects.PatientRequest;
 import org.htl.adt.exception.AdtSystemErrorException;
-import org.htl.adt.exception.CommunicationException;
 
 import ca.uhn.fhir.model.dstu2.resource.Encounter;
+import ca.uhn.fhir.model.dstu2.resource.Encounter.Location;
 import ca.uhn.fhir.model.dstu2.resource.Patient;
 
 public interface Connector {
@@ -25,21 +24,23 @@ public interface Connector {
 	public Patient getPatientbyIdentifier(PatientRequest patientRequest)
 			throws AdtSystemErrorException;
 
-	public List<Patient> searchPatient(PatientRequest patientRequest)
-			throws AdtSystemErrorException;
-
 	public List<Patient> getAllPatients() throws AdtSystemErrorException;
-	
+
 	public void deleteAllPatients() throws AdtSystemErrorException;
 
+	public void addEncounter(EncounterRequest encounterRequest)
+			throws AdtSystemErrorException;
 
-	public void addEncounter(PatientRequest patientRequest,
-			EncounterRequest encounterRequest) throws AdtSystemErrorException;
+	public void addLocation(LocationRequest locationRequest)
+			throws AdtSystemErrorException;
+	
+	public List<Location> getAllLocation()
+			throws AdtSystemErrorException;
 
-	public void addLocationtoEncounter(EncounterRequest encounterRequest,
-			LocationRequest locationRequest) throws AdtSystemErrorException;
+	public List<Encounter> getEncounterbyPatientID(Identifier patientIdentifier)
+			throws AdtSystemErrorException;
 
-	public List<Encounter> getEncounterbyPatient(Identifier patientIdentifier)
+	public Encounter getLastEncounterbyPatientID(Identifier patientIdentifier)
 			throws AdtSystemErrorException;
 
 	public List<Patient> searchPatientWithParameters(
@@ -49,5 +50,5 @@ public interface Connector {
 	public void getConnection();
 
 	public void setConnection(String url);
-	
+
 }

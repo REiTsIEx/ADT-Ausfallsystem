@@ -25,31 +25,35 @@ import org.junit.Before;
 import org.junit.Test;
 
 import ca.uhn.fhir.context.FhirContext;
+import ca.uhn.fhir.model.dstu2.composite.ResourceReferenceDt;
 import ca.uhn.fhir.model.dstu2.resource.Encounter;
 import ca.uhn.fhir.model.dstu2.resource.Patient;
 import ca.uhn.fhir.model.dstu2.valueset.AdministrativeGenderEnum;
 import ca.uhn.fhir.model.primitive.IdDt;
 
 public class DatabaseUnitTests {
+	
+	Connector connector = null;
+	Patient testPatient = new Patient();
+	Encounter testEncounter = new Encounter();
 
 	@Before
 	public void init() {
 		
-		Connector connector = null;
-		try {
+		testPatient.setId(new IdDt("633421021994"));
+		testPatient.addName().addFamily("Mustermann").addGiven("Max");
+		testPatient.setGender(AdministrativeGenderEnum.FEMALE);		
+		
+		try {		
 			connector = DBFactory.getInstance().getConnector("DBConnector");
+			
+			connector.deleteAllPatients();			
 		} catch (CommunicationException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
-		}
-		
-		try {
-			connector.deleteAllPatients();
-			
-		} catch (Exception e) {
+		} catch (AdtSystemErrorException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			System.out.print("Hallo");
 		}
 		
 	}
@@ -61,63 +65,33 @@ public class DatabaseUnitTests {
 	*/
 	@Test
 	public void addPatient() {
-		Patient testPatient = new Patient();
-		testPatient.setId(new IdDt("633421021991"));
-		testPatient.addName().addFamily("Mustermann").addGiven("Erika");
-		testPatient.setGender(AdministrativeGenderEnum.FEMALE);
 		
-		Patient returnPatient = new Patient();
+		Patient returnPatient = new Patient();		
 		
-		Connector connector = null;
-		try {
-			connector = DBFactory.getInstance().getConnector("DBConnector");
-			
-		} catch (CommunicationException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
-		try {
-			connector.addPatient(new PatientRequest("Patient hinzufügen", testPatient));
-			
-			returnPatient = connector.getPatientbyIdentifier(new PatientRequest("Patient nach Nachname suchen", testPatient));
+			try {
+				connector.addPatient(new PatientRequest("Patient hinzufügen", testPatient));
+				
+				returnPatient = connector.getPatientbyIdentifier(new PatientRequest("Patient nach Nachname suchen", testPatient));
 
-
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			} catch (AdtSystemErrorException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}		
 			
-		}
-		
 		assertTrue(testPatient.getId().getIdPart().equals(returnPatient.getId().getIdPart()));
 		
 	}
 	
 	@Test
 	public void addEncounter() {
-		Patient testPatient = new Patient();
-		testPatient.setId(new IdDt("8577"));
-		testPatient.addName().addFamily("Nachname789").addGiven("Vorname");
-		testPatient.setGender(AdministrativeGenderEnum.MALE);
 		
-		Encounter testEncounter = new Encounter();
 		testEncounter.setId(new IdDt("5"));
+		testEncounter.setPatient(new ResourceReferenceDt(testPatient.getId()));
 		
-		
-		Connector connector = null;
-		try {
-			
-			connector = DBFactory.getInstance().getConnector("DBConnector");
-			
-		} catch (CommunicationException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
 		
 		try {
 			
-			
-			connector.addEncounter(new PatientRequest("Patient für den Encounter hinzugefügt wird",testPatient), new EncounterRequest("", testEncounter));
+			connector.addEncounter(new EncounterRequest("", testEncounter));
 
 
 		} catch (Exception e) {
@@ -137,14 +111,6 @@ public class DatabaseUnitTests {
 	*/
 	@Test
 	public void getAllPatient() {
-		
-		Connector connector = null;
-		try {
-			connector = DBFactory.getInstance().getConnector("DBConnector");
-		} catch (CommunicationException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
 		
 		List<Patient> patientlist = new ArrayList<Patient>();
 
@@ -173,31 +139,19 @@ public class DatabaseUnitTests {
 	@Test
 	public void searchPatientWithParameters() {
 		
-		String searchID = "23";
-		
-		Patient testPatient = new Patient();
-		testPatient.setId(new IdDt("23"));
-		testPatient.addName().addFamily("Nach").addGiven("Tobias");
-		testPatient.setGender(AdministrativeGenderEnum.MALE);
-				
-		Connector connector = null;
-		try {
-			connector = DBFactory.getInstance().getConnector("DBConnector");
-		} catch (CommunicationException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
+		String searchID = testPatient.getId().getIdPart();
+		String searchFamilyName = testPatient.getNameFirstRep().getFamilyAsSingleString();
+		String searchFirstName = testPatient.getNameFirstRep().getGiven().get(0).toString();
+		String searchGender = testPatient.getGender();
+			
 		List<Patient> patientlist = new ArrayList<Patient>();
 				
 		Map<String, String> params = new HashMap<String, String>();
 		
-		//params.put("patientGender", "male");
-		params.put("familyName", "Nach");
-		params.put("firstName", "Tobias");
+		params.put("patientGender", searchGender);
+		params.put("familyName", searchFamilyName);
+		params.put("firstName", searchFirstName);
 		params.put("patientIdentifier", searchID);
-
-
 		
 		try {
 			connector.addPatient(new PatientRequest("Patient hinzufügen", testPatient));
@@ -211,6 +165,7 @@ public class DatabaseUnitTests {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		boolean assertValue = true;
 		for (Patient patient : patientlist) {
 			if(patient.getId().getIdPart().equals(searchID)){
@@ -233,22 +188,10 @@ public class DatabaseUnitTests {
 	*/
 	@Test
 	public void updatePatient() {
-		Patient testPatient = new Patient();
-		testPatient.setId(new IdDt("101"));
-		testPatient.addName().addFamily("Nach").addGiven("Tobias");
-		testPatient.setGender(AdministrativeGenderEnum.MALE);
-		
-		Connector connector = null;
 		try {
-			connector = DBFactory.getInstance().getConnector("DBConnector");
-		} catch (CommunicationException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
-		
-		try {
+			
 			connector.updatePatient(new PatientRequest("", testPatient));
+			
 		} catch (RuntimeException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -265,27 +208,13 @@ public class DatabaseUnitTests {
 	*/
 	@Test
 	public void getPatientbyIdentifier() {
-		Connector connector = null;
-		try {
-			connector = DBFactory.getInstance().getConnector("DBConnector");
-		} catch (CommunicationException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
-		Patient testPatient = new Patient();
-		testPatient.setId(new IdDt("101"));
-		testPatient.addName().addFamily("Nachname789").addGiven("Vorname");
-		testPatient.setGender(AdministrativeGenderEnum.MALE);
-		
-		Patient searchPatient = new Patient();
-		searchPatient.setId(new IdDt("101"));
-		Patient returnPatient = null;
 				
+		Patient returnPatient = null;
+		
 		try {
 			connector.addPatient(new PatientRequest("Patient hinzufügen", testPatient));
 			
-			returnPatient = connector.getPatientbyIdentifier(new PatientRequest("Patient nach Nachname suchen", searchPatient));
+			returnPatient = connector.getPatientbyIdentifier(new PatientRequest("Patient nach Nachname suchen", testPatient));
 		} catch (RuntimeException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -294,7 +223,7 @@ public class DatabaseUnitTests {
 			e.printStackTrace();
 		}
 		
-		assertTrue(searchPatient.getId().getIdPart().equals(returnPatient.getId().getIdPart()));
+		assertTrue(testPatient.getId().getIdPart().equals(returnPatient.getId().getIdPart()));
 		
 	}
 
