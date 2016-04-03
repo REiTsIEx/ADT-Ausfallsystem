@@ -42,14 +42,8 @@ import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 
 public class RestfulPatientResourceProvider implements IResourceProvider {
 
-	private Map<Long, Patient> myPatients = new HashMap<Long, Patient>();
-	private long nextID = 1L;
 
-	// private RestServer restServer =
-	// RestFactory.getInstance().getServer("TestServer");
 	Connector db;
-	// TestFHIRRestServlet myServlet = new TestFHIRRestServlet();
-	// DB db = new DB();
 
 	public Class<Patient> getResourceType() {
 		return Patient.class;
@@ -57,35 +51,26 @@ public class RestfulPatientResourceProvider implements IResourceProvider {
 
 	public RestfulPatientResourceProvider() {
 		try {
-			db = DBFactory.getInstance().getConnector("DBConnector");
+			db = DBFactory.getInstance().getConnector("TestDBConnector");
 		} catch (CommunicationException e) {
 			throw new InternalErrorException("Es konnte keine Verbindung mit der Datenbank hergestellt werden");
 		}
-		
-		long id = nextID++;
-		Patient patient = new Patient();
-		patient.setId(new IdDt(id));
-		patient.addIdentifier().setSystem("http://test.com/Patient").setValue("1234");
-		patient.addName().addFamily("Simpson").addGiven("Homer").addGiven("J");
-		patient.setGender(AdministrativeGenderEnum.MALE);
-		myPatients.put(id, patient);
 	}
 
+	/**
+	 * Sucht einen Patienten mit dem eindeutigen Identifier in der Datenbank
+	 * @param patientID (der Identifier des Patienten)
+	 * @return Die Patientenressource, die diesen Identifier hat
+	 */
 	@Read
-	public Patient getResourceById(@IdParam IdDt patID) {
-		/*
-		 * Patient retValue = myPatients.get(patID.getIdPartAsLong()); if(patID
-		 * == null){ throw new ResourceNotFoundException(patID); } return
-		 * retValue;
-		 */
-
-		if (patID.isEmpty()) {
+	public Patient getResourceById(@IdParam IdDt patientID) {
+		if (patientID.isEmpty()) {
 			OperationOutcome oo = new OperationOutcome();
 			oo.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("Ungültige ID wurde eingegeben");
 			throw new InternalErrorException("Ungültige ID", oo);
 		}
 		Patient pat = new Patient();
-		pat.setId(new IdDt(patID));
+		pat.setId(new IdDt(patientID));
 		PatientRequest patientRequest = new PatientRequest("Der zu suchende Patient", pat);
 		// Patient retValue = new Patient();
 		try {
@@ -93,11 +78,16 @@ public class RestfulPatientResourceProvider implements IResourceProvider {
 			return values.get(0);
 		} catch (AdtSystemErrorException e) {
 			throw new ResourceNotFoundException(
-					"Der Patient mit der ID " + patID.getIdPart() + " wurde nicht gefunden");
+					"Der Patient mit der ID " + patientID.getIdPart() + " wurde nicht gefunden");
 		}
 	
 	}
 
+	/**
+	 * Legt einen neuen Patient in der Datenbank an
+	 * @param patient (der neu zu erzeugende Patient)
+	 * @return
+	 */
 	@Create
 	public MethodOutcome create(@ResourceParam Patient patient) {
 		if (patient != null) {
@@ -109,30 +99,27 @@ public class RestfulPatientResourceProvider implements IResourceProvider {
 			} catch (AdtSystemErrorException e){
 				throw new InternalErrorException("Der Patient konnte nich angelegt werden");
 			}
-			// OperationOutcome oo = new OperationOutcome();
-			// oo.addIssue().setSeverity(IssueSeverityEnum.INFORMATION).setDetails(patient.toString());
-			// throw new InternalErrorException("Patient wurde angelegt", oo);
 		} else {
 			throw new InternalErrorException("Kein gültiger Patient eingegeben");
 		}
 		// return new MethodOutcome(patient.getId());
 	}
 
+	/**
+	 * Sucht einen Patienten in der Datenbank mit mehreren Parametern,
+	 * Unterstützt die Parameter die die Weboberfläche vorgibt,
+	 * Nur der Nachname muss übergeben werden, die anderen Werte sind optional
+	 * @param familyName
+	 * @param firstName
+	 * @param patientIdentifier
+	 * @param patientGender
+	 * @return
+	 */
 	@Search
 	public List<Patient> search(@RequiredParam(name = "family") StringParam familyName,
 			@OptionalParam(name = "given") StringParam firstName,
 			@OptionalParam(name = "identifier") StringParam patientIdentifier,
 			@OptionalParam(name = "gender") StringParam patientGender) {
-
-		/*
-		 * List<Patient> retValue = new ArrayList<Patient>(); for (Patient next
-		 * : myPatients.values()){ String familyName =
-		 * next.getNameFirstRep().getFamilyAsSingleString().toLowerCase();
-		 * if(!familyName.contains(theParam.getValue().toLowerCase())){
-		 * continue; } retValue.add(next); } if(retValue.isEmpty()) throw new
-		 * InternalErrorException("Patient mit diesem Nachnamn nicht vorhanden"
-		 * ); return retValue;
-		 */
 
 		Map<String, String> params = new HashMap<String, String>();
 		Patient pat = new Patient();
@@ -171,6 +158,10 @@ public class RestfulPatientResourceProvider implements IResourceProvider {
 		}
 	}
 
+	/**
+	 * Übergibt alle Patienten die sich in der Datenbank befinden zurück
+	 * @return List<Patient>
+	 */
 	@Search
 	public List<Patient> search() {
 		try {
@@ -179,7 +170,7 @@ public class RestfulPatientResourceProvider implements IResourceProvider {
 			throw new ResourceNotFoundException("Es konnten keine Patienten in der Datenbank gefunden werden");
 		} 
 	}
-
+	
 	@Update
 	public MethodOutcome updatePatient(@IdParam IdDt id, @ResourceParam Patient patient) {
 		if (patient != null) {
@@ -194,5 +185,14 @@ public class RestfulPatientResourceProvider implements IResourceProvider {
 			throw new InternalErrorException("Es wurde kein gültiger Patient eingegebe.");
 		}
 	}
-
+	
+	/**
+	 * Diese Methode übergibt den selben String, den sie erhält
+	 * @param input
+	 * @return der selbe Wert der übergeben wurde
+	 */
+	public static String returnInput(String input){
+		return input;
+	}
+	
 }

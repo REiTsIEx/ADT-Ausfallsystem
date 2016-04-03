@@ -1,6 +1,10 @@
 package org.htl.adt.exception;
 
+/**
+ * Eine Exception, die für interne Fehler im Ausfallsystem genützt wird
+ */
 public class AdtSystemErrorException extends Exception {
+
 
 	public AdtSystemErrorException() {
 		super();
