@@ -115,13 +115,9 @@
 
 			if (svnSearch.value != "") {
 
-				smart.api.search({
-					type : "Patient",
-					query : {
-						identifier : {
-							value : svnSearch.value
-						}
-					}
+				smart.api.search({type : "Patient",	query : {identifier : {value : svnSearch.value}}
+			
+
 				}).then(
 						function(patientList) {
 							var arrayCount = patientList.data.total;
@@ -143,19 +139,14 @@
 						});
 			} else if (lastnameSearch.value != "") {
 
-				smart.api
-						.search({
-							type : "Patient",
-							query : {
-								family : lastnameSearch.value,
-								given : firstnameSearch.value
-							}
+				smart.api.search({type : "Patient",query : {family : lastnameSearch.value,given : firstnameSearch.value}
 						})
 						.then(
 								function(patientList) {
 									
 
 									if (patientList.data.total != 0) {
+										console.log(patientList)
 										//Legt die Länge des Array fest
 										patientList.data.entry
 												.forEach(function(patient) {

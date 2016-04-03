@@ -1,0 +1,18 @@
+@CHARSET "ISO-8859-1";
+
+	.menu li {
+
+    background-color :#088A68;
+    color: #ffffff;
+
+	}
+	
+	.menu li a {
+	display: block;
+    color: white;
+    text-decoration: none;
+    text-align: center;
+	}
+	.menu li:HOVER{
+	background-color: #04A278;
+	}

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Patienten anlegen</title>
+<link rel="stylesheet" href="../css/bootstrap.min.css">
+<link rel="stylesheet" href="../css/SearchPatientNew.css">
+<script src='../js/Methods.js'></script>
+</head>
+<body>
+	<div class="container-fluid">
+	<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header ">
+      <a class="navbar-brand" href="About.html">ADT-Ausfallsystem</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li class="active"><a href="#">About</a></li>
+      <li><a href="index.html">Hauptseite</a></li>
+    </ul>
+  </div>
+ 
+</nav>
+
+<h1>Neuen Patienten anlegen</h1>
+<hr>
+	<div class="col-sm-2">
+			<ul class="list-group menu">
+				<li class="list-group-item">SVN-Nummer: <br> <input class="form-control" type="text"
+					placeholder="Optional" id="svn_value" name="SVNField"></li>
+				<li class="list-group-item">Versicherung: <br> <input class="form-control" type="text"
+					placeholder="Optional" id="insurance" name="insuranceField"></li>
+				<li class="list-group-item">Vorname: <br>
+				<input class="form-control" type="text" placeholder="Optional" id="firstname"
+					name="firstnameField"></li>
+				<li class="list-group-item">Nachname: <br>
+				<input class="form-control" type="text" placeholder="Optional" id="lastname"
+					name="lastnameField"></li>
+				<li class="list-group-item">Geburtsdatum: <br> <input class="form-control" type="date"
+					placeholder="Optional" id="birthdate" name="birthdateField"></li>
+				<li class="list-group-item">Geschlecht: <br> <select class="form-control" id="gender">
+						<option value="MALE">Männlich</option>
+						<option value="FEMALE">Weiblich</option>
+						<option value="UNDEFINED">undefiniert</option>
+				</select>
+				</li>
+			</ul>
+		</div>
+
+
+		<div class="col-sm-2">
+
+			<ul class="list-group menu">
+				<li class="list-group-item">Straße: <br>
+				<input class="form-control" type="text" placeholder="Optional" id="street"
+					name="streetField"></li>
+				<li class="list-group-item">Stadt: <br>
+				<input class="form-control" type="text" placeholder="Optional" id="city" name="cityField"></li>
+				<li class="list-group-item">Postleitzahl: <br>
+				<input class="form-control" type="text" placeholder="Optional" id="plz" name="plzField"></li>
+				<li class="list-group-item">Land: <br>
+				<input class="form-control" type="text" placeholder="Optional" id="country"
+					name="countryField"></li>
+			</ul>
+
+		</div>
+		<div class="col-sm-2">
+			<ul class="list-group menu">
+
+				<li class="list-group-item">Telefonnummer: <input class="form-control" type="text" placeholder="Optional"
+					id="phoneNumber"> <select class="form-control" id="phoneType">
+						<option value="mobile">Mobitelefon</option>
+						<option value="home">Haustelefon</option>
+				</select>
+				</li>
+
+				<li class="list-group-item">Station: <br> <select class="form-control" id="locationAdd">
+						<option value="radiology">Radiologie</option>
+						<option value="intensive">Intensivstation</option>
+						<option value="ambulant">Ambulanz</option>
+				</select>
+				</li>
+				<li class="list-group-item">Verstorben: <input class="form-control" type="checkbox"
+					id="checkbocdeceasedtrue" name="deceased" value="true">
+				</li>
+				<li class="btn-primary btn-lg button" onclick="addNewPatient()">Patient speichern</li>
+			</ul>
+
+		</div>
+	</div>
+</body>
+</html>

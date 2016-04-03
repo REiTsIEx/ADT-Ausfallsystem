@@ -80,14 +80,16 @@
 
 function addNewPatient() {
 	var svn = document.getElementById('svn_value');
+	var lastname = document.getElementById('lastname');
+	var firstname =document.getElementById('firstname');
+	if(svn.value != "" || (firstname.value != "" && lastname.value != "")){
 	url = "";
 	var url = "http://localhost:8080";
 	var method = "/Ausfallsystem/hapiservlet/Patient/"+svn.value;
 		
 	
 	
-	var lastname = document.getElementById('lastname');
-	var firstname =document.getElementById('firstname');
+	
 	var gender = document.getElementById('gender');
 	var birthday = document.getElementById('birthdate');
 	
@@ -146,8 +148,15 @@ function addNewPatient() {
 					reference : insurance.value
 				}
 				}));
-		alert("Patient mit der ID " + svn.value +" wurde angelegt!")
+		if(svn.value != "") {
+		alert("Patient mit der ID " + svn.value +" wurde angelegt!");
+		}else{
+			alert("Patient " + firstname.value + " " + lastname.value+ " wurde angelegt");
+		}
+	}else{
+		alert("Zur Identifizierung muss mindestens SVN-Nummer oder Vor- und Nachname angebeben werden!");
 	}
+}
 
 function updatePatient() {
 	var svn = document.getElementById('svn_value');
