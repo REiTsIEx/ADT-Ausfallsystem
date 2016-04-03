@@ -62,9 +62,9 @@ public class DatabaseUnitTests {
 	@Test
 	public void addPatient() {
 		Patient testPatient = new Patient();
-		testPatient.setId(new IdDt("8577"));
-		testPatient.addName().addFamily("Nachname789").addGiven("Vorname");
-		testPatient.setGender(AdministrativeGenderEnum.MALE);
+		testPatient.setId(new IdDt("633421021991"));
+		testPatient.addName().addFamily("Mustermann").addGiven("Erika");
+		testPatient.setGender(AdministrativeGenderEnum.FEMALE);
 		
 		Patient returnPatient = new Patient();
 		
