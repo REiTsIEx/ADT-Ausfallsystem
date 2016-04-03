@@ -38,6 +38,10 @@ public class RestfulClient {
 		return allPatients;
 	}
 	
+	/**
+	 * Übergibt der Ziel-URL des Clients einen Patienten, der neu erstellt werden soll
+	 * @param toCreatePatient
+	 */
 	public void createPatient(Patient toCreatePatient){
 		MethodOutcome createStatment = client
 				.create()
@@ -47,6 +51,10 @@ public class RestfulClient {
 				.execute();			
 	}
 	
+	/**
+	 * Übergibt der Ziel-URL des Clients einen Patienten, der aktulisiert werden soll
+	 * @param toUpdatePatient
+	 */
 	public void updatePatient(Patient toUpdatePatient){
 		MethodOutcome updateStatement = client
 				.update()
