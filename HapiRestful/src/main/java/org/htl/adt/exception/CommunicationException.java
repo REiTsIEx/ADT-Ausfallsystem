@@ -1,5 +1,8 @@
 package org.htl.adt.exception;
 
+/**
+ * Eine Exception, die für Fehler bei der Kommunikation zwischen Servlet und Datenbank genutzt wird
+ */
 public class CommunicationException extends Exception {
 
 	private static final long serialVersionUID = 2740669936575829237L;

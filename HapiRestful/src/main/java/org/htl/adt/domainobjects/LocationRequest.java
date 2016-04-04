@@ -5,8 +5,7 @@ import ca.uhn.fhir.model.dstu2.resource.Patient;
 
 public class LocationRequest extends Request{
 	private Location location;
-	
-	
+
 	public Location getLocation() {
 		return location;
 	}
@@ -15,13 +14,16 @@ public class LocationRequest extends Request{
 		this.location = location;
 	}
 
-	public LocationRequest(String messageText, Location messageObject) {
+	public LocationRequest(String messageText, Location location) {
 		super(messageText);
-		this.location = messageObject;
+		this.location = location;
 	}
 
-	public LocationRequest() {
-		super();
+	public LocationRequest(String messageText) {
+		super(messageText);
 	}
+	
+	
+	
 
 }

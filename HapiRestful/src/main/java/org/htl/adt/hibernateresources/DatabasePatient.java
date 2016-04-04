@@ -6,6 +6,9 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import ca.uhn.fhir.context.FhirContext;
+import ca.uhn.fhir.model.dstu2.resource.Patient;
+
 
 @Entity
 @Table(name = "Patient")
@@ -30,6 +33,34 @@ public class DatabasePatient{
 	
 	@Column(name = "FhirMessage")
 	private String fhirMessage;
+	
+	public DatabasePatient() {
+		super();
+	}	
+	
+	public DatabasePatient(Patient patient) {
+		FhirContext ctx = FhirContext.forDstu2();
+		
+		this.patientIdentifier = patient.getId().getIdPart(); 
+		this.familyName = patient.getNameFirstRep().getFamilyAsSingleString().toString();
+		if (!patient.getNameFirstRep().getGiven().isEmpty()) {
+			this.firstName = patient.getNameFirstRep().getGiven().get(0).getValue();
+		} else {
+			this.firstName = "";
+		}
+		this.patientGender = patient.getGender();
+		this.fhirMessage = ctx.newXmlParser().encodeResourceToString(patient);
+	}
+	
+	public DatabasePatient(String patientIdentifier, String firstName,
+			String patientGender, String familyName, String fhirMessage) {
+		super();
+		this.patientIdentifier = patientIdentifier;
+		this.firstName = firstName;
+		this.patientGender = patientGender;
+		this.familyName = familyName;
+		this.fhirMessage = fhirMessage;
+	}
 
 	public int getPatient_id() {
 		return patient_id;
@@ -78,22 +109,5 @@ public class DatabasePatient{
 	public void setFhirMessage(String fhirMessage) {
 		this.fhirMessage = fhirMessage;
 	}
-
-	public DatabasePatient(String patientIdentifier, String firstName,
-			String patientGender, String familyName, String fhirMessage) {
-		super();
-		this.patientIdentifier = patientIdentifier;
-		this.firstName = firstName;
-		this.patientGender = patientGender;
-		this.familyName = familyName;
-		this.fhirMessage = fhirMessage;
-	}
-
-	public DatabasePatient() {
-		super();
-	}
-
-	
-	
 
 }

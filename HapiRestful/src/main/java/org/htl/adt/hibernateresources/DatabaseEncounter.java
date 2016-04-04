@@ -7,6 +7,9 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import ca.uhn.fhir.context.FhirContext;
+import ca.uhn.fhir.model.dstu2.resource.Encounter;
+
 @Entity
 @Table(name = "Encounter")
 public class DatabaseEncounter {
@@ -21,6 +24,9 @@ public class DatabaseEncounter {
 	@Column(name = "PatientIdentifier")
 	private String patientIdentifier;
 	
+	@Column(name = "LocationIdentifier")
+	private String locationIdentifier;
+	
 	@Column(name = "Priority")
 	private String priority;
 	
@@ -30,40 +36,41 @@ public class DatabaseEncounter {
 	@Column(name = "Status")
 	private String status;
 	
-	@Column(name = "StartDate")
-	private Date startDate;
-	
-	@Column(name = "EndDate")
-	private String endDate;
-	
 	@Column(name = "FhirMessage")
 	private String fhirMessage;
 	
 	
 
-	public DatabaseEncounter(String encounterIdentifier,
-			String patientIdentifier, String fhirMessage) {
-		super();
-		this.encounterIdentifier = encounterIdentifier;
-		this.patientIdentifier = patientIdentifier;
-		this.fhirMessage = fhirMessage;
-	}
-
 	public DatabaseEncounter() {
 		super();
 	}
 
-	public DatabaseEncounter(String encounterIdentifier,
-			String patientIdentifier, String priority, String reason,
-			String status, Date startDate, String endDate, String fhirMessage) {
-		super();		
+	public DatabaseEncounter(Encounter encounter) {
+		FhirContext ctx = FhirContext.forDstu2();
+	
+		this.encounterIdentifier = encounter.getId().getIdPart();
+		this.patientIdentifier = encounter.getPatient().getReference().getIdPart();
+		this.locationIdentifier = encounter.getLocationFirstRep().getLocation().getReference().getIdPart();
+		this.priority = encounter.getPriority().getText();
+		if(encounter.getReason().isEmpty()){
+			this.reason = null;
+		}else{
+			this.reason = encounter.getReason().toString();
+		}
+		this.status = encounter.getStatus();
+		this.fhirMessage = ctx.newXmlParser().encodeResourceToString(encounter);
+		
+	}
+
+	public DatabaseEncounter(String encounterIdentifier, String patientIdentifier, String locationIdentifier, String priority, String reason,
+			String status, String fhirMessage) {
+		super();
 		this.encounterIdentifier = encounterIdentifier;
 		this.patientIdentifier = patientIdentifier;
+		this.locationIdentifier = locationIdentifier;
 		this.priority = priority;
 		this.reason = reason;
 		this.status = status;
-		this.startDate = startDate;
-		this.endDate = endDate;
 		this.fhirMessage = fhirMessage;
 	}
 
@@ -91,6 +98,14 @@ public class DatabaseEncounter {
 		this.patientIdentifier = patientIdentifier;
 	}
 
+	public String getLocationIdentifier() {
+		return locationIdentifier;
+	}
+
+	public void setLocationIdentifier(String locationIdentifier) {
+		this.locationIdentifier = locationIdentifier;
+	}
+
 	public String getPriority() {
 		return priority;
 	}
@@ -115,22 +130,6 @@ public class DatabaseEncounter {
 		this.status = status;
 	}
 
-	public Date getStartDate() {
-		return startDate;
-	}
-
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
-
-	public String getEndDate() {
-		return endDate;
-	}
-
-	public void setEndDate(String endDate) {
-		this.endDate = endDate;
-	}
-
 	public String getFhirMessage() {
 		return fhirMessage;
 	}
@@ -138,8 +137,9 @@ public class DatabaseEncounter {
 	public void setFhirMessage(String fhirMessage) {
 		this.fhirMessage = fhirMessage;
 	}
+	
+	
+	
 
-	
-	
 	
 }

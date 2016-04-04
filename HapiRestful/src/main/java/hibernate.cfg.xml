@@ -14,6 +14,8 @@
     
     <mapping resource= "org/htl/adt/hibernateresources/DatabasePatient.hbm.xml"/>
     <mapping resource= "org/htl/adt/hibernateresources/DatabaseEncounter.hbm.xml"/>
+        <mapping resource= "org/htl/adt/hibernateresources/DatabaseLocation.hbm.xml"/>
+    
     
      
   </session-factory>

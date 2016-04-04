@@ -15,6 +15,7 @@ import org.htl.adt.exception.AdtSystemErrorException;
 import org.htl.adt.interfaces.Connector;
 
 import ca.uhn.fhir.model.dstu2.resource.Encounter;
+import ca.uhn.fhir.model.dstu2.resource.Encounter.Location;
 import ca.uhn.fhir.model.dstu2.resource.OperationOutcome;
 import ca.uhn.fhir.model.dstu2.resource.Patient;
 import ca.uhn.fhir.model.dstu2.valueset.AdministrativeGenderEnum;
@@ -119,9 +120,42 @@ public class TestDBConnector implements Connector{
 	}
 
 
-	public void deleteAllPatients() throws AdtSystemErrorException {
+	public void resetDatabase() throws AdtSystemErrorException {
 		// TODO Auto-generated method stub
 		
 	}
+
+
+	public void addEncounter(EncounterRequest encounterRequest) throws AdtSystemErrorException {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	public void addLocation(LocationRequest locationRequest) throws AdtSystemErrorException {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	public List<Location> getAllLocation() throws AdtSystemErrorException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	public List<Encounter> getEncounterbyPatientID(Identifier patientIdentifier) throws AdtSystemErrorException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	public Encounter getLastEncounterbyPatientID(Identifier patientIdentifier) throws AdtSystemErrorException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	
 
 }
