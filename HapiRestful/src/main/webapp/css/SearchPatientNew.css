@@ -1,13 +1,13 @@
 @CHARSET "ISO-8859-1";
 
 
-.menu ul{
+	.menu ul{
     list-style-type: none;
     
     
-}
+	}
 
-.menu li 
+	.menu li 
 	{
 	
     background-color :#088A68;

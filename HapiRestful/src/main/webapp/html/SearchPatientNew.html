@@ -37,18 +37,17 @@
 					class="form-control" type="text" placeholder="Optional" id="lastnameSearch"
 					name="lastnameField"></li>
 
-<!-- 				<li class="list-group-item">Vorname: <br> <input -->
-<!-- 					class="form-control" type="text" placeholder="Optional" id="firstnameSearch" -->
-<!-- 					name="firstnameField"></li> -->
-
+			<li class="list-group-item">Vorname: <br> <input 
+				class="form-control" type="text" placeholder="Optional" id="firstnameSearch"
+				name="firstnameField"></li>
 				<li class="btn-primary btn-lg button" onclick="searchPatient()">Suche nach Patient</li>
 					
 			</ul>
 
 
 		</div>
-		<div class="col-sm-2" >
-			<ul id="patientList" class="list-group patientListbutton">
+		<div class="col-sm-3" >
+			<ul id="patientList" class="list-group">
 
 
 			</ul>
@@ -114,8 +113,7 @@
 			document.getElementById('clickedPatient').style.display = "none";
 			$(patientList).empty();
 			
-			var entry = document.createElement('li')
-			entry.addEventListener("click", showPatient)
+
 
 			var smart = new FHIR.client({
 				//serviceUrl : "http://localhost:8080/Ausfallsystem/hapiservlet",
@@ -133,7 +131,7 @@
 				
 				}).then(
 						function(patientList) {
-							var arrayCount = patientList.data.total;
+							if (patientList.data.total != 0) {
 
 							patientList.data.entry.forEach(function(patient) {
 								console.log(patientList);
@@ -183,13 +181,6 @@
 									svn ="undefined"
 								}
 								
-								if(typeof resource.name != 'undefined'){
-									firstname = name.given;
-									lastname = name.family;
-								}else{
-									firstname = "undefined";
-									lastname = "undefined";
-								}
 								
 								singlePatient = {
 
@@ -205,28 +196,35 @@
 									country : country
 
 								};
-								entry.appendChild(document.createTextNode(singlePatient.givenName+ " " + singlePatient.familyName+ " "+ singlePatient.birthdate));
-								list.appendChild(entry);
 								patientArray
 										.push(singlePatient);
 
 
 							});
+							$.each(patientArray, function(i)
+									{
+									    var li = $('<li/>')
+									        .appendTo(list)
+									    	.addClass('patientListbutton')
+									    var aaa = $('<a/>')
+									    	
+									    	.click(showPatient)
+									        .text(patientArray[i].givenName+ " " + patientArray[i].familyName +" "+ patientArray[i].birthdate)
+									        .appendTo(li);
+									});
+							}else{
+								alert("Keinen Patienten unter dieser ID");
+							}
 
 						});
 			} else if (lastnameSearch.value != "") {
 
-				smart.api.search({type : "Patient",query : {family : lastnameSearch.value}
-						})
-						.then(
-								function(patientList) {
+				smart.api.search({type : "Patient",query : {family : lastnameSearch.value , given: firstnameSearch.value}
+				}).then(function(patientList) {
 									
 
 									if (patientList.data.total != 0) {
-										console.log(patientList)
-										//Legt die Länge des Array fest
-										patientList.data.entry
-												.forEach(function(patient) {
+										patientList.data.entry.forEach(function(patient) {
 													console.log(patientList);
 													var careProviderCheck;
 													var firstname;
@@ -296,19 +294,29 @@
 														country : country
 
 													};
-													entry.appendChild(document.createTextNode(singlePatient.givenName+ " " + singlePatient.familyName+ " "+ singlePatient.birthdate));
-													list.appendChild(entry);
+
+													
+													
 													patientArray
 															.push(singlePatient);
 
-
-													console
-															.log(patientArray[0]);
 												});
+
+										
+				$.each(patientArray, function(i)
+				  {
+					var li = $('<li/>')
+						 .addClass('list-group-item')
+						 .appendTo(list);
+					var aaa = $('<a/>')
+						.click(showPatient)
+						.text("Vorname: " + patientArray[i].givenName+ " Nachname: " + patientArray[i].familyName+ ", geboren am: "+ patientArray[i].birthdate)
+						.appendTo(li);
+						});
 									} else {
-										alert("Keine Ergebnisse");
+										console.log(patientList);
 									}
-								});
+				 });
 			} else {
 				alert("Bitte Nachname oder Sozialversicherungsnummer eingeben!")
 
@@ -321,9 +329,8 @@
 		
 		function showPatient() {
 
-			var index = $(this).parent('li').index() + 1;
+			var index = $(this).parent('li').index();
 
-			console.log(JSON.stringify(patientArray[index].givenName));
 			
 			//firstname wird gesucht
 				document.getElementById("firstname").defaultValue = patientArray[index].givenName;

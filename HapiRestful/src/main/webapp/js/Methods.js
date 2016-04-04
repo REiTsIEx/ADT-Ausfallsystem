@@ -82,7 +82,7 @@ function addNewPatient() {
 	var svn = document.getElementById('svn_value');
 	var lastname = document.getElementById('lastname');
 	var firstname =document.getElementById('firstname');
-	if(svn.value != "" || (firstname.value != "" && lastname.value != "")){
+	if(svn.value != ""){
 	url = "";
 	var url = "http://localhost:8080";
 	var method = "/Ausfallsystem/hapiservlet/Patient/"+svn.value;
@@ -148,6 +148,7 @@ function addNewPatient() {
 					reference : insurance.value
 				}
 				}));
+		
 		if(svn.value != "") {
 		alert("Patient mit der ID " + svn.value +" wurde angelegt!");
 		}else{
@@ -182,12 +183,12 @@ function updatePatient() {
  	var phone = document.getElementById('phoneNumber');
  	var phonetype = document.getElementById('phoneType');
 	
-// 	var deceasedisChecked = document.getElementById("checkbocdeceasedtrue").checked;
-//	if(deceasedisChecked) {
-//	var deceasedBool = true;	
-//	}else{
-//		deceasedBool = false;
-//	}
+ 	var deceasedisChecked = document.getElementById("checkbocdeceasedtrue").checked;
+	if(deceasedisChecked) {
+	var deceasedBool = true;	
+	}else{
+		deceasedBool = false;
+	}
 	
 	var insurance = document.getElementById('insurance');
 		url = url+method;
@@ -207,14 +208,14 @@ function updatePatient() {
 					family: lastname.value,
 					given: firstname.value
 				},
-//				telecom: {
-//					system : 'phone',
-//					value : phone.value,
-//					use : phoneType.value
-//				},
-//				gender: gender.value,
+				telecom: {
+					system : 'phone',
+					value : phone.value,
+					use : phoneType.value
+				},
+			gender: gender.value,
 				birthDate: birthday.value,
-				//deceasedBoolean : deceasedBool.value,
+				deceasedBoolean : deceasedBool.value,
 				address: {
 					use: 'home',
 					line:street.value,
