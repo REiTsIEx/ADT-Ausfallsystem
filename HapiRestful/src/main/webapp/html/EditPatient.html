@@ -57,17 +57,35 @@
 			<ul id="clickedEncounter" class="list-group menu" style="display: none">
 				<li class="list-group-item">Letzte Art des Aufenthalts: <br> <input class="form-control" type="text"
 					placeholder="Optional" id="type_value" name="TypeField"></li>
+				<li class="list-group-item">Letzte Station: <br> <input class="form-control" type="text"
+					placeholder="Optional" id="station_value" name="StationField"></li>
 			</ul>
 
 		</div>
 				<div class="col-sm-3">
 			<ul id="newEncounter" class="list-group menu" style="display: none">
-<li class="list-group-item">Neuer Encounter: <br> <select class="form-control" id="gender">
-						<option value="ambulatory">ambulatory</option>
-						<option value="stationary">stationary</option>
-						<option value="undefined">undefiniert</option>
+<li class="list-group-item">Aufenthalt des Patienten: <br> <select class="form-control" id="gender">
+						<option value="ambulatory">Patient ist ambulant</option>
+						<option value="inaptient">Patient ist stationär</option>
+						<option value="outpatient">Patient bleibt nicht über Nacht</option>
+						<option value="home">Patient ist zu Hause</option>
+						<option value="field">Patient außerhalb regulärer Umgebung für Pflege</option>
+						<option value="daytime">Patient nur Tags stationär</option>
+						<option value="virtual">Patient hält online Kontakt zu Personal</option>
+						<option value="other">nicht genauer definiert</option>
 				</select>
-				<li class="btn-primary btn-lg button" onclick="searchPatient()">Encounter anlegen</li>
+				
+				<li class="list-group-item">Station des Patienten: <br> 
+					<select class="form-control" id="locationItem">
+						<option value="radiology">Radiologie</option>
+						<option value="cardiology">Kardiologie</option>
+						<option value="icu">Intensivstation</option>
+						<option value="earnosethroat">HNO</option>
+						<option value="neurology">Neurologie</option>
+						<option value="urology">Urologie</option>
+					</select>
+				
+				<li class="btn-primary btn-lg button" onclick="searchPatient()">Behandlung anlegen</li>
 			</ul>
 
 		</div>
@@ -86,10 +104,12 @@
 	<!-- CODE -->
 	<script src='http://code.jquery.com/jquery-2.1.4.min.js'></script>
 	<script src='../js/fhir-client.js'></script>
+	<script src='../js/Methods.js'></script>
 	<script>
 		
 	var patientArray = [];
 		function searchPatient() {
+			checkHTTPStatus();
 			patientArray = [];
 			var list = document.getElementById('patientList');
 			document.getElementById('clickedEncounter').style.display = "none";
@@ -147,7 +167,9 @@
 
 
 							});
+							
 							$.each(patientArray, function(i)
+									
 									{
 									    var li = $('<li/>')
 									        .appendTo(list)
@@ -169,9 +191,8 @@
 				}).then(function(patientList) {
 									
 
-									if (patientList.data.total != 0) {
+									if (typeof patientList.data.total != 'undefined') {
 										patientList.data.entry.forEach(function(patient) {
-													console.log(patientList);
 													var firstname;
 													var lastname;
 													var resource = patient.resource;
@@ -216,7 +237,7 @@
 						.appendTo(li);
 						});
 									} else {
-										console.log(patientList);
+										alert("keinen Patienten unter diesem Nachnamen!");
 									}
 				 });
 			} else {
@@ -229,44 +250,59 @@
 		
 		
 		
-		function showPatient() {
+		
+		
+// 		function showPatient() {
 
-			var index = $(this).parent('li').index();
+// 			var index = $(this).parent('li').index();
 
 			
-			//firstname wird gesucht
-			var svn = patientArray[index].svn;
-			console.log(svn);
+// 			//firstname wird gesucht
+// 			var svn = patientArray[index].svn;
 			
-			var smart = new FHIR.client({
-				//serviceUrl : "http://localhost:8080/Ausfallsystem/hapiservlet",
-				serviceUrl : "https://fhir-open-api-dstu2.smarthealthit.org",
-				patientId: svn,
-				auth : {
-					type : 'none'
-				}
-			});
+// 			var smart = new FHIR.client({
+// 				//serviceUrl : "http://localhost:8080/Ausfallsystem/hapiservlet",
+// 				serviceUrl : "https://fhir-open-api-dstu2.smarthealthit.org",
+// 				patientId: svn,
+// 				auth : {
+// 					type : 'none'
+// 				}
+// 			});
 			
-			smart.patient.api.search({type : "Encounter"
-			}).then(function(encounterList) {
-				console.log(encounterList)
-				var length = encounterList.data.total;
-				if(length != 0) {
-					var resourcePath = encounterList.data.entry[length-1].resource;
-					var type = resourcePath.class;
-					console.log(type);
+// 			smart.api.search({type : "Encounter"
+// 			}).then(function(encounterList) {
+// 				var resourcePath;
+// 				var type;
+// 				var location;
+// 				if(encounterList.data.total != 'undefined') {
+// 						if(encounterList.data.entry[index].resource != 'undefined') {
+// 							resourcePath = encounterList.data.entry[length-1].resource
+// 							type = resourcePath.class;
+// 							location = resourcePath.location[0].location;
+							
+// 						}else{
+// 							type = 	"noch kein Aufenthalt";
+// 							location = "noch kein Aufenthalt";
+// 						}
 					
-				}
-			//Liste wird angezeigt
-			if(typeof type != 'undefined'){
-			document.getElementById('type_value').defaultValue = type;
-			}else{
-			document.getElementById('type_value').defaultValue = "noch kein Aufenthalt";
-			}
-			document.getElementById('clickedEncounter').style.display = "block";
-			document.getElementById('newEncounter').style.display = "block";
-		});
-			}
+					
+// 					var patient = "Patient/"+svn;
+					
+// 				}else{
+// 					alert("Patient noch keine Aufenthalt!")
+// 				}
+// 			//Liste wird angezeigt
+// 			if(typeof type != 'undefined'){
+// 			document.getElementById('type_value').defaultValue = type;
+// 			}else{
+// 			document.getElementById('type_value').defaultValue = "noch kein Aufenthalt";
+// 			}
+// 			document.getElementById('station_value').defaultValue = location;
+// 			document.getElementById('clickedEncounter').style.display = "block";
+// 			document.getElementById('newEncounter').style.display = "block";
+// 			addEncounter(type, patient, location);
+// 		});
+// 			}
 		
 			
 	</script>

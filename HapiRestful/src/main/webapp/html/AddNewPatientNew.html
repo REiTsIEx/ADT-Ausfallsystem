@@ -6,6 +6,7 @@
 <link rel="stylesheet" href="../css/bootstrap.min.css">
 <link rel="stylesheet" href="../css/SearchPatientNew.css">
 <script src='../js/Methods.js'></script>
+<script src='http://code.jquery.com/jquery-2.1.4.min.js'></script>
 </head>
 <body>
 	<div class="container-fluid">
@@ -59,10 +60,8 @@
 				<li class="list-group-item">Postleitzahl: <br>
 				<input class="form-control" type="text" placeholder="Optional" id="plz" name="plzField"></li>
 				<li class="list-group-item">Land: <br>
-				<input class="form-control" type="text" placeholder="Optional" id="country"
-					name="countryField"></li>
+				<input class="form-control" type="text" placeholder="Optional" id="country" name="countryField"></li>
 			</ul>
-
 		</div>
 		<div class="col-sm-2">
 			<ul class="list-group menu">
@@ -72,21 +71,35 @@
 						<option value="mobile">Mobitelefon</option>
 						<option value="home">Haustelefon</option>
 				</select>
-				</li>
-
-				<li class="list-group-item">Station: <br> <select class="form-control" id="locationAdd">
+			</li>
+		</ul>
+	</div>
+		<div class="col-sm-2">
+			<ul id="EncounterList" class="list-group menu">
+				<li class="list-group-item">Aufenthalt des Patienten: <br> 
+					<select class="form-control" id="encounterItem">
+						<option value="ambulatory">Patient ist ambulant</option>
+						<option value="inaptient">Patient ist stationär</option>
+						<option value="outpatient">Patient bleibt nicht über Nacht</option>
+						<option value="home">Patient ist zu Hause</option>
+						<option value="field">Patient außerhalb regulärer Umgebung für Pflege</option>
+						<option value="daytime">Patient nur Tags stationär</option>
+						<option value="virtual">Patient hält online Kontakt zu Personal</option>
+						<option value="other">nicht genauer definiert</option>
+					</select>
+					
+				<li class="list-group-item">Station des Patienten: <br> 
+					<select class="form-control" id="locationItem">
 						<option value="radiology">Radiologie</option>
-						<option value="intensive">Intensivstation</option>
-						<option value="ambulant">Ambulanz</option>
-				</select>
-				</li>
-				<li class="list-group-item">Verstorben: <input class="form-control" type="checkbox"
-					id="checkbocdeceasedtrue" name="deceased" value="true">
-				</li>
-				<li class="btn-primary btn-lg button" onclick="addNewPatient()">Patient speichern</li>
+						<option value="cardiology">Kardiologie</option>
+						<option value="icu">Intensivstation</option>
+						<option value="earnosethroat">HNO</option>
+						<option value="neurology">Neurologie</option>
+						<option value="urology">Urologie</option>
+					</select>
+					<li class="btn-primary btn-lg button" onclick="addNewPatient()">Patient speichern</li>
 			</ul>
-
-		</div>
+		</div>	
 	</div>
 </body>
 </html>

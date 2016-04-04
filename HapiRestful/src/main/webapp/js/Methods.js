@@ -7,7 +7,27 @@
 
 
 
-//function searchPatientByName() {
+function checkHTTPStatus() {
+	
+	request = $.ajax({
+	    type: "GET",
+	    url: "https://fhir-open-api-dstu2.smarthealthit.org",
+	    data: "Test",
+	    statusCode: {
+	      200: function() {
+	        console.log("Verbindung ist möglich");
+	       },
+	      500:function(){
+	        alert("Error 500: Keine Verbindung zur Datenbank! \n Bitte an Administrator wenden.");
+	       },
+	       400:function() {
+	    	 alert("Bitte Eingabe erneut wiederholen!")
+	       }
+	       
+	     }
+	});
+	
+}
 //	var method ="";
 //	var param= "";
 //	method = "/Ausfallsystem/hapiservlet/Patient";
@@ -79,6 +99,7 @@
 
 
 function addNewPatient() {
+	checkHTTPStatus();
 	var svn = document.getElementById('svn_value');
 	var lastname = document.getElementById('lastname');
 	var firstname =document.getElementById('firstname');
@@ -103,18 +124,15 @@ function addNewPatient() {
 	var location = document.getElementById('location');
  	var phone = document.getElementById('phoneNumber');
  	var phonetype = document.getElementById('phoneType');
+ 	
+ 	var encounterType = document.getElementById('encounterItem');
 	
- 	var deceasedisChecked = document.getElementById("checkbocdeceasedtrue").checked;
-	if(deceasedisChecked) {
-	var deceasedBool = true;	
-	}else{
-		deceasedBool = false;
-	}
 	
 	var insurance = document.getElementById('insurance');
 		url = url+method;
 		
-		var xmlRequest = new XMLHttpRequest();
+		
+/*		var xmlRequest = new XMLHttpRequest();
 		
 		xmlRequest.open("POST",url);
 		xmlRequest.withCredentials = false;
@@ -136,7 +154,6 @@ function addNewPatient() {
 				},
 				gender: gender.value,
 				birthDate: birthday.value,
-				deceasedBoolean : deceasedBool.value,
 				address: {
 					use: 'home',
 					line:street.value,
@@ -147,19 +164,63 @@ function addNewPatient() {
 				careProvider:{
 					reference : insurance.value
 				}
-				}));
+				}));*/
 		
-		if(svn.value != "") {
-		alert("Patient mit der ID " + svn.value +" wurde angelegt!");
-		}else{
-			alert("Patient " + firstname.value + " " + lastname.value+ " wurde angelegt");
-		}
+		request = $.ajax({
+		    type: "POST",
+		    url: url+method,
+		    data: JSON.stringify({
+				resourceType:"Patient", 
+				identifier: {
+					value: svn.value
+				
+					},
+					name:{
+						family: lastname.value,
+						given: firstname.value
+					},
+					telecom: {
+						system : 'phone',
+						value : phone.value,
+						use : phoneType.value
+					},
+					gender: gender.value,
+					birthDate: birthday.value,
+					address: {
+						use: 'home',
+						line:street.value,
+						city: city.value,
+						postalCode : plz.value,
+						country: country.value
+					},
+					careProvider:{
+						reference : insurance.value
+					}
+					}),
+		    statusCode: {
+		      200: function() {
+		    	  if(svn.value != "") {
+		    			alert("Patient mit der ID " + svn.value +" wurde angelegt!");
+		    			}else{
+		    				alert("Patient " + firstname.value + " " + lastname.value+ " wurde angelegt");
+		    			}
+		       },
+		      500:function(){
+		        alert("Error 500: Keine Verbindung zur Datenbank! \n Bitte an Administrator wenden.");
+		       },
+		       400:function() {
+		    	 alert("Bitte Eingabe erneut wiederholen!")
+		       }
+		       
+		     }
+		});
 	}else{
 		alert("Zur Identifizierung muss mindestens SVN-Nummer oder Vor- und Nachname angebeben werden!");
 	}
 }
 
 function updatePatient() {
+	
 	var svn = document.getElementById('svn_value');
 	url = "";
 	var url = "http://localhost:8080";
@@ -183,52 +244,134 @@ function updatePatient() {
  	var phone = document.getElementById('phoneNumber');
  	var phonetype = document.getElementById('phoneType');
 	
- 	var deceasedisChecked = document.getElementById("checkbocdeceasedtrue").checked;
-	if(deceasedisChecked) {
-	var deceasedBool = true;	
-	}else{
-		deceasedBool = false;
-	}
-	
+
 	var insurance = document.getElementById('insurance');
 		url = url+method;
 		
-		var xmlRequest = new XMLHttpRequest();
+//		var xmlRequest = new XMLHttpRequest();
+//		
+//		xmlRequest.open("PUT",url);
+//		xmlRequest.withCredentials = false;
+//		xmlRequest.setRequestHeader("Content-Type", "application/json+fhir;charset=UTF-8");
+//		xmlRequest.send(JSON.stringify({
+//			resourceType:"Patient", 
+//			identifier: {
+//				value: svn.value
+//			
+//				},
+//				name:{
+//					family: lastname.value,
+//					given: firstname.value
+//				},
+//				telecom: {
+//					system : 'phone',
+//					value : phone.value,
+//					use : phoneType.value
+//				},
+//			gender: gender.value,
+//				birthDate: birthday.value,
+//				address: {
+//					use: 'home',
+//					line:street.value,
+//					city: city.value,
+//					postalCode : plz.value,
+//					country: country.value
+//				},
+//				careProvider:{
+//					reference : insurance.value
+//				}
+//				}));
 		
-		xmlRequest.open("PUT",url);
-		xmlRequest.withCredentials = false;
-		xmlRequest.setRequestHeader("Content-Type", "application/json+fhir;charset=UTF-8");
-		xmlRequest.send(JSON.stringify({
-			resourceType:"Patient", 
-			identifier: {
-				value: svn.value
-			
-				},
-				name:{
-					family: lastname.value,
-					given: firstname.value
-				},
-				telecom: {
-					system : 'phone',
-					value : phone.value,
-					use : phoneType.value
-				},
-			gender: gender.value,
-				birthDate: birthday.value,
-				deceasedBoolean : deceasedBool.value,
-				address: {
-					use: 'home',
-					line:street.value,
-					city: city.value,
-					postalCode : plz.value,
-					country: country.value
-				},
-				careProvider:{
-					reference : insurance.value
-				}
-				}));
-		alert("Patient mit der ID " + svn.value +" wurde überschrieben!")
+		request = $.ajax({
+		    type: "PUT",
+		    url: url+method,
+		    data: JSON.stringify({
+				resourceType:"Patient", 
+				identifier: {
+					value: svn.value
+				
+					},
+					name:{
+						family: lastname.value,
+						given: firstname.value
+					},
+					telecom: {
+						system : 'phone',
+						value : phone.value,
+						use : phoneType.value
+					},
+					gender: gender.value,
+					birthDate: birthday.value,
+					address: {
+						use: 'home',
+						line:street.value,
+						city: city.value,
+						postalCode : plz.value,
+						country: country.value
+					},
+					careProvider:{
+						reference : insurance.value
+					}
+					}),
+		    statusCode: {
+		      200: function() {
+		    	  if(svn.value != "") {
+		    		  alert("Patient mit der ID " + svn.value +" wurde überschrieben!");
+		    			}else{
+		    				alert("Patient " + firstname.value + " " + lastname.value+ " wurde angelegt");
+		    			}
+		       },
+		      500:function(){
+		        alert("Error 500: Keine Verbindung zur Datenbank! \n Bitte an Administrator wenden.");
+		       },
+		       400:function() {
+		    	 alert("Bitte Eingabe erneut wiederholen!")
+		       }
+		       
+		     }
+		});
+		
+		
+		
+		
 	}
+function addEncounter(classValue, patientValue, locationValue) {
+	
+	var url = "http://localhost:8080";
+	var method = "/Ausfallsystem/hapiservlet/Encounter/";
+	request = $.ajax({
+	    type: "POST",
+	    url: url+method,
+	    data: JSON.stringify({
+			resourceType:"Encounter", 
+			
+				value: classValue,
+				patient:{
+					reference: patientValue
+				},
+				location: locationValue
+				}
+				),
+	    statusCode: {
+	      200: function() {
+	    	  if(svn.value != "") {
+	    		  alert("Patient mit der ID " + svn.value +" wurde überschrieben!");
+	    			}else{
+	    				alert("Patient " + firstname.value + " " + lastname.value+ " wurde angelegt");
+	    			}
+	       },
+	      500:function(){
+	        alert("Error 500: Keine Verbindung zur Datenbank! \n Bitte an Administrator wenden.");
+	       },
+	       400:function() {
+	    	 alert("Bitte Eingabe erneut wiederholen!")
+	       }
+	       
+	     }
+	});
+}
+
+
 
 
 

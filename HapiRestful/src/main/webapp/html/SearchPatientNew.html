@@ -104,10 +104,12 @@
 	<!-- CODE -->
 	<script src='http://code.jquery.com/jquery-2.1.4.min.js'></script>
 	<script src='../js/fhir-client.js'></script>
+	<script src='../js/Methods.js'></script>
 	<script>
 		
 	var patientArray = [];
 		function searchPatient() {
+			checkHTTPStatus();
 			patientArray = [];
 			var list = document.getElementById('patientList');
 			document.getElementById('clickedPatient').style.display = "none";
@@ -134,7 +136,7 @@
 							if (patientList.data.total != 0) {
 
 							patientList.data.entry.forEach(function(patient) {
-								console.log(patientList);
+								
 								var careProviderCheck;
 								var firstname;
 								var lastname;
@@ -222,10 +224,10 @@
 				smart.api.search({type : "Patient",query : {family : lastnameSearch.value , given: firstnameSearch.value}
 				}).then(function(patientList) {
 									
-
-									if (patientList.data.total != 0) {
+						
+									if (patientList.data.total != '0') {
 										patientList.data.entry.forEach(function(patient) {
-													console.log(patientList);
+												
 													var careProviderCheck;
 													var firstname;
 													var lastname;
@@ -314,7 +316,7 @@
 						.appendTo(li);
 						});
 									} else {
-										console.log(patientList);
+										alert("keine Patienten unter diesem Name gefunden!");
 									}
 				 });
 			} else {
