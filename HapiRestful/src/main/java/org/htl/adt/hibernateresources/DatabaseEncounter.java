@@ -24,6 +24,9 @@ public class DatabaseEncounter {
 	@Column(name = "PatientIdentifier")
 	private String patientIdentifier;
 	
+	@Column(name = "LocationIdentifier")
+	private String locationIdentifier;
+	
 	@Column(name = "Priority")
 	private String priority;
 	
@@ -37,13 +40,17 @@ public class DatabaseEncounter {
 	private String fhirMessage;
 	
 	
-	
+
+	public DatabaseEncounter() {
+		super();
+	}
 
 	public DatabaseEncounter(Encounter encounter) {
 		FhirContext ctx = FhirContext.forDstu2();
 	
 		this.encounterIdentifier = encounter.getId().getIdPart();
 		this.patientIdentifier = encounter.getPatient().getReference().getIdPart();
+		this.locationIdentifier = encounter.getLocationFirstRep().getLocation().getReference().getIdPart();
 		this.priority = encounter.getPriority().getText();
 		if(encounter.getReason().isEmpty()){
 			this.reason = null;
@@ -55,18 +62,16 @@ public class DatabaseEncounter {
 		
 	}
 
-	public DatabaseEncounter(String encounterIdentifier, String patientIdentifier, String priority, String reason, String status, String fhirMessage) {
+	public DatabaseEncounter(String encounterIdentifier, String patientIdentifier, String locationIdentifier, String priority, String reason,
+			String status, String fhirMessage) {
 		super();
 		this.encounterIdentifier = encounterIdentifier;
 		this.patientIdentifier = patientIdentifier;
+		this.locationIdentifier = locationIdentifier;
 		this.priority = priority;
 		this.reason = reason;
 		this.status = status;
 		this.fhirMessage = fhirMessage;
-	}
-
-	public DatabaseEncounter() {
-		super();
 	}
 
 	public int getEncounter_id() {
@@ -91,6 +96,14 @@ public class DatabaseEncounter {
 
 	public void setPatientIdentifier(String patientIdentifier) {
 		this.patientIdentifier = patientIdentifier;
+	}
+
+	public String getLocationIdentifier() {
+		return locationIdentifier;
+	}
+
+	public void setLocationIdentifier(String locationIdentifier) {
+		this.locationIdentifier = locationIdentifier;
 	}
 
 	public String getPriority() {
@@ -124,8 +137,9 @@ public class DatabaseEncounter {
 	public void setFhirMessage(String fhirMessage) {
 		this.fhirMessage = fhirMessage;
 	}
+	
+	
+	
 
-	
-	
 	
 }

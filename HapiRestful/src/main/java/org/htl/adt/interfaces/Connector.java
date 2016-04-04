@@ -10,7 +10,7 @@ import org.htl.adt.domainobjects.PatientRequest;
 import org.htl.adt.exception.AdtSystemErrorException;
 
 import ca.uhn.fhir.model.dstu2.resource.Encounter;
-import ca.uhn.fhir.model.dstu2.resource.Encounter.Location;
+import ca.uhn.fhir.model.dstu2.resource.Location;
 import ca.uhn.fhir.model.dstu2.resource.Patient;
 
 public interface Connector {
@@ -25,8 +25,6 @@ public interface Connector {
 			throws AdtSystemErrorException;
 
 	public List<Patient> getAllPatients() throws AdtSystemErrorException;
-
-	public void deleteAllPatients() throws AdtSystemErrorException;
 
 	public void addEncounter(EncounterRequest encounterRequest)
 			throws AdtSystemErrorException;
@@ -46,6 +44,8 @@ public interface Connector {
 	public List<Patient> searchPatientWithParameters(
 			Map<String, String> patientParameter)
 			throws AdtSystemErrorException;
+	
+	public void deleteAllDatabaseRows() throws AdtSystemErrorException;
 
 	public void getConnection();
 

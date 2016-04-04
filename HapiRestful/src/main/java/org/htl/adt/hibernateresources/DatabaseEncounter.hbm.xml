@@ -9,7 +9,8 @@
         
         <property name="encounter_id" column="Encounter_id"/>     
         <property name="patientIdentifier" column="PatientIdentifier"/>
-      	<property name="priority" column="Priority"/>
+        <property name="locationIdentifier" column="LocationIdentifier"/>
+        <property name="priority" column="Priority"/>
       	<property name="reason" column="Reason"/>           	
       	<property name="status" column="Status"/>
       	<property name="fhirMessage" column="FhirMessage"/>
