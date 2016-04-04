@@ -8,6 +8,8 @@ import javax.annotation.Resource;
 
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.htl.adt.connector.DBFactory;
+import org.htl.adt.domainobjects.LocationRequest;
+import org.htl.adt.exception.AdtSystemErrorException;
 import org.htl.adt.exception.CommunicationException;
 import org.htl.adt.interfaces.Connector;
 
@@ -33,7 +35,7 @@ public class RestfulLocationProvider implements IResourceProvider {
 	
 	public RestfulLocationProvider() {
 		try {
-			db = DBFactory.getInstance().getConnector("TestDBConnector");
+			db = DBFactory.getInstance().getConnector("DBConnector");
 		} catch (CommunicationException e) {
 			throw new InternalErrorException("Es konnte keine Verbindung zur Datenbank hergestellt werden.");
 		}
@@ -66,31 +68,26 @@ public class RestfulLocationProvider implements IResourceProvider {
 	
 	@Create
 	public MethodOutcome createLocation(@ResourceParam Location location){
-		if(location.getId().isEmpty()){
-			location.setId(new IdDt(nextID));
-			myLocations.put(nextID, location);
-			nextID++;
-		} else {
-			myLocations.put(location.getId().getIdPartAsLong(), location);
+		try {
+			LocationRequest locationRequest = new LocationRequest("", location);
+			db.addLocation(locationRequest);
+		} catch (AdtSystemErrorException e) {
+			throw new ResourceNotFoundException("Es gab ein Problem bei der Eingabe.");
 		}
 		return new MethodOutcome(location.getId());
 	}
 	
 	@Update
 	public MethodOutcome updateLocation(@IdParam IdDt locID, @ResourceParam Location location){
-		if(myLocations.keySet().contains(locID.getIdPartAsLong())){
-			myLocations.put(locID.getIdPartAsLong(), location);
-			return new MethodOutcome(locID);
-		} else {
-			throw new ResourceNotFoundException(locID);
-		}
-		
+		return null;
 	}
 	
 	@Search
 	public List<Location> getAllLocations(){
-		List<Location> retValue = new ArrayList<Location>();
-		retValue.addAll(myLocations.values());
-		return retValue;
+		try {
+			return db.getAllLocation();
+		} catch (AdtSystemErrorException e) {
+			throw new ResourceNotFoundException("Es gab ein Problem bei der Eingabe.");
+		}
 	}
 }

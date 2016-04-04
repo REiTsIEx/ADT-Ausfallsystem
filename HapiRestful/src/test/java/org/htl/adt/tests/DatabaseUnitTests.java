@@ -47,7 +47,8 @@ public class DatabaseUnitTests {
 		testPatient.setId(new IdDt("633421021994"));
 		testPatient.addName().addFamily("Mustermann").addGiven("Erika");
 		testPatient.setGender(AdministrativeGenderEnum.FEMALE);
-
+		testPatient.addIdentifier().setValue("633421021994");
+		
 		testLocation.setId(new IdDt("radlog"));
 		testLocation.setName("Radiologie");
 		testLocation.setStatus(LocationStatusEnum.ACTIVE);

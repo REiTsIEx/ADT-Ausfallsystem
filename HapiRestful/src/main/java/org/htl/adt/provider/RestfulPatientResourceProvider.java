@@ -9,6 +9,7 @@ import java.util.Map;
 
 
 import org.hibernate.HibernateException;
+import org.htl.adt.client.RestfulClient;
 import org.htl.adt.connector.DBFactory;
 import org.htl.adt.domainobjects.Identifier;
 import org.htl.adt.domainobjects.PatientRequest;
@@ -36,12 +37,12 @@ import ca.uhn.fhir.rest.annotation.Search;
 import ca.uhn.fhir.rest.annotation.Update;
 import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.param.StringParam;
+import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 
 public class RestfulPatientResourceProvider implements IResourceProvider {
-
 
 	Connector db;
 
@@ -51,7 +52,7 @@ public class RestfulPatientResourceProvider implements IResourceProvider {
 
 	public RestfulPatientResourceProvider() {
 		try {
-			db = DBFactory.getInstance().getConnector("TestDBConnector");
+			db = DBFactory.getInstance().getConnector("DBConnector");
 		} catch (CommunicationException e) {
 			throw new InternalErrorException("Es konnte keine Verbindung mit der Datenbank hergestellt werden");
 		}
@@ -74,7 +75,8 @@ public class RestfulPatientResourceProvider implements IResourceProvider {
 		PatientRequest patientRequest = new PatientRequest("Der zu suchende Patient", pat);
 		// Patient retValue = new Patient();
 		try {
-			List<Patient> values = db.searchPatient(patientRequest);
+			List<Patient> values = db.searchPatientWithParameters(null);
+			//List<Patient> values = db.searchPatientWith(patientRequest);
 			return values.get(0);
 		} catch (AdtSystemErrorException e) {
 			throw new ResourceNotFoundException(
@@ -97,10 +99,10 @@ public class RestfulPatientResourceProvider implements IResourceProvider {
 			return new MethodOutcome(
 					new IdDt("Patient", patient.getId().toString(), patient.getId().getVersionIdPart()));
 			} catch (AdtSystemErrorException e){
-				throw new InternalErrorException("Der Patient konnte nich angelegt werden");
+				throw new ResourceNotFoundException("Der Patient konnte nich angelegt werden");
 			}
 		} else {
-			throw new InternalErrorException("Kein gültiger Patient eingegeben");
+			throw new ResourceNotFoundException("Kein gültiger Patient eingegeben");
 		}
 		// return new MethodOutcome(patient.getId());
 	}
@@ -116,16 +118,16 @@ public class RestfulPatientResourceProvider implements IResourceProvider {
 	 * @return
 	 */
 	@Search
-	public List<Patient> search(@RequiredParam(name = "family") StringParam familyName,
-			@OptionalParam(name = "given") StringParam firstName,
-			@OptionalParam(name = "identifier") StringParam patientIdentifier,
-			@OptionalParam(name = "gender") StringParam patientGender) {
-
+	public List<Patient> searchWithRequiredFamilyName(@RequiredParam(name = "family") StringParam familyName,
+			@OptionalParam(name = Patient.SP_GIVEN) StringParam firstName,
+			@OptionalParam(name = Patient.SP_IDENTIFIER) StringParam patientIdentifier,
+			@OptionalParam(name = Patient.SP_GENDER) StringParam patientGender) {
+			
 		Map<String, String> params = new HashMap<String, String>();
 		Patient pat = new Patient();
 		pat.setId(new IdDt(1));
 
-		if (familyName != null) {
+		if (familyName != null || familyName.getValue() == " ") {
 			pat.addName().addFamily(familyName.getValue());
 			params.put("familyName", familyName.getValue());
 		}
@@ -136,7 +138,6 @@ public class RestfulPatientResourceProvider implements IResourceProvider {
 		if (patientIdentifier != null) {
 			pat.addIdentifier().setValue(patientIdentifier.getValue());
 			params.put("patientIdentifier", patientIdentifier.getValue());
-			// throw new InternalErrorException("Identifier angekommen");
 		}
 		if (patientGender != null) {
 			if (patientGender.getValue().equals("Male") || patientGender.equals("MALE")) {
@@ -158,12 +159,54 @@ public class RestfulPatientResourceProvider implements IResourceProvider {
 		}
 	}
 
+/*	@Search
+	public List<Patient> searchWithRequiredIdentifier(@RequiredParam(name=Patient.SP_IDENTIFIER) StringParam patientIdentifier,
+			@OptionalParam(name = "family") StringParam familyName,
+			@OptionalParam(name = "given") StringParam firstName,
+			@OptionalParam(name = "gender") StringParam patientGender) {
+
+		Map<String, String> params = new HashMap<String, String>();
+		Patient pat = new Patient();
+		pat.setId(new IdDt(patientIdentifier.getValue()));
+
+		if (familyName != null) {
+			pat.addName().addFamily(familyName.getValue());
+			params.put("familyName", familyName.getValue());
+		}
+		if (firstName != null) {
+			pat.addName().addGiven(firstName.getValue());
+			params.put("firstName", firstName.getValue());
+		}
+		if (patientIdentifier != null) {
+			pat.addIdentifier().setValue(patientIdentifier.getValue());
+			params.put("patientIdentifier", patientIdentifier.getValue());
+		}
+		if (patientGender != null) {
+			if (patientGender.getValue().equals("Male") || patientGender.equals("MALE")) {
+				pat.setGender(AdministrativeGenderEnum.MALE);
+				params.put("patientGender", "male");
+			} else if (patientGender.getValue().equals("Female")) {
+				pat.setGender(AdministrativeGenderEnum.FEMALE);
+				params.put("patientGender", "female");
+			} else if (patientGender.getValue().equals("Undefined")) {
+				pat.setGender(AdministrativeGenderEnum.UNKNOWN);
+				params.put("patientGender", "unknown");
+			}
+		}
+		PatientRequest request = new PatientRequest(familyName.getValue(), pat);
+		try {
+			return db.searchPatientWithParameters(params);
+		} catch (AdtSystemErrorException e) {
+			throw new ResourceNotFoundException("Es wurde kein Patient mit den eingegebenen Parametern gefunden.");
+		}
+	}
+*/
 	/**
 	 * Übergibt alle Patienten die sich in der Datenbank befinden zurück
 	 * @return List<Patient>
 	 */
 	@Search
-	public List<Patient> search() {
+	public List<Patient> getAllPatients() {
 		try {
 			return db.getAllPatients();
 		} catch (AdtSystemErrorException e) {
@@ -171,6 +214,13 @@ public class RestfulPatientResourceProvider implements IResourceProvider {
 		} 
 	}
 	
+	/**
+	 * Mithilfe des Identifiers, wird ein Patient aktualisiert; ist er nicht vorhanden, wird er neu angelegt
+	 * @param id (Identiefier des zu aktualiserenden Patienten)
+	 * Patient patient (die neuen Patientendaten)
+	 * @param patient
+	 * @return
+	 */
 	@Update
 	public MethodOutcome updatePatient(@IdParam IdDt id, @ResourceParam Patient patient) {
 		if (patient != null) {
@@ -182,17 +232,9 @@ public class RestfulPatientResourceProvider implements IResourceProvider {
 				throw new ResourceNotFoundException("Der zu aktualisierende Patient konnte nicht gefunden werden.");
 			}
 		} else {
-			throw new InternalErrorException("Es wurde kein gültiger Patient eingegebe.");
+			throw new ResourceNotFoundException("Es wurde kein gültiger Patient eingegebe.");
 		}
 	}
 	
-	/**
-	 * Diese Methode übergibt den selben String, den sie erhält
-	 * @param input
-	 * @return der selbe Wert der übergeben wurde
-	 */
-	public static String returnInput(String input){
-		return input;
-	}
 	
 }

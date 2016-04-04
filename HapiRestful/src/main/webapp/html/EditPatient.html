@@ -85,7 +85,7 @@
 						<option value="urology">Urologie</option>
 					</select>
 				
-				<li class="btn-primary btn-lg button" onclick="searchPatient()">Behandlung anlegen</li>
+				<li class="btn-primary btn-lg button" onclick="saveEncounter()">Behandlung anlegen</li>
 			</ul>
 
 		</div>
@@ -106,7 +106,9 @@
 	<script src='../js/fhir-client.js'></script>
 	<script src='../js/Methods.js'></script>
 	<script>
-		
+	var type;
+	var location;
+	var patientEntcounter
 	var patientArray = [];
 		function searchPatient() {
 			checkHTTPStatus();
@@ -118,8 +120,8 @@
 
 
 			var smart = new FHIR.client({
-				//serviceUrl : "http://localhost:8080/Ausfallsystem/hapiservlet",
-				serviceUrl : "https://fhir-open-api-dstu2.smarthealthit.org",
+				serviceUrl : "http://localhost:8080/Ausfallsystem/hapiservlet",
+				//serviceUrl : "https://fhir-open-api-dstu2.smarthealthit.org",
 				
 				auth : {
 					type : 'none'
@@ -140,7 +142,6 @@
 								var firstname;
 								var lastname;
 								var resource = patient.resource;
-								var address = resource.address[0];
 								var name = resource.name[0];
 								
 							
@@ -191,12 +192,11 @@
 				}).then(function(patientList) {
 									
 
-									if (typeof patientList.data.total != 'undefined') {
+									if (patientList.data.total != '0') {
 										patientList.data.entry.forEach(function(patient) {
 													var firstname;
 													var lastname;
 													var resource = patient.resource;
-													var address = resource.address[0];
 													var name = resource.name[0];
 													
 													
@@ -252,57 +252,56 @@
 		
 		
 		
-// 		function showPatient() {
+		function showPatient() {
 
-// 			var index = $(this).parent('li').index();
+			var index = $(this).parent('li').index();
 
 			
-// 			//firstname wird gesucht
-// 			var svn = patientArray[index].svn;
+			//firstname wird gesucht
+			var svn = patientArray[index].svn;
 			
-// 			var smart = new FHIR.client({
-// 				//serviceUrl : "http://localhost:8080/Ausfallsystem/hapiservlet",
-// 				serviceUrl : "https://fhir-open-api-dstu2.smarthealthit.org",
-// 				patientId: svn,
-// 				auth : {
-// 					type : 'none'
-// 				}
-// 			});
+			var smart = new FHIR.client({
+				serviceUrl : "http://localhost:8080/Ausfallsystem/hapiservlet",
+				//serviceUrl : "https://fhir-open-api-dstu2.smarthealthit.org",
+				patientId: svn,
+				auth : {
+					type : 'none'
+				}
+			});
 			
-// 			smart.api.search({type : "Encounter"
-// 			}).then(function(encounterList) {
-// 				var resourcePath;
-// 				var type;
-// 				var location;
-// 				if(encounterList.data.total != 'undefined') {
-// 						if(encounterList.data.entry[index].resource != 'undefined') {
-// 							resourcePath = encounterList.data.entry[length-1].resource
-// 							type = resourcePath.class;
-// 							location = resourcePath.location[0].location;
+			smart.patient.api.search({type : "Encounter"
+			}).then(function(encounterList) {
+				var resourcePath;
+				
+				if(encounterList.data.total != '0') {
+						if(typeof encounterList.data.entry[index].resource != 'undefined') {
+							resourcePath = encounterList.data.entry[length].resource
+							//type = resourcePath.class;
+							//location = encounterList.data.entry[length].resource.location.location;
 							
-// 						}else{
-// 							type = 	"noch kein Aufenthalt";
-// 							location = "noch kein Aufenthalt";
-// 						}
+						}else{
+							type = 	"noch kein Aufenthalt";
+							location = "noch kein Aufenthalt";
+						}
 					
 					
-// 					var patient = "Patient/"+svn;
+					patientEncounter = "Patient/"+svn.value;
 					
-// 				}else{
-// 					alert("Patient noch keine Aufenthalt!")
-// 				}
-// 			//Liste wird angezeigt
-// 			if(typeof type != 'undefined'){
-// 			document.getElementById('type_value').defaultValue = type;
-// 			}else{
-// 			document.getElementById('type_value').defaultValue = "noch kein Aufenthalt";
-// 			}
-// 			document.getElementById('station_value').defaultValue = location;
-// 			document.getElementById('clickedEncounter').style.display = "block";
-// 			document.getElementById('newEncounter').style.display = "block";
-// 			addEncounter(type, patient, location);
-// 		});
-// 			}
+				}else{
+					alert("Patient noch keine Aufenthalt!")
+				}
+			//Liste wird angezeigt
+			document.getElementById('type_value').defaultValue = type;
+			document.getElementById('station_value').defaultValue = location;
+			document.getElementById('clickedEncounter').style.display = "block";
+			document.getElementById('newEncounter').style.display = "block";
+			
+		});
+			}
+		
+		function saveEncounter() {
+			addEncounter(type, patientEncouter, location);
+		}
 		
 			
 	</script>

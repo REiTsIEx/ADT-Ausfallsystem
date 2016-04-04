@@ -118,8 +118,8 @@
 
 
 			var smart = new FHIR.client({
-				//serviceUrl : "http://localhost:8080/Ausfallsystem/hapiservlet",
-				serviceUrl : "https://fhir-open-api-dstu2.smarthealthit.org",
+				serviceUrl : "http://localhost:8080/Ausfallsystem/hapiservlet",
+				//serviceUrl : "https://fhir-open-api-dstu2.smarthealthit.org",
 				
 				auth : {
 					type : 'none'
@@ -128,12 +128,12 @@
 
 			if (svnSearch.value != "") {
 
-				smart.api.search({type : "Patient",	query : {identifier : {value : svnSearch.value}}
+				smart.api.search({type : "Patient",	query : {identifier : {value : svnSearch.value},family : lastnameSearch.value}
 			
 				
 				}).then(
 						function(patientList) {
-							if (patientList.data.total != 0) {
+							if (patientList.data.total != '0') {
 
 							patientList.data.entry.forEach(function(patient) {
 								
@@ -236,7 +236,7 @@
 													var city;
 													var country;
 													var resource = patient.resource;
-													var address = resource.address[0];
+													
 													var name = resource.name[0];
 													
 													

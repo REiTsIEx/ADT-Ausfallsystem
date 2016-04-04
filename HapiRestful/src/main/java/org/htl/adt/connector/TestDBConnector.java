@@ -27,7 +27,7 @@ import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 public class TestDBConnector implements Connector{
 	TestDB db = new TestDB();
 	Long nextID = 3L;
-	RestfulClient client = new RestfulClient();
+	//RestfulClient client = new RestfulClient();
 
 	public void addPatient(PatientRequest patientRequest) {
 		//IdDt newPatientID = new IdDt();
@@ -36,6 +36,7 @@ public class TestDBConnector implements Connector{
 		//patient.patient.setId(newPatientID);
 		db.myPatients.put(nextID, patientRequest.getPatient());
 		nextID++;
+		//client.createPatient(patientRequest.getPatient());
 		//client.createPatient(patient.getPatient());
 	}
 
@@ -138,7 +139,7 @@ public class TestDBConnector implements Connector{
 	}
 
 
-	public List<Location> getAllLocation() throws AdtSystemErrorException {
+	public List<ca.uhn.fhir.model.dstu2.resource.Location> getAllLocation() throws AdtSystemErrorException {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -153,6 +154,12 @@ public class TestDBConnector implements Connector{
 	public Encounter getLastEncounterbyPatientID(Identifier patientIdentifier) throws AdtSystemErrorException {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+
+	public void deleteAllDatabaseRows() throws AdtSystemErrorException {
+		// TODO Auto-generated method stub
+		
 	}
 
 

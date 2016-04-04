@@ -11,8 +11,8 @@ function checkHTTPStatus() {
 	
 	request = $.ajax({
 	    type: "GET",
-	    url: "https://fhir-open-api-dstu2.smarthealthit.org",
-	    data: "Test",
+	    url: "http://localhost:8080/Ausfallsystem/hapiservlet/Patient/",
+	    headers:{"Content-Type": "application/json+fhir;charset=UTF-8"},
 	    statusCode: {
 	      200: function() {
 	        console.log("Verbindung ist möglich");
@@ -99,15 +99,15 @@ function checkHTTPStatus() {
 
 
 function addNewPatient() {
-	checkHTTPStatus();
+	
 	var svn = document.getElementById('svn_value');
 	var lastname = document.getElementById('lastname');
 	var firstname =document.getElementById('firstname');
 	if(svn.value != ""){
 	url = "";
 	var url = "http://localhost:8080";
-	var method = "/Ausfallsystem/hapiservlet/Patient/"+svn.value;
-		
+	//var method = "/Ausfallsystem/hapiservlet/Patient/";
+	var method = "/Ausfallsystem/hapiservlet/Patient/"+svn.value;	
 	
 	
 	
@@ -129,7 +129,7 @@ function addNewPatient() {
 	
 	
 	var insurance = document.getElementById('insurance');
-		url = url+method;
+		
 		
 		
 /*		var xmlRequest = new XMLHttpRequest();
@@ -169,6 +169,7 @@ function addNewPatient() {
 		request = $.ajax({
 		    type: "POST",
 		    url: url+method,
+		    headers:{"Content-Type": "application/json+fhir;charset=UTF-8"},
 		    data: JSON.stringify({
 				resourceType:"Patient", 
 				identifier: {
@@ -198,7 +199,7 @@ function addNewPatient() {
 					}
 					}),
 		    statusCode: {
-		      200: function() {
+		      201: function() {
 		    	  if(svn.value != "") {
 		    			alert("Patient mit der ID " + svn.value +" wurde angelegt!");
 		    			}else{
@@ -246,7 +247,7 @@ function updatePatient() {
 	
 
 	var insurance = document.getElementById('insurance');
-		url = url+method;
+		
 		
 //		var xmlRequest = new XMLHttpRequest();
 //		
@@ -285,6 +286,7 @@ function updatePatient() {
 		request = $.ajax({
 		    type: "PUT",
 		    url: url+method,
+		    headers:{"Content-Type": "application/json+fhir;charset=UTF-8"},
 		    data: JSON.stringify({
 				resourceType:"Patient", 
 				identifier: {
@@ -295,12 +297,12 @@ function updatePatient() {
 						family: lastname.value,
 						given: firstname.value
 					},
-					telecom: {
-						system : 'phone',
-						value : phone.value,
-						use : phoneType.value
-					},
-					gender: gender.value,
+//					telecom: {
+//						system : 'phone',
+//						value : phone.value,
+//						use : phoneType.value
+//					},
+//					gender: gender.value,
 					birthDate: birthday.value,
 					address: {
 						use: 'home',
@@ -342,6 +344,7 @@ function addEncounter(classValue, patientValue, locationValue) {
 	request = $.ajax({
 	    type: "POST",
 	    url: url+method,
+	    headers:{"Content-Type": "application/json+fhir;charset=UTF-8"},
 	    data: JSON.stringify({
 			resourceType:"Encounter", 
 			
