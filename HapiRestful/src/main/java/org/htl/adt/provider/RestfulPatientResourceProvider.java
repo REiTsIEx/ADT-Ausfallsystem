@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -52,7 +53,7 @@ public class RestfulPatientResourceProvider implements IResourceProvider {
 
 	public RestfulPatientResourceProvider() {
 		try {
-			db = DBFactory.getInstance().getConnector("DBConnector");
+			db = DBFactory.getInstance().getConnector("TestDBConnector");
 		} catch (CommunicationException e) {
 			throw new InternalErrorException("Es konnte keine Verbindung mit der Datenbank hergestellt werden");
 		}
@@ -70,19 +71,15 @@ public class RestfulPatientResourceProvider implements IResourceProvider {
 			oo.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("Ungültige ID wurde eingegeben");
 			throw new InternalErrorException("Ungültige ID", oo);
 		}
-		Patient pat = new Patient();
-		pat.setId(new IdDt(patientID));
-		PatientRequest patientRequest = new PatientRequest("Der zu suchende Patient", pat);
-		// Patient retValue = new Patient();
+		Patient patient = new Patient();
+		patient.setId(new IdDt(patientID.getIdPart()));
+		PatientRequest patientRequest = new PatientRequest("", patient);
 		try {
-			List<Patient> values = db.searchPatientWithParameters(null);
-			//List<Patient> values = db.searchPatientWith(patientRequest);
-			return values.get(0);
+			return db.getPatientbyIdentifier(patientRequest);
 		} catch (AdtSystemErrorException e) {
 			throw new ResourceNotFoundException(
 					"Der Patient mit der ID " + patientID.getIdPart() + " wurde nicht gefunden");
 		}
-	
 	}
 
 	/**

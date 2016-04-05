@@ -29,8 +29,6 @@ import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 
 public class RestfulLocationProvider implements IResourceProvider {
 
-	HashMap<Long, Location> myLocations = new HashMap<Long, Location>();
-	Long nextID = 1L;
 	Connector db;
 	
 	public RestfulLocationProvider() {
@@ -40,16 +38,6 @@ public class RestfulLocationProvider implements IResourceProvider {
 			throw new InternalErrorException("Es konnte keine Verbindung zur Datenbank hergestellt werden.");
 		}
 		
-		Location location = new Location();
-		location.setId(new IdDt(nextID));
-		location.setDescription("Station: Tageschirurgie");
-		myLocations.put(nextID, location);
-		nextID++;
-		Location location2 = new Location();
-		location2.setId(new IdDt(nextID));
-		location2.setDescription("Station: Labor");
-		myLocations.put(nextID, location2);
-		nextID++;
 	}
 
 	public Class<? extends IBaseResource> getResourceType() {
@@ -57,15 +45,13 @@ public class RestfulLocationProvider implements IResourceProvider {
 		return Location.class;
 	}
 	
-	@Read
-	public Location getResourceByID(@IdParam IdDt locID){
-		Location retValue = myLocations.get(locID.getIdPartAsLong());
-		if(locID == null || retValue == null){
-			throw new ResourceNotFoundException(locID);
-		}
-		return retValue;
-	}
-	
+/*Da die DB und Webgui diese Methode nicht unterstützten, wurde sie auskommentiert
+ * 	@Read
+ *	public Location getResourceByID(@IdParam IdDt locID){
+ *		return null;
+ *	}
+ */
+
 	@Create
 	public MethodOutcome createLocation(@ResourceParam Location location){
 		try {
@@ -76,11 +62,13 @@ public class RestfulLocationProvider implements IResourceProvider {
 		}
 		return new MethodOutcome(location.getId());
 	}
-	
-	@Update
-	public MethodOutcome updateLocation(@IdParam IdDt locID, @ResourceParam Location location){
-		return null;
+	/*Da die DB und Webgui diese Methode nicht unterstützten, wurde sie auskommentiert
+	 * @Update
+	 *	public MethodOutcome updateLocation(@IdParam IdDt locID, @ResourceParam Location location){
+	 *	return null;
 	}
+	 */
+	
 	
 	@Search
 	public List<Location> getAllLocations(){

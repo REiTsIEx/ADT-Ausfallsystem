@@ -17,6 +17,7 @@ import org.hibernate.criterion.CriteriaQuery;
 import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.htl.adt.client.RestfulClient;
 import org.htl.adt.domainobjects.EncounterRequest;
 import org.htl.adt.domainobjects.Identifier;
 import org.htl.adt.domainobjects.LocationRequest;
@@ -27,6 +28,8 @@ import org.htl.adt.hibernateresources.DatabaseEncounter;
 import org.htl.adt.hibernateresources.DatabaseLocation;
 import org.htl.adt.hibernateresources.DatabasePatient;
 import org.htl.adt.interfaces.Connector;
+
+import com.mysql.fabric.xmlrpc.Client;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.model.dstu2.resource.Encounter;
@@ -40,7 +43,7 @@ public class DBConnector implements Connector {
 
 	private Configuration config;
 	private SessionFactory sessionFactory;
-
+	RestfulClient client = new RestfulClient();
 	public DBConnector() throws CommunicationException {
 		try {
 
@@ -74,7 +77,7 @@ public class DBConnector implements Connector {
 			session.save(data);
 
 			transaction.commit();// transaction is committed
-
+			//client.createPatient(patientRequest.getPatient());
 		} catch (IndexOutOfBoundsException e) {
 			throw new AdtSystemErrorException(
 					"Error during the reading of the Patient Parameters - IndexOutOfBoundException of one of the Parameters", e);
@@ -226,6 +229,7 @@ public class DBConnector implements Connector {
 			}
 
 			transaction.commit();// transaction is committed
+			//client.updatePatient(patientRequest.getPatient());
 		} catch (IndexOutOfBoundsException e) {
 			throw new AdtSystemErrorException(
 					"Error during the reading of the Patient Parameters - IndexOutOfBoundException of one of the Parameters", e);

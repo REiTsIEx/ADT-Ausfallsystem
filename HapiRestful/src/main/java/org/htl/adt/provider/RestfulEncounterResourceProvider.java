@@ -57,40 +57,6 @@ public class RestfulEncounterResourceProvider implements IResourceProvider{
 	
 	
 	@Search
-	public List<Encounter> getAllEncounter(){
-		/*LinkedList<Encounter> listE = new LinkedList<Encounter>();
-		Encounter encounter = new Encounter();
-		encounter.setId(new IdDt(1));
-		Patient patientToRead = new Patient();
-		patientToRead.setId(new IdDt(1));
-		patientToRead.addName().addFamily("Reiter");
-		List<Patient> allPatients = client.searchPatient(patientToRead);
-		//Patient patient = allPatients.getFirst();
-		ResourceReferenceDt ref = new ResourceReferenceDt(allPatients.get(0));
-		encounter.setPatient(ref);
-		encounter.setLanguage(new CodeDt("German"));
-		
-		Location location = new Location();
-		ca.uhn.fhir.model.dstu2.resource.Location realLocation = new ca.uhn.fhir.model.dstu2.resource.Location();
-		realLocation.setId(new IdDt(1));
-		location.setLocation(new ResourceReferenceDt(client.readLocationWithID(realLocation)));
-		encounter.addLocation(location);
-		listE.add(encounter);
-		return listE;*/
-		
-		LinkedList<Encounter> listE = new LinkedList<Encounter>();
-		Encounter encounter = new Encounter();
-		encounter.setId(new IdDt(1));
-		Patient patientToRead = new Patient();
-		patientToRead.setId(new IdDt(1));
-
-		encounter.setLanguage(new CodeDt("German"));
-		
-		listE.add(encounter);
-		return listE;
-	}
-	
-	@Search
 	public List<Encounter> getEncounterWithPatientID(@RequiredParam(name = "patient") StringParam patientID){
 		Identifier id = new Identifier();
 		id.setIdentifier(new IdDt(patientID.getValue()));
@@ -102,6 +68,24 @@ public class RestfulEncounterResourceProvider implements IResourceProvider{
 		
 	}
 	
+	@Create
+	public MethodOutcome createEncounter(@ResourceParam Encounter encounter) {
+		try {
+			EncounterRequest encounterRequest = new EncounterRequest("", encounter);
+			db.addEncounter(encounterRequest);
+		} catch (AdtSystemErrorException e) {
+			throw new ResourceNotFoundException("Fehler bei der Eingabe");
+		}
+		return new MethodOutcome(encounter.getId());
+	}
+	
+	/* Die folgenden Methoden, werden von der DB und der Weboberfläche 
+	 * nicht unterstützt, sie sind demnach auskommentiert
+ 	@Search
+   	public List<Encounter> getAllEncounter(){
+	 	return null;
+	}
+	 
 	@Search
 	public Encounter getLastEncounter(){
 		return null;
@@ -116,15 +100,5 @@ public class RestfulEncounterResourceProvider implements IResourceProvider{
 	public MethodOutcome updateEncounter(@IdParam IdDt id, @ResourceParam Encounter encounter) {
 		return null;
 	}
-	
-	@Create
-	public MethodOutcome createEncounter(@ResourceParam Encounter encounter) {
-		try {
-			EncounterRequest encounterRequest = new EncounterRequest("", encounter);
-			db.addEncounter(encounterRequest);
-		} catch (AdtSystemErrorException e) {
-			throw new ResourceNotFoundException("Fehler bei der Eingabe");
-		}
-		return new MethodOutcome(encounter.getId());
-	}
+	*/
 }

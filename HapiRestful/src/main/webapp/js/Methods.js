@@ -189,7 +189,9 @@ function addNewPatient() {
 					birthDate: birthday.value,
 					address: {
 						use: 'home',
-						line:street.value,
+						line:{
+							0:street.value,
+						},
 						city: city.value,
 						postalCode : plz.value,
 						country: country.value
@@ -306,7 +308,9 @@ function updatePatient() {
 					birthDate: birthday.value,
 					address: {
 						use: 'home',
-						line:street.value,
+						line:{
+							0:street.value,
+						},
 						city: city.value,
 						postalCode : plz.value,
 						country: country.value

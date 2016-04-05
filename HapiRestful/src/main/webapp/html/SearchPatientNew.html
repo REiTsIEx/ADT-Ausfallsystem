@@ -227,7 +227,7 @@
 						
 									if (patientList.data.total != '0') {
 										patientList.data.entry.forEach(function(patient) {
-												
+												console.log(patient);
 													var careProviderCheck;
 													var firstname;
 													var lastname;
@@ -257,10 +257,11 @@
 													}
 													
 													if(typeof resource.address != 'undefined'){
-														street = address.line[0];
-														postalCode = address.postalCode;
-														city = address.city;
-														country = address.country;
+														console.log(resource.adress);
+														street = resource.address[0].line[0];
+														postalCode = resource.address[0].postalCode;
+														city = resource.address[0].city;
+														country = resource.address[0].country;
 													}else{									
 														street = "undefined";
 														postalCode = "undefined";
