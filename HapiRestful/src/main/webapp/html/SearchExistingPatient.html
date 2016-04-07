@@ -158,7 +158,6 @@
 													var city;
 													var country;
 													var resource = patient.resource;
-													var address = resource.address[0];
 													var name = resource.name[0];
 
 													if (typeof resource.careProvider != 'undefined') {
@@ -178,10 +177,10 @@
 													}
 
 													if (typeof resource.address != 'undefined') {
-														street = address.line[0];
-														postalCode = address.postalCode;
-														city = address.city;
-														country = address.country;
+														street = resource.address[0].line;
+														postalCode = resource.address[0].postalCode;
+														city = resource.address[0].city;
+														country = resource.address[0].country;
 													} else {
 														street = "undefined";
 														postalCode = "undefined";
@@ -256,7 +255,6 @@
 									if (patientList.data.total != '0') {
 										patientList.data.entry
 												.forEach(function(patient) {
-													console.log(patient);
 													var careProviderCheck;
 													var firstname;
 													var lastname;
@@ -265,7 +263,6 @@
 													var city;
 													var country;
 													var resource = patient.resource;
-
 													var name = resource.name[0];
 
 													if (typeof resource.careProvider != 'undefined') {

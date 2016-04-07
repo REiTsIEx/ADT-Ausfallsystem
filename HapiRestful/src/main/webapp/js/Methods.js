@@ -105,7 +105,6 @@ function addNewPatient() {
 	if (svn.value != "") {
 		url = "";
 		var url = "http://localhost:8080";
-		// var method = "/Ausfallsystem/hapiservlet/Patient/";
 		var method = "/Ausfallsystem/hapiservlet/Patient/" + svn.value;
 
 		var gender = document.getElementById('gender');
@@ -117,41 +116,13 @@ function addNewPatient() {
 		var plz = document.getElementById('plz');
 
 		var location = document.getElementById('location');
-		var phone = document.getElementById('phoneNumber');
-		var phonetype = document.getElementById('phoneType');
+//		var phone = document.getElementById('phoneNumber');
+//		var phonetype = document.getElementById('phoneType');
 
 		var encounterType = document.getElementById('encounterItem');
 
 		var insurance = document.getElementById('insurance');
 		
-		console.log(JSON.stringify({
-			resourceType : "Patient",
-			identifier : {
-				value : svn.value
-
-			},
-			name : {
-				family : lastname.value,
-				given : firstname.value
-			},
-			telecom: {
-			system : 'phone',
-			value : phone.value,
-			use : phoneType.value
-			},
-			gender: gender.value,
-			birthDate : birthday.value,
-			address : {
-				use : 'home',
-				line : street.value,
-				city : city.value,
-				postalCode : plz.value,
-				country : country.value
-			},
-			careProvider : {
-				reference : insurance.value
-			}
-		}));
 
 		/*
 		 * var xmlRequest = new XMLHttpRequest();
@@ -186,11 +157,11 @@ function addNewPatient() {
 							family : lastname.value,
 							given : firstname.value
 						},
-						telecom : {
-							system : 'phone',
-							value : phone.value,
-							use : phoneType.value
-						},
+//						telecom : {
+//							system : 'phone',
+//							value : phone.value,
+//							use : phoneType.value
+//						},
 						gender : gender.value,
 						birthDate : birthday.value,
 						address : {
@@ -246,43 +217,13 @@ function updatePatient() {
 	var plz = document.getElementById('plz');
 
 	var location = document.getElementById('location');
-	var phone = document.getElementById('phoneNumber');
-	var phonetype = document.getElementById('phoneType');
+//	var phone = document.getElementById('phoneNumber');
+//	var phonetype = document.getElementById('phoneType');
 
 	var insurance = document.getElementById('insurance');
 	
 	
 	
-	console.log(JSON.stringify({
-		resourceType : "Patient",
-		identifier : {
-			value : svn.value
-
-		},
-		name : {
-			family : lastname.value,
-			given : firstname.value
-		},
-		telecom: {
-		system : 'phone',
-		value : phone.value,
-		use : phoneType.value
-		},
-		gender: gender.value,
-		birthDate : birthday.value,
-		address : {
-			use : 'home',
-			line : {
-				0 : street.value,
-			},
-			city : city.value,
-			postalCode : plz.value,
-			country : country.value
-		},
-		careProvider : {
-			reference : insurance.value
-		}
-	}));
 
 	request = $
 			.ajax({
