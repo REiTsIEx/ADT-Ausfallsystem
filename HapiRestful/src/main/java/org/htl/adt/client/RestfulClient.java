@@ -21,22 +21,11 @@ import ca.uhn.fhir.rest.client.exceptions.FhirClientConnectionException;
 
 public class RestfulClient {
 	FhirContext context = FhirContext.forDstu2();
-	String serverURL = "http://localhost:8081/Ausfallsystem/hapiservlet/";
+	String serverURL = "http://127.0.0.1:8081/Ausfallsystem/hapiservlet/";
 	IGenericClient client = context.newRestfulGenericClient(serverURL);
 
 	public RestfulClient() {
 
-	}
-
-	public List<Patient> searchPatient(Patient toSearchPatient) {
-		Bundle results = client.search().forResource(Patient.class)
-				.where(Patient.FAMILY.matches().value(toSearchPatient.getNameFirstRep().getFamilyAsSingleString()))
-				.returnBundle(Bundle.class).execute();
-		List<Patient> allPatients = new ArrayList();
-		for (Entry entry : results.getEntry()) {
-			allPatients.add((Patient) entry.getResource());
-		}
-		return allPatients;
 	}
 
 	/**
@@ -44,7 +33,6 @@ public class RestfulClient {
 	 * werden soll
 	 * 
 	 * @param toCreatePatient
-	 * @throws CommunicationException
 	 */
 	public void createPatient(Patient toCreatePatient) {
 		try {
@@ -54,14 +42,13 @@ public class RestfulClient {
 			throw new InternalError("Es konnte keine Verbindung zum Kommunikationsserver hergestellt werden.");
 		}
 
-	} // ca.uhn.fhir.rest.client.exceptions.FhirClientConnectionException
+	}
 
 	/**
 	 * Übergibt der Ziel-URL des Clients einen Patienten, der aktulisiert werden
 	 * soll
 	 * 
 	 * @param toUpdatePatient
-	 * @throws CommunicationException
 	 */
 	public void updatePatient(Patient toUpdatePatient) {
 		try {
@@ -73,11 +60,34 @@ public class RestfulClient {
 	}
 
 	public Patient readPatientWithID(Patient toReadPatient) {
+		try {
 		Patient patient = client.read().resource(Patient.class).withId(toReadPatient.getId()).execute();
 		return patient;
+		} catch (FhirClientConnectionException e) {
+			throw new InternalError("Es konnte keine Verbindung zum Kommunikationsserver hergestellt werden.");
+		}
 	}
 
 	public Location readLocationWithID(Location toReadLoction) {
+		try {
 		return client.read().resource(Location.class).withId(toReadLoction.getId()).execute();
+		} catch (FhirClientConnectionException e) {
+			throw new InternalError("Es konnte keine Verbindung zum Kommunikationsserver hergestellt werden.");
+		}
+	}
+	
+	public List<Patient> searchPatientWithFamilyName(Patient toSearchPatient) {
+		try {
+		Bundle results = client.search().forResource(Patient.class)
+				.where(Patient.FAMILY.matches().value(toSearchPatient.getNameFirstRep().getFamilyAsSingleString()))
+				.returnBundle(Bundle.class).execute();
+		List<Patient> allPatients = new ArrayList();
+		for (Entry entry : results.getEntry()) {
+			allPatients.add((Patient) entry.getResource());
+		}
+		return allPatients;
+		} catch (FhirClientConnectionException e) {
+			throw new InternalError("Es konnte keine Verbindung zum Kommunikationsserver hergestellt werden.");
+		}
 	}
 }

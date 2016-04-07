@@ -41,16 +41,10 @@ public class RestfulLocationProvider implements IResourceProvider {
 	}
 
 	public Class<? extends IBaseResource> getResourceType() {
-		// TODO Auto-generated method stub
 		return Location.class;
 	}
 	
-/*Da die DB und Webgui diese Methode nicht unterstützten, wurde sie auskommentiert
- * 	@Read
- *	public Location getResourceByID(@IdParam IdDt locID){
- *		return null;
- *	}
- */
+
 
 	@Create
 	public MethodOutcome createLocation(@ResourceParam Location location){
@@ -62,12 +56,6 @@ public class RestfulLocationProvider implements IResourceProvider {
 		}
 		return new MethodOutcome(location.getId());
 	}
-	/*Da die DB und Webgui diese Methode nicht unterstützten, wurde sie auskommentiert
-	 * @Update
-	 *	public MethodOutcome updateLocation(@IdParam IdDt locID, @ResourceParam Location location){
-	 *	return null;
-	}
-	 */
 	
 	
 	@Search
@@ -78,4 +66,18 @@ public class RestfulLocationProvider implements IResourceProvider {
 			throw new ResourceNotFoundException("Es gab ein Problem bei der Eingabe.");
 		}
 	}
+	
+	/*Da die DB und Webgui diese Methode nicht unterstützten, wurde sie auskommentiert
+	 * 	@Read
+	 *	public Location getResourceByID(@IdParam IdDt locID){
+	 *		return null;
+	 *	}
+	 */
+	
+	/*Da die DB und Webgui diese Methode nicht unterstützten, wurde sie auskommentiert
+	 * @Update
+	 *	public MethodOutcome updateLocation(@IdParam IdDt locID, @ResourceParam Location location){
+	 *	return null;
+	}
+	 */
 }

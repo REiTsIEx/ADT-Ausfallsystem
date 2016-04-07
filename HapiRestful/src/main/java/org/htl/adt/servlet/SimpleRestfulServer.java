@@ -8,13 +8,12 @@ import javax.servlet.annotation.WebServlet;
 
 import org.htl.adt.provider.RestfulEncounterResourceProvider;
 import org.htl.adt.provider.RestfulLocationProvider;
-import org.htl.adt.provider.RestfulOrganizationResourceProvider;
 import org.htl.adt.provider.RestfulPatientResourceProvider;
 
 import ca.uhn.fhir.rest.server.IResourceProvider;
 import ca.uhn.fhir.rest.server.RestfulServer;
 
-@WebServlet("/hapiservlet/*")
+@WebServlet("/servlet/*")
 public class SimpleRestfulServer extends RestfulServer{
 	private static final long serialVersionUID = 1L;
 	
@@ -25,9 +24,7 @@ public class SimpleRestfulServer extends RestfulServer{
 		provider.add(new RestfulLocationProvider());
 		provider.add(new RestfulEncounterResourceProvider());
 		setResourceProviders(provider);
-		//setResourceProviders(new RestfulPatientResourceProvider());
-		//setResourceProviders(new RestfulLocationProvider());
-		//setResourceProviders(new RestfulOrganizationResourceProvider());
+
 		setUseBrowserFriendlyContentTypes(true);
 	}
 }

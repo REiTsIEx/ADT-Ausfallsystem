@@ -7,7 +7,9 @@ import ca.uhn.fhir.model.dstu2.resource.Location;
 import ca.uhn.fhir.model.dstu2.resource.Patient;
 import ca.uhn.fhir.model.dstu2.valueset.AdministrativeGenderEnum;
 import ca.uhn.fhir.model.primitive.IdDt;
-
+/**
+ * Das ist eine Test-Klasse, die die Datenbank simuliert, drei Patienten und eine Location sind vorhanden.
+ */
 public class TestDB {
 	public Map<Long, Patient> myPatients = new HashMap<Long, Patient>();
 	public Map<Long, Location> testLocations = new HashMap<Long, Location>();
@@ -29,6 +31,13 @@ public class TestDB {
 		patientFrida.addName().addFamily("Musterfrau").addGiven("Frida");
 		patientFrida.setGender(AdministrativeGenderEnum.FEMALE);
 		myPatients.put(patID, patientFrida);
+		patID++;
+		
+		Patient patientErika = new Patient();
+		patientErika.setId(new IdDt(patID));
+		patientErika.addName().addFamily("Stark").addGiven("Erika");
+		patientErika.addAddress().addLine("Hier steht die Line").setCity("Stadt").setCountry("Land");
+		myPatients.put(patID, patientErika);
 		patID++;
 		
 		Location location = new Location();

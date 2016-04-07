@@ -18,7 +18,6 @@ import org.htl.adt.exception.AdtSystemErrorException;
 import org.htl.adt.exception.CommunicationException;
 import org.htl.adt.interfaces.Connector;
 import org.htl.adt.interfaces.RestServer;
-import org.htl.adt.restservlet.RestFactory;
 
 import ca.uhn.fhir.model.dstu2.composite.HumanNameDt;
 import ca.uhn.fhir.model.dstu2.resource.Encounter;
@@ -46,14 +45,15 @@ import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 public class RestfulPatientResourceProvider implements IResourceProvider {
 
 	Connector db;
-
+	RestfulClient client = new RestfulClient();
+	
 	public Class<Patient> getResourceType() {
 		return Patient.class;
 	}
 
 	public RestfulPatientResourceProvider() {
 		try {
-			db = DBFactory.getInstance().getConnector("TestDBConnector");
+			db = DBFactory.getInstance().getConnector("DBConnector");
 		} catch (CommunicationException e) {
 			throw new InternalErrorException("Es konnte keine Verbindung mit der Datenbank hergestellt werden");
 		}
@@ -93,6 +93,7 @@ public class RestfulPatientResourceProvider implements IResourceProvider {
 			try{
 			PatientRequest patientRequest = new PatientRequest("Der anzulegende Patient", patient);
 			db.addPatient(patientRequest);
+			client.createPatient(patient);
 			return new MethodOutcome(
 					new IdDt("Patient", patient.getId().toString(), patient.getId().getVersionIdPart()));
 			} catch (AdtSystemErrorException e){
@@ -156,48 +157,7 @@ public class RestfulPatientResourceProvider implements IResourceProvider {
 		}
 	}
 
-/*	@Search
-	public List<Patient> searchWithRequiredIdentifier(@RequiredParam(name=Patient.SP_IDENTIFIER) StringParam patientIdentifier,
-			@OptionalParam(name = "family") StringParam familyName,
-			@OptionalParam(name = "given") StringParam firstName,
-			@OptionalParam(name = "gender") StringParam patientGender) {
 
-		Map<String, String> params = new HashMap<String, String>();
-		Patient pat = new Patient();
-		pat.setId(new IdDt(patientIdentifier.getValue()));
-
-		if (familyName != null) {
-			pat.addName().addFamily(familyName.getValue());
-			params.put("familyName", familyName.getValue());
-		}
-		if (firstName != null) {
-			pat.addName().addGiven(firstName.getValue());
-			params.put("firstName", firstName.getValue());
-		}
-		if (patientIdentifier != null) {
-			pat.addIdentifier().setValue(patientIdentifier.getValue());
-			params.put("patientIdentifier", patientIdentifier.getValue());
-		}
-		if (patientGender != null) {
-			if (patientGender.getValue().equals("Male") || patientGender.equals("MALE")) {
-				pat.setGender(AdministrativeGenderEnum.MALE);
-				params.put("patientGender", "male");
-			} else if (patientGender.getValue().equals("Female")) {
-				pat.setGender(AdministrativeGenderEnum.FEMALE);
-				params.put("patientGender", "female");
-			} else if (patientGender.getValue().equals("Undefined")) {
-				pat.setGender(AdministrativeGenderEnum.UNKNOWN);
-				params.put("patientGender", "unknown");
-			}
-		}
-		PatientRequest request = new PatientRequest(familyName.getValue(), pat);
-		try {
-			return db.searchPatientWithParameters(params);
-		} catch (AdtSystemErrorException e) {
-			throw new ResourceNotFoundException("Es wurde kein Patient mit den eingegebenen Parametern gefunden.");
-		}
-	}
-*/
 	/**
 	 * Übergibt alle Patienten die sich in der Datenbank befinden zurück
 	 * @return List<Patient>
@@ -224,6 +184,7 @@ public class RestfulPatientResourceProvider implements IResourceProvider {
 			PatientRequest patientRequest = new PatientRequest("Die neuen Patientendaten", patient);
 			try {
 				db.updatePatient(patientRequest);
+				client.updatePatient(patient);
 				return new MethodOutcome(id);
 			} catch (AdtSystemErrorException e) {
 				throw new ResourceNotFoundException("Der zu aktualisierende Patient konnte nicht gefunden werden.");

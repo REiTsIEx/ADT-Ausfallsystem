@@ -24,20 +24,14 @@ import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 
+/**
+ * Diese Klasse dient als Connector zur TestDB
+ */
 public class TestDBConnector implements Connector{
 	TestDB db = new TestDB();
-	Long nextID = 3L;
-	//RestfulClient client = new RestfulClient();
 
 	public void addPatient(PatientRequest patientRequest) {
-		//IdDt newPatientID = new IdDt();
-		//newPatientID.withVersion(nextID.toString());
-		patientRequest.getPatient().setId(new IdDt(nextID));
-		//patient.patient.setId(newPatientID);
-		db.myPatients.put(nextID, patientRequest.getPatient());
-		nextID++;
-		//client.createPatient(patientRequest.getPatient());
-		//client.createPatient(patient.getPatient());
+		db.myPatients.put(patientRequest.getPatient().getId().getIdPartAsLong(), patientRequest.getPatient());
 	}
 
 
@@ -46,9 +40,6 @@ public class TestDBConnector implements Connector{
 		Patient dbPatient = db.myPatients.get(patID.getIdPartAsLong());
 		if(dbPatient == null){
 			throw new ResourceNotFoundException("Der Patient mit der ID " + patID.getIdPart() + " ist nicht vorhanden");
-			//OperationOutcome oo = new OperationOutcome();
-			//oo.addIssue().setSeverity(IssueSeverityEnum.ERROR).setDetails("Patient mit dieser ID nicht vorhanden");
-			//throw new InternalErrorException("Ungueltige Patienten-ID", oo);
 		}
 		List<Patient> retValue = new ArrayList<Patient>();
 		retValue.add(dbPatient);
@@ -84,19 +75,10 @@ public class TestDBConnector implements Connector{
 		}
 		if(retValue.isEmpty())
 			throw new ResourceNotFoundException("Patient mit dem Nachnamen " + patientFamilyName + " nicht vorhanden");
-		/*Patient newPatient = new Patient();
-		newPatient.setId(new IdDt(3));
-		newPatient.addIdentifier().setSystem("http://test.com/Patient").setValue("1234");
-		newPatient.addName().addFamily("Simpson").addGiven("Homer").addGiven("J");
-		newPatient.setGender(AdministrativeGenderEnum.MALE);
-		client.createPatient(newPatient);*/
 		return retValue;
 	}
 
 	public void updatePatient(PatientRequest patientRequest) {
-		/*Patient oldPatient = db.myPatients.get(id.identifier.getIdPartAsLong());
-		oldPatient.addName(patient.patient.getNameFirstRep());
-		db.myPatients.put(id.identifier.getIdPartAsLong(), oldPatient);*/
 		db.myPatients.put(patientRequest.getPatient().getId().getIdPartAsLong(), patientRequest.getPatient());
 	}
 
