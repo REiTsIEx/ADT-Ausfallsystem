@@ -12,9 +12,8 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.cfg.AnnotationConfiguration;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.criterion.CriteriaQuery;
-import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.htl.adt.client.RestfulClient;
@@ -41,18 +40,21 @@ import ca.uhn.fhir.parser.IParser;
 
 public class DBConnector implements Connector {
 
-	private Configuration config;
+	private AnnotationConfiguration annotationConfig;
 	private SessionFactory sessionFactory;
 	RestfulClient client = new RestfulClient();
+	
 	public DBConnector() throws CommunicationException {
 		try {
-
-			BasicConfigurator.configure();
-
-			config = new Configuration();
-			config.configure("hibernate.cfg.xml");
-
-			sessionFactory = config.buildSessionFactory();
+			
+			annotationConfig = ((AnnotationConfiguration) new AnnotationConfiguration().
+							configure()).
+							addAnnotatedClass(DatabaseEncounter.class).
+							addAnnotatedClass(DatabaseLocation.class).
+							addAnnotatedClass(DatabasePatient.class);
+			
+			sessionFactory = annotationConfig.buildSessionFactory();
+							
 
 		} catch (HibernateException e) {
 			throw new CommunicationException("Error during the Creation of the Hibernate Configuration", e);
@@ -431,7 +433,6 @@ public class DBConnector implements Connector {
 				encounterlist.add(parser.parseResource(Encounter.class, encounter.getFhirMessage()));
 			}			
 			
-			//Nicht RICHTIG !!! Nur übergangslösung
 			returnEncounter = encounterlist.get(0);
 			
 			transaction.commit();// transaction is committed
