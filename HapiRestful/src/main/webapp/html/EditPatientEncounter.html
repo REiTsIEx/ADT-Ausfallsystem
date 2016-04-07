@@ -9,44 +9,45 @@
 </head>
 <body>
 	<div class="container-fluid">
-	<nav class="navbar navbar-default">
-  <div class="container-fluid">
-    <div class="navbar-header ">
-      <a class="navbar-brand" href="About.html">ADT-Ausfallsystem</a>
-    </div>
-    <ul class="nav navbar-nav">
-      <li class="active"><a href="#">About</a></li>
-      <li><a href="index.html">Hauptseite</a></li>
+		<nav class="navbar navbar-default">
+			<div class="container-fluid">
+				<div class="navbar-header ">
+					<a class="navbar-brand" href="About.html">ADT-Ausfallsystem</a>
+				</div>
+				<ul class="nav navbar-nav">
+					<li class="active"><a href="#">About</a></li>
+					<li><a href="index.html">Hauptseite</a></li>
 
-    </ul>
-  </div>
- 
-</nav>
+				</ul>
+			</div>
+
+		</nav>
 
 		<h1>Patienten verlegen</h1>
 		<hr>
 		<div class="col-sm-2">
 			<ul class="list-group menu">
 
-			
-				<li class="list-group-item">SV-Nummer: <br>
-					<input class="form-control" type="text" placeholder="Optional" id="svnSearch"
-					name="svnField"></li>
+
+				<li class="list-group-item">SV-Nummer: <br> <input
+					class="form-control" type="text" placeholder="Optional"
+					id="svnSearch" name="svnField"></li>
 
 				<li class="list-group-item">Nachname: <br> <input
-					class="form-control" type="text" placeholder="Optional" id="lastnameSearch"
-					name="lastnameField"></li>
+					class="form-control" type="text" placeholder="Optional"
+					id="lastnameSearch" name="lastnameField"></li>
 
-			<li class="list-group-item">Vorname: <br> <input 
-				class="form-control" type="text" placeholder="Optional" id="firstnameSearch"
-				name="firstnameField"></li>
-				<li class="btn-primary btn-lg button" onclick="searchPatient()">Suche nach Patient</li>
-					
+				<li class="list-group-item">Vorname: <br> <input
+					class="form-control" type="text" placeholder="Optional"
+					id="firstnameSearch" name="firstnameField"></li>
+				<li class="btn-primary btn-lg button" onclick="searchPatient()">Suche
+					nach Patient</li>
+
 			</ul>
 
 
 		</div>
-		<div class="col-sm-3" >
+		<div class="col-sm-3">
 			<ul id="patientList" class="list-group">
 
 
@@ -54,42 +55,48 @@
 
 		</div>
 		<div class="col-sm-3">
-			<ul id="clickedEncounter" class="list-group menu" style="display: none">
-				<li class="list-group-item">Letzte Art des Aufenthalts: <br> <input class="form-control" type="text"
-					placeholder="Optional" id="type_value" name="TypeField"></li>
-				<li class="list-group-item">Letzte Station: <br> <input class="form-control" type="text"
-					placeholder="Optional" id="station_value" name="StationField"></li>
+			<ul id="clickedEncounter" class="list-group menu"
+				style="display: none">
+				<li class="list-group-item">Letzte Art des Aufenthalts: <br>
+					<input class="form-control" type="text" placeholder="Optional"
+					id="type_value" name="TypeField"></li>
+				<li class="list-group-item">Letzte Station: <br> <input
+					class="form-control" type="text" placeholder="Optional"
+					id="station_value" name="StationField"></li>
 			</ul>
 
 		</div>
-				<div class="col-sm-3">
+		<div class="col-sm-3">
 			<ul id="newEncounter" class="list-group menu" style="display: none">
-<li class="list-group-item">Aufenthalt des Patienten: <br> <select class="form-control" id="gender">
+				<li class="list-group-item">Aufenthalt des Patienten: <br>
+					<select class="form-control" id="gender">
 						<option value="ambulatory">Patient ist ambulant</option>
 						<option value="inaptient">Patient ist stationär</option>
-						<option value="outpatient">Patient bleibt nicht über Nacht</option>
+						<option value="outpatient">Patient bleibt nicht über
+							Nacht</option>
 						<option value="home">Patient ist zu Hause</option>
-						<option value="field">Patient außerhalb regulärer Umgebung für Pflege</option>
+						<option value="field">Patient außerhalb regulärer
+							Umgebung für Pflege</option>
 						<option value="daytime">Patient nur Tags stationär</option>
-						<option value="virtual">Patient hält online Kontakt zu Personal</option>
+						<option value="virtual">Patient hält online Kontakt zu
+							Personal</option>
 						<option value="other">nicht genauer definiert</option>
 				</select>
-				
-				<li class="list-group-item">Station des Patienten: <br> 
-					<select class="form-control" id="locationItem">
+				<li class="list-group-item">Station des Patienten: <br> <select
+					class="form-control" id="locationItem">
 						<option value="radiology">Radiologie</option>
 						<option value="cardiology">Kardiologie</option>
 						<option value="icu">Intensivstation</option>
 						<option value="earnosethroat">HNO</option>
 						<option value="neurology">Neurologie</option>
 						<option value="urology">Urologie</option>
-					</select>
-				
-				<li class="btn-primary btn-lg button" onclick="saveEncounter()">Behandlung anlegen</li>
+				</select>
+				<li class="btn-primary btn-lg button" onclick="saveEncounter()">Behandlung
+					anlegen</li>
 			</ul>
 
 		</div>
-		
+
 
 
 
@@ -106,23 +113,21 @@
 	<script src='../js/fhir-client.js'></script>
 	<script src='../js/Methods.js'></script>
 	<script>
-	var type;
-	var location;
-	var patientEntcounter
-	var patientArray = [];
+		var type;
+		var location;
+		var patientEntcounter
+		var patientArray = [];
 		function searchPatient() {
 			checkHTTPStatus();
 			patientArray = [];
 			var list = document.getElementById('patientList');
 			document.getElementById('clickedEncounter').style.display = "none";
 			$(patientList).empty();
-			
-
 
 			var smart = new FHIR.client({
 				serviceUrl : "http://localhost:8080/Ausfallsystem/hapiservlet",
 				//serviceUrl : "https://fhir-open-api-dstu2.smarthealthit.org",
-				
+
 				auth : {
 					type : 'none'
 				}
@@ -130,180 +135,206 @@
 
 			if (svnSearch.value != "") {
 
-				smart.api.search({type : "Patient",	query : {identifier : {value : svnSearch.value}}
-			
-				
-				}).then(
-						function(patientList) {
-							if (patientList.data.total != 0) {
-
-							patientList.data.entry.forEach(function(patient) {
-							    
-								var firstname;
-								var lastname;
-								var resource = patient.resource;
-								var name = resource.name[0];
-								
-							
-								if(typeof resource.name != 'undefined'){
-
-									firstname = name.given;
-									lastname = name.family;
-								}else{
-
-									firstname = "undefined";
-									lastname = "undefined";
+				smart.api
+						.search({
+							type : "Patient",
+							query : {
+								identifier : {
+									value : svnSearch.value
 								}
-
-								
-								singlePatient = {
-
-									svn : svn,
-									familyName : lastname,
-									givenName : firstname,
-
-								};
-								patientArray
-										.push(singlePatient);
-
-
-							});
-							
-							$.each(patientArray, function(i)
-									
-									{
-									    var li = $('<li/>')
-									        .appendTo(list)
-									    	.addClass('patientListbutton')
-									    var aaa = $('<a/>')
-									    	
-									    	.click(showPatient)
-									        .text(patientArray[i].givenName+ " " + patientArray[i].familyName +" "+ patientArray[i].birthdate)
-									        .appendTo(li);
-									});
-							}else{
-								alert("Keinen Patienten unter dieser ID");
 							}
 
-						});
-			} else if (lastnameSearch.value != "") {
+						})
+						.then(
+								function(patientList) {
+									if (patientList.data.total != 0) {
 
-				smart.api.search({type : "Patient",query : {family : lastnameSearch.value , given: firstnameSearch.value}
-				}).then(function(patientList) {
-									
+										patientList.data.entry
+												.forEach(function(patient) {
 
-									if (patientList.data.total != '0') {
-										patientList.data.entry.forEach(function(patient) {
 													var firstname;
 													var lastname;
 													var resource = patient.resource;
 													var name = resource.name[0];
-													
-													
-													if(typeof resource.name != 'undefined'){
+
+													if (typeof resource.name != 'undefined') {
 
 														firstname = name.given;
 														lastname = name.family;
-													}else{
+													} else {
 
 														firstname = "undefined";
 														lastname = "undefined";
 													}
 
-													
 													singlePatient = {
-														svn : resource.identifier[0].value,
+
+														svn : svn,
 														familyName : lastname,
 														givenName : firstname,
-														birthdate: resource.birthDate,
-													};
 
-													
-													
+													};
 													patientArray
 															.push(singlePatient);
 
 												});
 
-										
-				$.each(patientArray, function(i)
-				  {
-					var li = $('<li/>')
-						 .addClass('list-group-item')
-						 .appendTo(list);
-					var aaa = $('<a/>')
-						.click(showPatient)
-						.text("Vorname: " + patientArray[i].givenName+ " Nachname: " + patientArray[i].familyName+ ", geboren am: "+ patientArray[i].birthdate)
-						.appendTo(li);
-						});
+										$
+												.each(
+														patientArray,
+														function(i)
+
+														{
+															var li = $('<li/>')
+																	.appendTo(
+																			list)
+																	.addClass(
+																			'patientListbutton')
+															var aaa = $('<a/>')
+
+																	.click(
+																			showPatient)
+																	.text(
+																			patientArray[i].givenName
+																					+ " "
+																					+ patientArray[i].familyName
+																					+ " "
+																					+ patientArray[i].birthdate)
+																	.appendTo(
+																			li);
+														});
+									} else {
+										alert("Keinen Patienten unter dieser ID");
+									}
+
+								});
+			} else if (lastnameSearch.value != "") {
+
+				smart.api
+						.search({
+							type : "Patient",
+							query : {
+								family : lastnameSearch.value,
+								given : firstnameSearch.value
+							}
+						})
+						.then(
+								function(patientList) {
+
+									if (patientList.data.total != '0') {
+										patientList.data.entry
+												.forEach(function(patient) {
+													var firstname;
+													var lastname;
+													var resource = patient.resource;
+													var name = resource.name[0];
+
+													if (typeof resource.name != 'undefined') {
+
+														firstname = name.given;
+														lastname = name.family;
+													} else {
+
+														firstname = "undefined";
+														lastname = "undefined";
+													}
+
+													singlePatient = {
+														svn : resource.identifier[0].value,
+														familyName : lastname,
+														givenName : firstname,
+														birthdate : resource.birthDate,
+													};
+
+													patientArray
+															.push(singlePatient);
+
+												});
+
+										$
+												.each(
+														patientArray,
+														function(i) {
+															var li = $('<li/>')
+																	.addClass(
+																			'list-group-item')
+																	.appendTo(
+																			list);
+															var aaa = $('<a/>')
+																	.click(
+																			showPatient)
+																	.text(
+																			"Vorname: "
+																					+ patientArray[i].givenName
+																					+ " Nachname: "
+																					+ patientArray[i].familyName
+																					+ ", geboren am: "
+																					+ patientArray[i].birthdate)
+																	.appendTo(
+																			li);
+														});
 									} else {
 										alert("keinen Patienten unter diesem Nachnamen!");
 									}
-				 });
+								});
 			} else {
 				alert("Bitte Nachname oder Sozialversicherungsnummer eingeben!")
 
 			}
-			
-			
+
 		}
-		
-		
-		
-		
-		
+
 		function showPatient() {
 
 			var index = $(this).parent('li').index();
 
-			
-			//firstname wird gesucht
 			var svn = patientArray[index].svn;
-			
+
 			var smart = new FHIR.client({
 				serviceUrl : "http://localhost:8080/Ausfallsystem/hapiservlet",
-				//serviceUrl : "https://fhir-open-api-dstu2.smarthealthit.org",
-				patientId: svn,
+
+				patientId : svn,
 				auth : {
 					type : 'none'
 				}
 			});
-			
-			smart.patient.api.search({type : "Encounter"
-			}).then(function(encounterList) {
-				var resourcePath;
-				
-				if(encounterList.data.total != '0') {
-						if(typeof encounterList.data.entry[index].resource != 'undefined') {
-							resourcePath = encounterList.data.entry[length].resource
-							//type = resourcePath.class;
-							//location = encounterList.data.entry[length].resource.location.location;
-							
-						}else{
-							type = 	"noch kein Aufenthalt";
-							location = "noch kein Aufenthalt";
-						}
-					
-					
-					patientEncounter = "Patient/"+svn.value;
-					
-				}else{
-					alert("Patient noch keine Aufenthalt!")
-				}
-			//Liste wird angezeigt
-			document.getElementById('type_value').defaultValue = type;
-			document.getElementById('station_value').defaultValue = location;
-			document.getElementById('clickedEncounter').style.display = "block";
-			document.getElementById('newEncounter').style.display = "block";
-			
-		});
-			}
-		
+
+			smart.patient.api
+					.search({
+						type : "Encounter"
+					})
+					.then(
+							function(encounterList) {
+								var resourcePath;
+
+								if (encounterList.data.total != '0') {
+									if (typeof encounterList.data.entry[index].resource != 'undefined') {
+										resourcePath = encounterList.data.entry[length].resource
+										//type = resourcePath.class;
+										//location = encounterList.data.entry[length].resource.location.location;
+
+									} else {
+										type = "noch kein Aufenthalt";
+										location = "noch kein Aufenthalt";
+									}
+
+									patientEncounter = "Patient/" + svn.value;
+
+								} else {
+									alert("Patient noch keine Aufenthalt!")
+								}
+
+								document.getElementById('type_value').defaultValue = type;
+								document.getElementById('station_value').defaultValue = location;
+								document.getElementById('clickedEncounter').style.display = "block";
+								document.getElementById('newEncounter').style.display = "block";
+
+							});
+		}
+
 		function saveEncounter() {
 			addEncounter(type, patientEncouter, location);
 		}
-		
-			
 	</script>
 
 </body>
